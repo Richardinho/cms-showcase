@@ -1,0 +1,46 @@
+
+<div class="cta-bar">
+	<button
+			(click)="createArticle()"
+			class="button">create article</button>
+</div>
+
+<div class="links-container">
+	<ul data-test="article-page" class="links">
+
+		<li
+				*ngFor="let article of articles$ | async"
+				[class.unsaved]="!article.saved"
+				class="link">
+
+			<span>{{article.title}}</span>
+			&nbsp;
+			<span *ngIf="!article.saved">unsaved changes</span>
+
+			<div class="button-panel">
+
+				<button
+						*ngIf="!article.published"
+						(click)="publish(article.id)"
+						class="button"
+						>publish</button>
+
+				<button
+						*ngIf="article.published"
+						(click)="unpublish(article.id)"
+						class="button"
+						>unpublish</button>
+
+				<button
+						[routerLink]="['/view-article', article.id]"
+						class="button"
+						data-test="view-article-button">view article</button>
+
+				<button
+						[routerLink]="['/edit-article', article.id]"
+						class="button"
+						>edit article</button>
+			</div>
+		</li>
+	</ul>
+</div>

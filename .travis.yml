@@ -1,0 +1,31 @@
+dist: trusty
+sudo: false
+
+language: node_js
+node_js:
+  - "8"
+  
+addons:
+  apt:
+    sources:
+      - google-chrome
+    packages:
+      - google-chrome-stable
+
+cache:
+  directories:
+     - ./node_modules
+
+cache:
+  # cache both npm modules and Cypress binary
+  directories:
+    - ~/.npm
+    - ~/.cache
+  override:
+    - npm ci
+    - npm run cy:verify
+install:
+  - npm install
+
+script:
+  - npm run test -- --no-watch --no-progress --browsers=ChromeHeadless

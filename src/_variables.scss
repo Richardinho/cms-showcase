@@ -1,0 +1,29 @@
+$unit: 8px;
+$half-unit: $unit / 2;
+$border-radius: 4px;
+$size-gutter: 20px;
+$size-gutter-small: 10px;
+
+/*
+  colors
+*/
+
+$base-color: grey;
+$unsaved-color: yellow;
+$color-white: white;
+
+$color-shadow: darken($base-color, 10%);
+$color-background: lighten($base-color, 15%);
+$color-light-background: lighten($base-color, 45%);
+$color-border: darken($base-color, 4%);
+$color-light-blue: lighten($base-color, 30%);
+$color-highlight: lighten($base-color, 30%);
+$error-color: crimson;
+$color-text: #333;
+
+@mixin focus-input() {
+  &:focus {
+    box-shadow: 0 0 0px 2px lighten($base-color, 80%);
+    outline: none;
+  }
+}

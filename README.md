@@ -1,27 +1,58 @@
-# Cms
+# CMS
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.1.2.
+Content Management System for my website. Written in **Angular**
 
-## Development server
+##  Development
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+```
+  npm start
+```
 
-## Code scaffolding
+##  Deployment
+Delete app folder from server, then upload files.
+Must have ssh keys set up for this.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+```
+  # build Angular project
+  npm run build
+  
+  # log into remote server. Once in, use cd, rm etc. to delete app folder
+  ssh richardh@richardhunter.co.uk
 
-## Build
+  # load build folder to server
+  scp -r dist/cms richardh@richardhunter.co.uk:/home/richardh/public_html/
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+```
 
-## Running unit tests
+##  Cypress Tests
+Start server
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+```
+npm start
+```
 
-## Running end-to-end tests
+run Cypress tests
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+```
+npm run cypress:run
+```
 
-## Further help
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+##  Unit Tests
+
+```
+cd /Users/richardhunter/development/cms
+
+npm test
+
+```
+
+## Repository
+
+Source code stored in Github
+
+`https://github.com/Richardinho/cms`
+
+On push, tests run in Travis CI
+
+`https://travis-ci.org/Richardinho/cms`

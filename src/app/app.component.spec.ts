@@ -1,6 +1,9 @@
 import { TestBed } from '@angular/core/testing';
+import { MessageWidgetComponent } from './message-widget/message-widget.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
+import { MessageService } from './message-service/message.service';
+
 
 describe('AppComponent', () => {
   beforeEach(async () => {
@@ -9,8 +12,12 @@ describe('AppComponent', () => {
         RouterTestingModule
       ],
       declarations: [
-        AppComponent
+				AppComponent,
+				MessageWidgetComponent,
       ],
+			providers: [
+				MessageService,
+			],
     }).compileComponents();
   });
 
@@ -26,10 +33,4 @@ describe('AppComponent', () => {
     expect(app.title).toEqual('cms');
   });
 
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('cms app is running!');
-  });
 });

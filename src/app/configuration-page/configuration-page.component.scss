@@ -1,0 +1,43 @@
+@import '../../variables';
+
+:host {
+	display: grid;
+	grid-template-rows: auto 1fr;
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	right: 0;
+}
+
+.button-container {
+	padding: 10px 16px;
+	display: flex;
+	align-items: center;
+}
+
+.content {
+	padding: 0 12px;
+}
+
+.input-container {
+	padding: $unit;
+
+  .input {
+    width: 100%;
+		margin: 0;
+  }
+
+  .label {
+    flex-shrink: 0;
+  }
+}
+
+.spinner {
+  width: 30px;
+  height: 30px;
+  margin-right: $half-unit;
+}
+
+
+  

@@ -1,0 +1,28 @@
+@import '../variables';
+
+.container {
+	height: 100vh;
+	display: grid;
+	grid-template-rows: auto 1fr;
+	overflow: hidden;
+}
+
+.header {
+	display: flex;
+	background: $color-shadow;
+	align-items: center;
+	padding: 10px 16px;
+}
+
+.right-aligned {
+	margin-left: auto;
+}
+
+.content {
+	position: relative;
+}
+
+.link {
+	color: white;
+}
+
