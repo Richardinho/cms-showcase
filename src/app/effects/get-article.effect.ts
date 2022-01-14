@@ -8,13 +8,13 @@ import { AppState } from '../model';
 
 import { ArticleService } from '../services/article.service';
 
-import { articleRequest } from '../pages/edit-article-page/actions/edit-article-request.action';
-import { getArticleResponse } from '../pages/edit-article-page/actions/get-article-response.action';
-import { articleFoundInCache } from '../pages/edit-article-page/actions/article-found-in-cache.action';
-import { unauthorisedResponse } from '../pages/edit-article-page/actions/unauthorised-response.action';
-import { genericError } from '../pages/edit-article-page/actions/generic-error.action';
+import { articleFoundInCache } from '../actions/article-found-in-cache.action';
+import { articleRequest } from '../actions/edit-article-request.action';
+import { genericError } from '../actions/generic-error.action';
+import { getArticleResponse } from '../actions/get-article-response.action';
+import { unauthorisedResponse } from '../actions/unauthorised-response.action';
 
-import { selectArticleWithToken } from '../pages/edit-article-page/selectors/article.selector';
+import { selectArticleWithToken } from '../selectors/article.selector';
 
 import { UNAUTHORIZED } from '../status-code.constants';
 

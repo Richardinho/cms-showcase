@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { Articles } from '../../../model';
+import { Articles } from '../model';
 
 export const articleLinksResponse = createAction(
   '[Home Page] Article Links Response',

@@ -8,12 +8,12 @@ import { AppState } from '../model';
 
 import { ArticleService } from '../services/article.service';
 
-import { saveArticle } from '../pages/edit-article-page/actions/save-article.action';
-import { articleSavedResponse } from '../pages/edit-article-page/actions/article-saved-response.action';
-import { genericError } from '../pages/edit-article-page/actions/generic-error.action';
-import { unauthorisedResponse } from '../pages/edit-article-page/actions/unauthorised-response.action';
+import { articleSavedResponse } from '../actions/article-saved-response.action';
+import { genericError } from '../actions/generic-error.action';
+import { saveArticle } from '../actions/save-article.action';
+import { unauthorisedResponse } from '../actions/unauthorised-response.action';
 
-import { selectArticleUnderEditWithToken } from '../pages/edit-article-page/selectors/article.selector';
+import { selectArticleUnderEditWithToken } from '../selectors/article.selector';
 import { UNAUTHORIZED } from '../status-code.constants';
 
 @Injectable()

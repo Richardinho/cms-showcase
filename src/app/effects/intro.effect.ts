@@ -8,11 +8,11 @@ import { AppState } from '../model';
 
 import { IntroService } from '../services/intro.service';
 
-import { introRequest } from '../pages/intro-page/actions/intro-request.action';
-import { introChanged, nullAction } from '../pages/intro-page/actions/intro-changed.action';
-import { saveIntro } from '../pages/intro-page/actions/save-intro.action';
-import { unauthorisedResponse } from '../pages/edit-article-page/actions/unauthorised-response.action';
-import { genericError } from '../pages/edit-article-page/actions/generic-error.action';
+import { genericError } from '../actions/generic-error.action';
+import { introChanged, nullAction } from '../actions/intro-changed.action';
+import { introRequest } from '../actions/intro-request.action';
+import { saveIntro } from '../actions/save-intro.action';
+import { unauthorisedResponse } from '../actions/unauthorised-response.action';
 
 import { UNAUTHORIZED } from '../status-code.constants';
 

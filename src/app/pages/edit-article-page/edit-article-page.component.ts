@@ -12,13 +12,13 @@ import { ArticleService } from '../../services/article.service';
 
 import { AppState, Article } from '../../model';
 
-import { articleChanged } from './actions/article-changed.action';
-import { articleRequest } from './actions/edit-article-request.action';
-import { saveArticle } from './actions/save-article.action';
+import { articleChanged } from '../../actions/article-changed.action';
+import { articleRequest } from '../../actions/edit-article-request.action';
+import { saveArticle } from '../../actions/save-article.action';
 
-import { selectArticleUnderEdit } from './selectors/article.selector';
-import { selectSaving } from './selectors/ui.selector';
-import { selectUnsavedChanges } from './selectors/article.selector';
+import { selectArticleUnderEdit } from '../../selectors/article.selector';
+import { selectSaving } from '../../selectors/ui.selector';
+import { selectUnsavedChanges } from '../../selectors/article.selector';
 
 import { createArticlePatchData, articleToFormGroup } from './utils/article-form.utils';
 import { tagsValidator } from './utils/tags.validator';

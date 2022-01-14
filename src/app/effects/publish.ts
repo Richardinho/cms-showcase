@@ -4,27 +4,28 @@ import { of } from 'rxjs';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { map, switchMap, catchError, concatMap, withLatestFrom } from 'rxjs/operators';
 
-import { AppState } from '../../../model';
+import { AppState } from '../model';
 
-import { ArticleService } from '../../../services/article.service';
+import { ArticleService } from '../services/article.service';
 
-import { articleRequest } from '../../edit-article-page/actions/edit-article-request.action';
-import { getArticleResponse } from '../../edit-article-page/actions/get-article-response.action';
-import { articleFoundInCache } from '../../edit-article-page/actions/article-found-in-cache.action';
-import { unauthorisedResponse } from '../../edit-article-page/actions/unauthorised-response.action';
-import { genericError } from '../../edit-article-page/actions/generic-error.action';
+import { articleRequest } from '../actions/edit-article-request.action';
+import { getArticleResponse } from '../actions/get-article-response.action';
+import { articleFoundInCache } from '../actions/article-found-in-cache.action';
+import { unauthorisedResponse } from '../actions/unauthorised-response.action';
+import { genericError } from '../actions/generic-error.action';
+import { publishArticleResponse } from '../actions/publish-article-response';
 
-import { selectArticle } from '../../edit-article-page/selectors/article.selector';
 import { articleLinksResponse } from '../actions/article-links-response';
 import { requestArticleLinks } from '../actions/request-article-links';
 import { requestPublishArticle } from '../actions/request-publish-article';
-import { publishArticleResponse } from '../actions/publish-article-response';
-import { selectJWTToken } from '../../edit-article-page/selectors/article.selector';
+
+import { selectArticle } from '../selectors/article.selector';
+import { selectJWTToken } from '../selectors/article.selector';
 
 import {
   UNAUTHORIZED,
   NOT_FOUND,
-} from '../../../status-code.constants';
+} from '../status-code.constants';
 
 @Injectable()
 export class PublishEffects {

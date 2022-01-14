@@ -3,11 +3,13 @@ import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { tap, map, mergeMap, catchError, concatMap, withLatestFrom } from 'rxjs/operators';
-import { AppState } from '../../../model';
 import { Store, select } from '@ngrx/store';
 
+import { AppState } from '../model';
+
 import { navigateToEditPageRequest } from '../actions/navigate-to-edit-page-request';
-import { selectId } from '../../../pages/edit-article-page/selectors/article.selector';
+
+import { selectId } from '../selectors/article.selector';
 
 @Injectable()
 export class NavigationEffects {

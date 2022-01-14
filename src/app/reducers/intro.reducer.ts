@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { introChanged } from '../pages/intro-page/actions/intro-changed.action';
+import { introChanged } from '../actions/intro-changed.action';
 
 const initialState = {};
 

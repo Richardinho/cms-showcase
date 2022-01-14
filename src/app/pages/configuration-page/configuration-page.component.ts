@@ -3,10 +3,12 @@ import { AppState } from '../../model';
 import { Observable } from 'rxjs';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { Store, select } from '@ngrx/store';
-import { metadataRequest } from './actions/metadata.action';
-import { updateMetadataRequest } from './actions/update-metadata.action';
-import { selectMetadata } from './selectors/metadata.selector';
-import { selectShowLoader } from './selectors/show-loader.selector';
+
+import { metadataRequest } from '../../actions/metadata.action';
+import { updateMetadataRequest } from '../../actions/update-metadata.action';
+
+import { selectMetadata } from '../../selectors/metadata.selector';
+import { selectShowLoader } from '../../selectors/show-loader.selector';
 import {
   FormArray,
   FormControl,

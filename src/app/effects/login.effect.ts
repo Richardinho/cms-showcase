@@ -8,11 +8,11 @@ import { tap, map, switchMap, catchError } from 'rxjs/operators';
 import { AppState } from '../model';
 import { AuthorisationService } from '../services/authorisation.service';
 
-import { unauthorisedResponse } from '../pages/edit-article-page/actions/unauthorised-response.action';
+import { genericError } from '../actions/generic-error.action';
 import { logInRequest, logInResponse } from '../actions/log-in.action';
-import { genericError } from '../pages/edit-article-page/actions/generic-error.action';
 import { logOut } from '../actions/log-in.action';
-import { sessionExpired } from '../pages/edit-article-page/actions/session-expired.action';
+import { sessionExpired } from '../actions/session-expired.action';
+import { unauthorisedResponse } from '../actions/unauthorised-response.action';
 
 import { UNAUTHORIZED } from '../status-code.constants';
 

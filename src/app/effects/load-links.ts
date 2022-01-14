@@ -4,22 +4,21 @@ import { map, switchMap, catchError, concatMap, withLatestFrom } from 'rxjs/oper
 import { Store, select } from '@ngrx/store';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 
-import { AppState } from '../../../model';
+import { AppState } from '../model';
 
-import { ArticleService } from '../../../services/article.service';
+import { ArticleService } from '../services/article.service';
 
-import { unauthorisedResponse } from '../../../pages/edit-article-page/actions/unauthorised-response.action';
-import { genericError } from '../../../pages/edit-article-page/actions/generic-error.action';
-
+import { unauthorisedResponse } from '../actions/unauthorised-response.action';
+import { genericError } from '../actions/generic-error.action';
 import { articleLinksResponse } from '../actions/article-links-response';
 import { requestArticleLinks } from '../actions/request-article-links';
 
-import { selectArticlesWithJWTToken } from '../../../pages/edit-article-page/selectors/article.selector';
+import { selectArticlesWithJWTToken } from '../selectors/article.selector';
 
 import {
   UNAUTHORIZED,
   NOT_FOUND,
-} from '../../../status-code.constants';
+} from '../status-code.constants';
 
 @Injectable()
 export class LoadArticleLinksEffects {

@@ -9,11 +9,11 @@ import { AppState } from '../model';
 
 import { ArticleService } from '../services/article.service';
 
-import { unauthorisedResponse } from '../pages/edit-article-page/actions/unauthorised-response.action';
-import { genericError } from '../pages/edit-article-page/actions/generic-error.action';
-import { createArticleRequest, createArticleResponse } from '../pages/article-page/actions/create-article.action';
+import { unauthorisedResponse } from '../actions/unauthorised-response.action';
+import { genericError } from '../actions/generic-error.action';
+import { createArticleRequest, createArticleResponse } from '../actions/create-article.action';
 
-import { selectJWTToken } from '../pages/edit-article-page/selectors/article.selector';
+import { selectJWTToken } from '../selectors/article.selector';
 
 import { UNAUTHORIZED } from '../status-code.constants';
 

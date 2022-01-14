@@ -1,34 +1,36 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store, select } from '@ngrx/store';
-import { MetadataService } from '../../../services/metadata.service';
-import { AppState } from '../../../model';
-import { updateMetadataRequest, updateMetadataResponse } from '../actions/update-metadata.action';
 import { of } from 'rxjs';
 import { map, switchMap, catchError, concatMap, withLatestFrom } from 'rxjs/operators';
-import { genericError } from '../../edit-article-page/actions/generic-error.action';
-import {selectJWTToken} from '../../edit-article-page/selectors/article.selector';
-import { UNAUTHORIZED } from '../../../status-code.constants';
-import { unauthorisedResponse } from '../../edit-article-page/actions/unauthorised-response.action';
+import { AppState } from '../model';
+
+import { genericError } from '../actions/generic-error.action';
+import { metadataRequest, metadataResponse } from '../actions/metadata.action';
+import { unauthorisedResponse } from '../actions/unauthorised-response.action';
+
+import { MetadataService } from '../services/metadata.service';
+import { selectJWTToken } from '../selectors/article.selector';
+import { UNAUTHORIZED } from '../status-code.constants';
 
 @Injectable()
-export class PutMetadataEffect {
+export class GetMetadataEffect {
   constructor(
     private actions$: Actions,
     private metadataService: MetadataService,
     private store: Store<AppState>,
   ) {}
 
-  putMetadata$ = createEffect(() =>  
+  getMetadata$ = createEffect(() => 
 
     this.actions$.pipe(
-      ofType(updateMetadataRequest),
+      ofType(metadataRequest),
       concatMap(action => of(action).pipe(
         withLatestFrom(this.store.pipe(select(selectJWTToken)))
       )),
       switchMap(([action, token]) => {
-        return this.metadataService.putMetadata(token, action.metadata).pipe(
-          map((metadata: any) => updateMetadataResponse({ metadata })),
+        return this.metadataService.getMetadata(token).pipe(
+          map((metadata: any) => metadataResponse({ metadata: metadata })),
           catchError((error) => {
             if (error.status) {
               if (error.status === UNAUTHORIZED) {
@@ -37,10 +39,10 @@ export class PutMetadataEffect {
                 return of(genericError({ message: 'Server error occurred' }));
               }
             } else {
-              return of(genericError({ message: 'Server error occurred' }));
+              return of(genericError({ message: "some generic error happened"}));
             }
           })
-        );
+        )
       })
     ));
 }

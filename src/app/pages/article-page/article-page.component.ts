@@ -4,11 +4,12 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from '../../model';
 
 //import { navigateAway } from './actions/navigate-away';
-import { requestArticleLinks } from './actions/request-article-links';
 
-import { selectArticleLinks } from './selectors/select-article-links';
-import { requestPublishArticle } from './actions/request-publish-article';
-import { createArticleRequest } from './actions/create-article.action';
+import { selectArticleLinks } from '../../selectors/select-article-links';
+
+import { requestArticleLinks } from '../../actions/request-article-links';
+import { requestPublishArticle } from '../../actions/request-publish-article';
+import { createArticleRequest } from '../../actions/create-article.action';
 
 @Component({
   templateUrl: './article-page.component.html',

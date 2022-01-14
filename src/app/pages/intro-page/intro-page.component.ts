@@ -7,10 +7,11 @@ import { Observable } from 'rxjs';
 import { Article } from '../../model';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../model';
-import { selectIntro } from './selectors/intro.selector';
-import { introChanged } from './actions/intro-changed.action';
-import { introRequest } from './actions/intro-request.action';
-import { saveIntro } from './actions/save-intro.action';
+import { selectIntro } from '../../selectors/intro.selector';
+
+import { introChanged } from '../../actions/intro-changed.action';
+import { introRequest } from '../../actions/intro-request.action';
+import { saveIntro } from '../../actions/save-intro.action';
 
 @Component({
   templateUrl: './intro-page.component.html',

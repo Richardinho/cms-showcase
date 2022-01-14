@@ -28,21 +28,24 @@ import { introReducer } from './reducers/intro.reducer';
 import { uiReducer } from './reducers/ui.reducer';
 import { logInReducer } from './reducers/logged-in.reducer';
 import { metadataReducer } from './reducers/metadata.reducer';
-import { NavigationEffects } from './pages/view-article-page/effects/navigation.effect';
+
 // add this to styles page
 import { SpinnerComponent } from './pages/configuration-page/spinner';
+
+import { NavigationEffects } from './effects/navigation.effect';
 import { DeleteArticleEffects } from './effects/delete-article.effect';
 import { CreateArticleEffects } from './effects/create-article.effect';
 import { MetadataService } from './services/metadata.service';
-import { GetMetadataEffect } from './pages/configuration-page/effects/get-metadata.effect';
-import { PutMetadataEffect } from './pages/configuration-page/effects/put-metadata.effect';
+import { GetMetadataEffect } from './effects/get-metadata.effect';
+import { PutMetadataEffect } from './effects/put-metadata.effect';
 import { SaveArticleEffects } from './effects/save-article.effect';
-import { CheckboxComponent } from './components/checkbox/checkbox.component';
 import { GetArticleEffects } from './effects/get-article.effect';
 import { LogInEffects } from './effects/login.effect';
 import { GetIntroEffects } from './effects/intro.effect';
-import { LoadArticleLinksEffects } from './pages/article-page/effects/load-links';
-import { PublishEffects } from './pages/article-page/effects/publish';
+import { PublishEffects } from './effects/publish';
+import { LoadArticleLinksEffects } from './effects/load-links';
+
+import { CheckboxComponent } from './components/checkbox/checkbox.component';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 
 @NgModule({

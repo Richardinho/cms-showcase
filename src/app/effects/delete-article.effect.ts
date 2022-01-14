@@ -9,11 +9,11 @@ import { ArticleService } from '../services/article.service';
 
 import { AppState } from '../model';
 
-import { deleteArticle } from '../pages/edit-article-page/actions/delete-article.action';
-import { deleteArticleResponse } from '../pages/edit-article-page/actions/delete-article-response.action';
-import { unauthorisedResponse } from '../pages/edit-article-page/actions/unauthorised-response.action';
+import { deleteArticle } from '../actions/delete-article.action';
+import { deleteArticleResponse } from '../actions/delete-article-response.action';
+import { unauthorisedResponse } from '../actions/unauthorised-response.action';
 
-import { selectArticleUnderEditWithToken } from '../pages/edit-article-page/selectors/article.selector';
+import { selectArticleUnderEditWithToken } from '../selectors/article.selector';
 
 import {
   UNAUTHORIZED,

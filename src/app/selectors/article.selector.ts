@@ -1,5 +1,5 @@
 import { createSelector, State } from '@ngrx/store';
-import { AppState, Articles } from '../../../model';
+import { AppState, Articles } from '../model';
 
 export const selectArticles = (state: AppState) => state.articles;
 export const selectJWTToken = (state: AppState) => state.jwt_token;

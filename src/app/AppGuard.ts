@@ -9,7 +9,7 @@ import {
 	Router,
 } from '@angular/router';
 import { map, Observable } from 'rxjs';
-import { selectJWTToken } from './pages/edit-article-page/selectors/article.selector';
+import { selectJWTToken } from './selectors/article.selector';
 
 const selectFoo = (state: AppState) => {
 	return 'hellofoo';

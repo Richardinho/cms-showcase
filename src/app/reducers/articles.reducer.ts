@@ -1,8 +1,8 @@
 import { createReducer, on } from '@ngrx/store';
-import { articleChanged } from '../pages/edit-article-page/actions/article-changed.action';
-import { articleSavedResponse } from '../pages/edit-article-page/actions/article-saved-response.action';
-import { deleteArticleResponse } from '../pages/edit-article-page/actions/delete-article-response.action';
-import { getArticleResponse } from '../pages/edit-article-page/actions/get-article-response.action';
+import { articleChanged } from '../actions/article-changed.action';
+import { articleSavedResponse } from '../actions/article-saved-response.action';
+import { deleteArticleResponse } from '../actions/delete-article-response.action';
+import { getArticleResponse } from '../actions/get-article-response.action';
 
 import { Article, Articles } from '../model';
 import { tagData } from '../services/article.service';

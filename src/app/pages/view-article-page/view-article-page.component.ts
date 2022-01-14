@@ -3,15 +3,16 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Router } from '@angular/router';
 import { Store, select, createSelector, State } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
+import { switchMap, mergeMap } from 'rxjs/operators';
 
 import { ArticleService } from '../../services/article.service';
-import { switchMap, mergeMap } from 'rxjs/operators';
 import { AppState, Article } from '../../model';
-import { selectArticleUnderEdit } from '../edit-article-page/selectors/article.selector';
+import { selectArticleUnderEdit } from '../../selectors/article.selector';
 import { DialogService } from '../../services/dialog.service';
-import { articleRequest } from '../edit-article-page/actions/edit-article-request.action';
-import { navigateToEditPageRequest } from './actions/navigate-to-edit-page-request';
-import { deleteArticle } from '../edit-article-page/actions/delete-article.action';
+
+import { articleRequest } from '../../actions/edit-article-request.action';
+import { navigateToEditPageRequest } from '../../actions/navigate-to-edit-page-request';
+import { deleteArticle } from '../../actions/delete-article.action';
 
 const CONFIRMATION_MESSAGE = 'Are you sure that you want to delete this article?';
 @Component({
