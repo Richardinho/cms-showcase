@@ -1,14 +1,14 @@
 import { createReducer, on } from '@ngrx/store';
 import { UI } from '../model';
-import { saveArticle } from '../edit-article-page/actions/save-article.action';
-import { articleSavedResponse } from '../edit-article-page/actions/article-saved-response.action';
-import { articleRequest } from '../edit-article-page/actions/edit-article-request.action';
-import { deleteArticleResponse } from '../edit-article-page/actions/delete-article-response.action';
-import { navigateAway } from '../article-page/actions/navigate-away';
-import { articleLinksResponse } from '../article-page/actions/article-links-response';
-import { publishArticleResponse } from '../article-page/actions/publish-article-response';
+import { saveArticle } from '../pages/edit-article-page/actions/save-article.action';
+import { articleSavedResponse } from '../pages/edit-article-page/actions/article-saved-response.action';
+import { articleRequest } from '../pages/edit-article-page/actions/edit-article-request.action';
+import { deleteArticleResponse } from '../pages/edit-article-page/actions/delete-article-response.action';
+import { navigateAway } from '../pages/article-page/actions/navigate-away';
+import { articleLinksResponse } from '../pages/article-page/actions/article-links-response';
+import { publishArticleResponse } from '../pages/article-page/actions/publish-article-response';
 import { updateLinks } from './utils';
-import { updateMetadataRequest, updateMetadataResponse } from '../configuration-page/actions/update-metadata.action';
+import { updateMetadataRequest, updateMetadataResponse } from '../pages/configuration-page/actions/update-metadata.action';
 
 export const initialState: UI = {
   saving: false,

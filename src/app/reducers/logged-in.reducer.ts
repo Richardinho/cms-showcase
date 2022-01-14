@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 import { logInResponse, logOut } from '../actions/log-in.action';
-import { sessionExpired } from '../edit-article-page/actions/session-expired.action';
+import { sessionExpired } from '../pages/edit-article-page/actions/session-expired.action';
 
 const initialState = '';
 

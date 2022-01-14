@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
-import { metadataResponse } from '../configuration-page/actions/metadata.action';
-import { updateMetadataResponse } from '../configuration-page/actions/update-metadata.action';
+import { metadataResponse } from '../pages/configuration-page/actions/metadata.action';
+import { updateMetadataResponse } from '../pages/configuration-page/actions/update-metadata.action';
 
 export const initialState = {
   github_url: '',

@@ -9,10 +9,9 @@ import {
 	Router,
 } from '@angular/router';
 import { map, Observable } from 'rxjs';
-import { selectJWTToken } from './edit-article-page/selectors/article.selector';
+import { selectJWTToken } from './pages/edit-article-page/selectors/article.selector';
 
 const selectFoo = (state: AppState) => {
-	console.log(state);
 	return 'hellofoo';
 };
 
