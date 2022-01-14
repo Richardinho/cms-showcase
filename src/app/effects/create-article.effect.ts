@@ -7,7 +7,7 @@ import { switchMap, tap, map, catchError, concatMap, withLatestFrom } from 'rxjs
 
 import { AppState } from '../model';
 
-import { ArticleService } from '../article.service';
+import { ArticleService } from '../services/article.service';
 
 import { unauthorisedResponse } from '../pages/edit-article-page/actions/unauthorised-response.action';
 import { genericError } from '../pages/edit-article-page/actions/generic-error.action';

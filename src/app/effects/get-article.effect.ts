@@ -6,7 +6,7 @@ import { map, switchMap, catchError, concatMap, withLatestFrom } from 'rxjs/oper
 
 import { AppState } from '../model';
 
-import { ArticleService } from '../article.service';
+import { ArticleService } from '../services/article.service';
 
 import { articleRequest } from '../pages/edit-article-page/actions/edit-article-request.action';
 import { getArticleResponse } from '../pages/edit-article-page/actions/get-article-response.action';

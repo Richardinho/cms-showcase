@@ -8,7 +8,7 @@ import {
 import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 
-import { ArticleService } from '../../article.service';
+import { ArticleService } from '../../services/article.service';
 
 import { AppState, Article } from '../../model';
 

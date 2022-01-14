@@ -5,7 +5,7 @@ import { deleteArticleResponse } from '../pages/edit-article-page/actions/delete
 import { getArticleResponse } from '../pages/edit-article-page/actions/get-article-response.action';
 
 import { Article, Articles } from '../model';
-import { tagData } from '../article.service';
+import { tagData } from '../services/article.service';
 
 export const initialState = {};
 

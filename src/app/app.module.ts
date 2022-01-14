@@ -20,8 +20,9 @@ import { StylesPageComponent } from './pages/styles-page/styles-page.component';
 
 import { MarkdownToHTMLPipe } from './pipes/markdown-to-html.pipe';
 import { AuthorisationService } from './services/authorisation.service';
-import { MessageService } from './message-service/message.service';
-import { MessageWidgetComponent } from './message-widget/message-widget.component';
+import { MessageService } from './services/message.service';
+
+import { MessageWidgetComponent } from './components/message-widget/message-widget.component';
 import { articlesReducer } from './reducers/articles.reducer';
 import { introReducer } from './reducers/intro.reducer';
 import { uiReducer } from './reducers/ui.reducer';

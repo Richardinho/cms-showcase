@@ -1,13 +1,14 @@
-import { ActivatedRoute, ParamMap } from '@angular/router';
-import { ArticleService } from '../../article.service';
-import { Store, select, createSelector, State } from '@ngrx/store';
 import { Component, OnInit } from '@angular/core';
-import { switchMap, mergeMap } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
-import { AppState, Article } from '../../model';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Router } from '@angular/router';
+import { Store, select, createSelector, State } from '@ngrx/store';
+import { Observable, of } from 'rxjs';
+
+import { ArticleService } from '../../services/article.service';
+import { switchMap, mergeMap } from 'rxjs/operators';
+import { AppState, Article } from '../../model';
 import { selectArticleUnderEdit } from '../edit-article-page/selectors/article.selector';
-import { DialogService } from '../../auth/dialog.service';
+import { DialogService } from '../../services/dialog.service';
 import { articleRequest } from '../edit-article-page/actions/edit-article-request.action';
 import { navigateToEditPageRequest } from './actions/navigate-to-edit-page-request';
 import { deleteArticle } from '../edit-article-page/actions/delete-article.action';

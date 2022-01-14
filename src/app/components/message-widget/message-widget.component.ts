@@ -5,7 +5,7 @@ import {
   Input,
   Output,
   EventEmitter } from '@angular/core';
-import { MessageService } from '../message-service/message.service';
+import { MessageService } from '../../services/message.service';
 
 @Component({
   templateUrl: './message-widget.component.html',

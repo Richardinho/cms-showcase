@@ -6,7 +6,7 @@ import { map, mergeMap, catchError, concatMap, withLatestFrom } from 'rxjs/opera
 
 import { AppState } from '../model';
 
-import { ArticleService } from '../article.service';
+import { ArticleService } from '../services/article.service';
 
 import { saveArticle } from '../pages/edit-article-page/actions/save-article.action';
 import { articleSavedResponse } from '../pages/edit-article-page/actions/article-saved-response.action';

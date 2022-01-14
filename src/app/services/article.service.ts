@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
+import { HttpErrorResponse, HttpHeaders, HttpClient } from '@angular/common/http';
+
 import { Observable } from 'rxjs';
 import { throwError, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-import { Article } from './model';
-import { HttpErrorResponse, HttpHeaders, HttpClient } from '@angular/common/http';
-import { environment } from '../environments/environment';
 
-import { articleToFormData } from './utils/article-to-form-data';
+import { Article } from '../model';
+import { environment } from '../../environments/environment';
+import { articleToFormData } from '../utils/article-to-form-data';
 
 export const tagData: string[] = ['angular', 'javascript', 'css', 'react', 'html-5'];
 
