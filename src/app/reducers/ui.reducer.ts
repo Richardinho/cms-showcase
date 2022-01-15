@@ -4,6 +4,9 @@ import { saveArticle } from '../actions/save-article.action';
 import { articleSavedResponse } from '../actions/article-saved-response.action';
 import { articleRequest } from '../actions/edit-article-request.action';
 import { deleteArticleResponse } from '../actions/delete-article-response.action';
+import { introChanged } from '../actions/intro-changed.action';
+import { introSaved, introNotSavedToServer } from '../actions/intro-request.action';
+import { saveIntro } from '../actions/save-intro.action';
 import { navigateAway } from '../actions/navigate-away';
 import { articleLinksResponse } from '../actions/article-links-response';
 import { publishArticleResponse } from '../actions/publish-article-response';
@@ -91,6 +94,9 @@ const _uiReducer = createReducer(initialState,
   on(publishArticleResponse, publishArticleResponseReducer),
   on(updateMetadataRequest, state => ({ ...state, loading: true })),
   on(updateMetadataResponse, state => ({ ...state, loading: false })),
+	on(saveIntro, state => ({ ...state, loading: true })),
+	on(introNotSavedToServer, state => ({ ...state, loading: false })),
+	on(introSaved, state => ({ ...state, loading: false })),
 );
 
 export function uiReducer(state: any, action: any) {

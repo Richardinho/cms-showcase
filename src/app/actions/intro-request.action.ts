@@ -5,3 +5,8 @@ export const introRequest = createAction(
 );
 
 export const introSaved = createAction('[Intro] IntroSaved');
+
+export const introNotSavedToServer = createAction(
+	'[Intro] IntroNotSavedToServer',
+	props<{ error: any }>()
+);

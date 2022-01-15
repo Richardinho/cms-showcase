@@ -30,7 +30,6 @@ export class MessageWidgetComponent implements OnInit {
       this.boxShadow = ` 0 2px 3px ${this.backgroundColor}`;
       this.message = data.message;
     });
-		this.messageService.show('richard is great', 'warning');
   }
 
   getBackgroundColor(mode: any) {

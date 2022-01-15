@@ -13,6 +13,8 @@ $error-color: orange;
 }
 
 .cta-bar {
+	display: flex;
+	align-items: center;
 	padding: 10px 16px;
 	background: $color-light-blue;
 }
@@ -73,4 +75,8 @@ textarea {
   resize: none;
 }
 
-
+.spinner {
+  width: 30px;
+  height: 30px;
+  margin-left: $half-unit;
+}

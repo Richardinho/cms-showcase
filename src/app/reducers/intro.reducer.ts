@@ -1,6 +1,7 @@
 import { createReducer, on } from '@ngrx/store';
 import { introChanged } from '../actions/intro-changed.action';
-import { introSaved } from '../actions/intro-request.action';
+import { introNotSavedToServer } from '../actions/intro-request.action';
+import { saveIntro } from '../actions/save-intro.action';
 
 const initialState = {
 	body: '',
@@ -20,22 +21,34 @@ export const introChangedReducer = (state: any, action: any) => {
 	};
 };
 
+
 /*
- * When the intro is saved on the server, we mark `saved` as true in the store.
+ * If intro is not saved due to server error or network down, then we
+ * mark `saved` as false.
  */
 
-export const introSavedReducer = (state: any, action: any) => {
+export const introNotSavedReducer = (state: any, action: any) => {
 	return {
 		...state,
-		saved: true,
+		saved: false,
 	};
 };
 
 
+
+// when the request to save the intro is made (not when it is actually saved)
+export const introSaveRequestReducer = (state: any, action: any) => {
+	return {
+		...state,
+		saved: true,
+	};
+}
+
 const _introReducer = createReducer(
 	initialState,
 	on(introChanged, introChangedReducer),
-	on(introSaved, introSavedReducer)
+	on(saveIntro, introSaveRequestReducer),
+	on(introNotSavedToServer, introNotSavedReducer)
 );
 
 export function introReducer(state: any, action: any) {

@@ -1,8 +1,12 @@
 <div class="cta-bar">
 	<button
-		[disabled]="(unsavedChanges$ | async) !== true"
+		[disabled]="disableSaveButton$ | async"
 		class="button"
 		(click)="saveEdit()">Save&nbsp;edit</button>
+
+		<div class="spinner">
+			<spinner-component *ngIf="showLoader$ | async" ></spinner-component>
+		</div>
 </div>
 
 <!-- only purpose of this div is to so the container div can be relative to it: is there a better way? -->

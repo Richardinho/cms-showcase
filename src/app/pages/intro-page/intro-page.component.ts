@@ -3,11 +3,13 @@ import {
   FormControl,
   FormGroup,
   Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Article } from '../../model';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../model';
-import { introUnsavedChanges, selectIntro } from '../../selectors/intro.selector';
+import { introSavedChanges, selectIntro } from '../../selectors/intro.selector';
+import { selectShowLoader } from '../../selectors/show-loader.selector';
 
 import { introChanged } from '../../actions/intro-changed.action';
 import { introRequest } from '../../actions/intro-request.action';
@@ -19,8 +21,8 @@ import { saveIntro } from '../../actions/save-intro.action';
 })
 export class IntroPageComponent {
   intro$: Observable<any>;
-
-	unsavedChanges$: Observable<boolean>;
+	showLoader$: Observable<boolean>;
+	disableSaveButton$: Observable<boolean>;
 
   fGroup: FormGroup = new FormGroup({
     body: new FormControl('', Validators.required),
@@ -31,8 +33,18 @@ export class IntroPageComponent {
   ) {}
 
 	ngOnInit() {
+    this.showLoader$ = this.store.pipe(select(selectShowLoader));
 
-		this.unsavedChanges$ = this.store.pipe(select(introUnsavedChanges));
+		const savedChanges$: Observable<boolean> = this.store.pipe(
+			select(introSavedChanges),
+		);
+
+		this.disableSaveButton$ = combineLatest(savedChanges$, this.fGroup.statusChanges).pipe(
+			map(([savedChanges, status]) => {
+				return savedChanges || status === 'INVALID';
+			})
+		); 
+
 		//  when form changes, update store (note: updating the server is a different action).
 		this.fGroup.valueChanges.subscribe(fg => {
 			const metadata = { ...fg, saved: false };

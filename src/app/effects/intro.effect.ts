@@ -7,10 +7,14 @@ import { tap, map, mergeMap, switchMap, catchError, concatMap, withLatestFrom } 
 import { AppState } from '../model';
 
 import { IntroService } from '../services/intro.service';
+import { MessageService, ERROR } from '../services/message.service';
 
 import { genericError } from '../actions/generic-error.action';
 import { introChanged, nullAction } from '../actions/intro-changed.action';
-import { introRequest, introSaved } from '../actions/intro-request.action';
+import {
+	introRequest,
+	introSaved,
+	introNotSavedToServer } from '../actions/intro-request.action';
 import { introFoundInCache } from '../actions/intro-found-in-cache.action';
 import { saveIntro } from '../actions/save-intro.action';
 import { unauthorisedResponse } from '../actions/unauthorised-response.action';
@@ -80,29 +84,46 @@ export class GetIntroEffects {
 				)),
 				mergeMap(([action, introWithToken]) => {
 					return this.introService.saveIntro(action, introWithToken).pipe(
-						map(blah => {
-						  return introSaved();
+						map(() => {
+							this.messageService.show('changes saved to server');
+							return introSaved();
 						}),
 						catchError((error) => {
-              if (error.status) {
-                if (error.status === UNAUTHORIZED) {
-                  return of(unauthorisedResponse({ redirectUrl: '/home' }));
-                } else {
-                  return of(genericError({ message: 'Server error occurred' }));
-                }
-              } else {
-                return of(genericError({ message: 'Check your network' }));
-              }
+							const metadata = {
+								error,
+							};
+
+							return of(introNotSavedToServer(metadata));
 						}),
 					);
 				}),
 			);
 		});
 
+	introNotSaved$ = createEffect(() => {
+		return this.actions$.pipe(
+			ofType(introNotSavedToServer),
+			mergeMap(({error}) => {
+				this.messageService.show('changes were not saved to the server', ERROR );
+
+				if (error.status) {
+					if (error.status === UNAUTHORIZED) {
+						return of(unauthorisedResponse({ redirectUrl: '/home' }));
+					} else {
+						return of(genericError({ message: 'Server error occurred' }));
+					}
+				} else {
+					return of(genericError({ message: 'Check your network' }));
+				}
+			}),
+		);
+	});
+
   constructor(
     private actions$: Actions,
     private introService: IntroService,
     private store: Store<AppState>,
+		private messageService: MessageService,
   ) {}
 }
 
