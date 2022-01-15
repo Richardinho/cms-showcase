@@ -54,7 +54,10 @@ export const articleChangedReducer = (state:any, action:any) => {
 
   if (article) {
 
-		const updatedArticle: Article = { ...article, ...articlePatchData } as Article;
+		const updatedArticle: Article = {
+			...article,
+			...articlePatchData
+		} as Article;
 
 		return {
 			...state,

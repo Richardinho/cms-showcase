@@ -28,6 +28,7 @@ export class GetArticleEffects {
         withLatestFrom(this.store.pipe(select(selectArticleWithToken, { id : action.id })))
       )),
       switchMap(([action, article]) => {
+				// check if article is in the store before fetching from the server
         if (article.article) {
           return of(articleFoundInCache({id: action.id}));
         }

@@ -54,7 +54,7 @@ export class EditArticlePageComponent implements OnInit {
   });
 
   ngOnInit() {
-    //hello todo: use this variable: e.g. have a spinner
+    //  todo: use this variable: e.g. have a spinner
     this.saving$ = this.store.pipe(select(selectSaving));
     this.unsavedChanges$ = this.store.pipe(select(selectUnsavedChanges));
 
@@ -62,16 +62,17 @@ export class EditArticlePageComponent implements OnInit {
      *  Whenever a form input value changes, we update the store
      */
 
-    //  get tag data from somewhere else. e.g the store
+    //  todo: get tag data from somewhere else. e.g the store
     this.formGroup.valueChanges.subscribe(formArticle => {
       this.store.dispatch(articleChanged({
-
         articlePatchData: createArticlePatchData(formArticle, this.articleService.tagData),
       }));
     });
 
     /*
      * when parameters change, we make a request for data
+		 * todo: Could simplify this by just getting a snapshot of the params and then
+		 * dispatching the action. i.e. I don't have to subscribe to paramMap
      */
 
     this.route.paramMap.subscribe((params: ParamMap) => {
@@ -82,9 +83,10 @@ export class EditArticlePageComponent implements OnInit {
         redirectUrl: '/edit-article/' + id }));
     });
 
+		//  fetch article from store
     this.article$ = this.store.pipe(select(selectArticleUnderEdit));
 
-		// when article is updated, update form group
+		// when article in store is updated, update form group
     this.article$.subscribe(article => {
       if (article) {
         this.formGroup

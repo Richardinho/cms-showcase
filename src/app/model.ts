@@ -35,6 +35,7 @@ export interface UI {
 
 export interface Intro {
 	body: string;
+	saved: boolean;
 }
 
 export interface AppState {

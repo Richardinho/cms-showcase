@@ -1,5 +1,6 @@
 <div class="cta-bar">
 	<button
+		[disabled]="(unsavedChanges$ | async) !== true"
 		class="button"
 		(click)="saveEdit()">Save&nbsp;edit</button>
 </div>

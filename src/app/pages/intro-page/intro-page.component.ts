@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import { Article } from '../../model';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../model';
-import { selectIntro } from '../../selectors/intro.selector';
+import { introUnsavedChanges, selectIntro } from '../../selectors/intro.selector';
 
 import { introChanged } from '../../actions/intro-changed.action';
 import { introRequest } from '../../actions/intro-request.action';
@@ -27,19 +27,27 @@ export class IntroPageComponent {
     private store: Store<AppState>
   ) {}
 
-	ngOnInit() {
-		this.store.dispatch(introRequest());
+	unsavedChanges$: Observable<boolean>;
 
+	ngOnInit() {
+
+		this.unsavedChanges$ = this.store.pipe(select(introUnsavedChanges));
+		//  when form changes, update store (note: updating the server is a different action).
 		this.fGroup.valueChanges.subscribe(fg => {
-			this.store.dispatch(introChanged(fg));
+			const metadata = { ...fg, saved: false };
+			this.store.dispatch(introChanged(metadata));
 		});
 
+		//  when intro in store is updated, update form
 		this.intro$ = this.store.pipe(select(selectIntro));
 		this.intro$.subscribe(intro => {
 			if (intro) {
 				this.fGroup.patchValue(intro, { emitEvent: false });
 			}
 		});
+
+		//  dispatch action to request intro data from server
+		this.store.dispatch(introRequest());
 	}
 
 	saveEdit() {

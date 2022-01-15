@@ -10,7 +10,8 @@ import { IntroService } from '../services/intro.service';
 
 import { genericError } from '../actions/generic-error.action';
 import { introChanged, nullAction } from '../actions/intro-changed.action';
-import { introRequest } from '../actions/intro-request.action';
+import { introRequest, introSaved } from '../actions/intro-request.action';
+import { introFoundInCache } from '../actions/intro-found-in-cache.action';
 import { saveIntro } from '../actions/save-intro.action';
 import { unauthorisedResponse } from '../actions/unauthorised-response.action';
 
@@ -25,32 +26,12 @@ export const selectIntroWithJWTToken = (state: AppState) => {
 	};
 };
 
-const foo = (srcJSON) => {
+const mapResponseJSONForStore = (srcJSON) => {
 	const result: any = {};
 	result.body = srcJSON.intro_text;
+	result.saved = true;
 	return result;
 }
-
-/*
-const combineActionWithJWT = (action) => {
-	return of(action).pipe(withLatestFrom(this.store.pipe(select(selectIntroWithToken))));
-};
-*/
-
-/*
-const updateIntro = ([action, intro]) => {
-	return this.introService.updateIntro(intro)
-		.pipe(
-			map((a) => {
-				console.log('blah blah', a);
-				return of('i like turtiles');
-			}),
-			catchError(error => {
-				return of(genericError({message: 'lalalalal'}));
-			}),
-		);
-};
-*/
 
 @Injectable()
 export class GetIntroEffects {
@@ -59,13 +40,21 @@ export class GetIntroEffects {
     this.actions$.pipe(
       ofType(introRequest),
       concatMap(action => of(action).pipe(
-        withLatestFrom(this.store.pipe(select(selectJWTToken)))
+        withLatestFrom(this.store.pipe(select(selectIntroWithJWTToken)))
       )),
-      switchMap(([action, token]) => {
+      switchMap(([action, { jwt, intro }]) => {
 
-        return this.introService.getIntro(token)
+				// check to see if intro body text is already in store.
+				// if so, we'll just use that so just signal this.
+				if (intro?.body) {
+					return of(introFoundInCache());
+				}
+
+        return this.introService.getIntro(jwt)
           .pipe(
-            map((introJSON) => introChanged(foo(introJSON))),
+            map((introJSON) => {
+							return introChanged(mapResponseJSONForStore(introJSON))
+						}),
             catchError((error) => {
               if (error.status) {
                 //  if we are unauthorised, we will dispatch an unauthorised response which results
@@ -91,7 +80,9 @@ export class GetIntroEffects {
 				)),
 				mergeMap(([action, introWithToken]) => {
 					return this.introService.saveIntro(action, introWithToken).pipe(
-						map(blah => nullAction()),
+						map(blah => {
+						  return introSaved();
+						}),
 						catchError((error) => {
               if (error.status) {
                 if (error.status === UNAUTHORIZED) {

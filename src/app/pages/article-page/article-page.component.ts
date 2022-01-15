@@ -11,6 +11,7 @@ import { requestArticleLinks } from '../../actions/request-article-links';
 import { requestPublishArticle } from '../../actions/request-publish-article';
 import { createArticleRequest } from '../../actions/create-article.action';
 
+// change name to ArticleLinksPageComponent
 @Component({
   templateUrl: './article-page.component.html',
   styleUrls: ['./article-page.component.scss']
@@ -23,7 +24,10 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+		// dispatch action to request links
     this.store.dispatch(requestArticleLinks());
+
+		// configure stream of links from store
     this.articles$ = this.store.pipe(select(selectArticleLinks));
   }
 

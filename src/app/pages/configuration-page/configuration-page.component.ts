@@ -15,6 +15,7 @@ import {
   FormGroup,
   Validators } from '@angular/forms';
 
+// should it be called MetadataPageComponent?
 @Component({
   templateUrl: './configuration-page.component.html',
   styleUrls: ['./configuration-page.component.scss'],
@@ -29,25 +30,28 @@ export class ConfigurationPageComponent implements OnInit {
   ) {}
 
   public formGroup: FormGroup = new FormGroup({
-    githubUrl: new FormControl('lalala'),
+    githubUrl: new FormControl(''),
   });
 
   update() {
-    this.store.dispatch(updateMetadataRequest({ metadata: { github_url: this.formGroup.value.githubUrl }}));
+		const metadata = { metadata: { github_url: this.formGroup.value.githubUrl }};
+		const action = updateMetadataRequest(metadata);
+    this.store.dispatch(action);
   }
 
   ngOnInit() {
-    this.metadata$ = this.store.pipe(select(selectMetadata));
+		// configure loader component
     this.showLoader$ = this.store.pipe(select(selectShowLoader));
 
+		// when metadata in store is updated, update form
+    this.metadata$ = this.store.pipe(select(selectMetadata));
     this.metadata$.subscribe(metadata => {
       this.formGroup
         .patchValue({ githubUrl: metadata.github_url })
     });
 
-    this.route.paramMap.subscribe((params: ParamMap) => {
-      this.store.dispatch(metadataRequest());
-    });
+		//  dispatch action to request metadata from server
+    this.store.dispatch(metadataRequest());
   }
 }
 
