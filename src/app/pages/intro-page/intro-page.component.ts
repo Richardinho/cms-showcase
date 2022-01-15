@@ -19,15 +19,16 @@ import { saveIntro } from '../../actions/save-intro.action';
 })
 export class IntroPageComponent {
   intro$: Observable<any>;
-  public fGroup: FormGroup = new FormGroup({
+
+	unsavedChanges$: Observable<boolean>;
+
+  fGroup: FormGroup = new FormGroup({
     body: new FormControl('', Validators.required),
   });
 
   constructor(
     private store: Store<AppState>
   ) {}
-
-	unsavedChanges$: Observable<boolean>;
 
 	ngOnInit() {
 
