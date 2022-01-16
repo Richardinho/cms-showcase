@@ -43,9 +43,7 @@ export class GetIntroEffects {
   getIntro$ = createEffect(() =>
     this.actions$.pipe(
       ofType(introRequest),
-      concatMap(action => of(action).pipe(
-        withLatestFrom(this.store.pipe(select(selectIntroWithJWTToken)))
-      )),
+			withLatestFrom(this.store.pipe(select(selectIntroWithJWTToken))),
       switchMap(([action, { jwt, intro }]) => {
 
 				// check to see if intro body text is already in store.
@@ -79,9 +77,7 @@ export class GetIntroEffects {
 		saveIntro$ = createEffect(() => {
 			return this.actions$.pipe(
 				ofType(saveIntro),
-				concatMap(action => of(action).pipe(
-					withLatestFrom(this.store.pipe(select(selectIntroWithJWTToken))),
-				)),
+				withLatestFrom(this.store.pipe(select(selectIntroWithJWTToken))),
 				mergeMap(([action, introWithToken]) => {
 					return this.introService.saveIntro(action, introWithToken).pipe(
 						map(() => {
