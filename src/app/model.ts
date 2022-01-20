@@ -26,11 +26,19 @@ export interface Articles {
   [id: string]: Article;
 }
 
+export interface Project {
+	id: string;
+	title: string;
+	href: '';
+	tags: Array<Tag>;
+}
+
 export interface UI {
   saving: boolean;
   id_of_article_under_edit: string;
   articleLinks: Array<any>;
   loading: boolean;
+	projects: Array<Project>;
 }
 
 export interface Intro {

@@ -1,0 +1,81 @@
+@import '../../../variables';
+
+:host {
+	display: grid;
+	grid-template-rows: auto 1fr;
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	right: 0;
+}
+
+.cta-bar {
+	display: flex;
+	align-items: center;
+	padding: 10px 16px;
+	background: $color-light-blue;
+}
+
+.outer-container {
+	position: relative;
+}
+
+.container {
+  padding: $size-gutter;
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	top: 0;
+}
+
+.page-title {
+	margin-bottom:  12px;
+}
+
+.project-item {
+	margin: 4px 0;
+	background: white;
+	padding: 4px;
+}
+
+
+.item-header {
+	display: flex;
+
+	.button {
+		margin-left: auto;
+	}
+}
+
+.input-container {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	align-items: center;
+	column-gap: 4px;
+	grid-template-areas:
+	"label input"
+	". error"
+}
+
+.input.ng-dirty.ng-invalid {
+	border-color: $error-color;
+}
+
+.label {
+	text-align: right;
+}
+
+.error {
+  margin: 0 4px;
+  padding-bottom: 4px;
+  color: $error-color;
+  font-size: 12px;
+  grid-area: error;
+	opacity: 0;
+}
+
+.error.show-error {
+	opacity: 1;
+}

@@ -12,14 +12,23 @@ import { articleLinksResponse } from '../actions/article-links-response';
 import { publishArticleResponse } from '../actions/publish-article-response';
 import { updateLinks } from './utils';
 import { updateMetadataRequest, updateMetadataResponse } from '../actions/update-metadata.action';
+import { projectsResponse } from '../actions/projects.action';
 
 export const initialState: UI = {
   saving: false,
   id_of_article_under_edit: '',
   articleLinks: [],
   loading: false,
+	projects: [],
 };
 
+const projectsResponseReducer = (state: any, action: any) => {
+	console.log('project response reducer', action);
+	return {
+		...state,
+		projects: action.projectsJSON,
+	};
+};
 
 /*
  *  set article id when we have navigated to an article or edit page
@@ -97,6 +106,7 @@ const _uiReducer = createReducer(initialState,
 	on(saveIntro, state => ({ ...state, loading: true })),
 	on(introNotSavedToServer, state => ({ ...state, loading: false })),
 	on(introSaved, state => ({ ...state, loading: false })),
+	on(projectsResponse, projectsResponseReducer),
 );
 
 export function uiReducer(state: any, action: any) {

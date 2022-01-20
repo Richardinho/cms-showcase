@@ -7,3 +7,5 @@ export const selectSaving = createSelector(
   selectUI,
   (state: UI) => state.saving
 );
+
+export const selectProjects = (state: AppState) => state?.ui?.projects;

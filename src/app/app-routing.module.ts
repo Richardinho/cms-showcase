@@ -6,6 +6,7 @@ import { ConfigurationPageComponent } from './pages/configuration-page/configura
 import { EditArticlePageComponent } from './pages/edit-article-page/edit-article-page.component';
 import { IntroPageComponent } from './pages/intro-page/intro-page.component';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
+import { ProjectsPageComponent } from './pages/projects-page/projects-page.component';
 import { MenuPageComponent } from './pages/menu-page/menu-page.component';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 import { StylesPageComponent } from './pages/styles-page/styles-page.component';
@@ -48,6 +49,11 @@ const routes: Routes = [
     component: ConfigurationPageComponent,
 		canActivate: [AppGuard],
   },
+	{
+		path: 'projects',
+		component: ProjectsPageComponent,
+		canActivate: [AppGuard],
+	},
   {
     path: 'styles',
     component: StylesPageComponent,

@@ -1,0 +1,33 @@
+<div class="cta-bar">
+</div>
+
+<!-- only purpose of this div is to so the container div can be relative to it: is there a better way? -->
+<div class="outer-container">
+	<div [formGroup]="form" class="container">
+		<h2 class="page-title">Projects</h2>
+		<ul formArrayName="projects">
+			<li class="project-item" *ngFor="let project of projectsForm.controls; let i=index">
+				<ng-container [formGroupName]="i">
+
+					<div class="item-header">
+						<button class="button">delete</button>
+					</div>
+
+					<div class="input-container">
+						<label class="label" [for]="'title-' + i">title</label>
+						<input class="input" [id]="'title-' + i" formControlName="title"/>
+						<div [class.show-error]="hasError(project, 'title')" class="error">an error occurred</div>
+					</div>
+
+					<div class="input-container">
+						<label class="label" [for]="'href-' + i">href</label>
+						<input class="input" [id]="'href-' + i" formControlName="href"/>
+						<div [class.show-error]="hasError(project, 'href')" class="error">an error occurred</div>
+					</div>
+
+				</ng-container>
+			</li>
+		</ul>
+	</div>
+</div>
+

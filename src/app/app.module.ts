@@ -11,14 +11,15 @@ import { AppComponent } from './app.component';
 import { environment } from '../environments/environment';
 
 
-import { MenuPageComponent } from './pages/menu-page/menu-page.component';
-import { IntroPageComponent } from './pages/intro-page/intro-page.component';
 import { ArticlePageComponent } from './pages/article-page/article-page.component';
-import { LoginPageComponent } from './pages/login-page/login-page.component';
-import { ViewArticlePageComponent } from './pages/view-article-page/view-article-page.component';
-import { EditArticlePageComponent } from './pages/edit-article-page/edit-article-page.component';
 import { ConfigurationPageComponent } from './pages/configuration-page/configuration-page.component';
+import { EditArticlePageComponent } from './pages/edit-article-page/edit-article-page.component';
+import { IntroPageComponent } from './pages/intro-page/intro-page.component';
+import { LoginPageComponent } from './pages/login-page/login-page.component';
+import { MenuPageComponent } from './pages/menu-page/menu-page.component';
+import { ProjectsPageComponent } from './pages/projects-page/projects-page.component';
 import { StylesPageComponent } from './pages/styles-page/styles-page.component';
+import { ViewArticlePageComponent } from './pages/view-article-page/view-article-page.component';
 
 import { MarkdownToHTMLPipe } from './pipes/markdown-to-html.pipe';
 import { AuthorisationService } from './services/authorisation.service';
@@ -46,26 +47,28 @@ import { LogInEffects } from './effects/login.effect';
 import { GetIntroEffects } from './effects/intro.effect';
 import { PublishEffects } from './effects/publish';
 import { LoadArticleLinksEffects } from './effects/load-links';
+import { ProjectsEffects } from './effects/projects.effect';
 
 import { CheckboxComponent } from './components/checkbox/checkbox.component';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
-    AppComponent,
-		MenuPageComponent,
 		IntroPageComponent,
+		MenuPageComponent,
+		PageNotFoundComponent,
+		ProjectsPageComponent,
+    AppComponent,
     ArticlePageComponent,
+    CheckboxComponent,
+    ConfigurationPageComponent,
+    EditArticlePageComponent,
     LoginPageComponent,
     MarkdownToHTMLPipe,
-    ViewArticlePageComponent,
-		PageNotFoundComponent,
-    EditArticlePageComponent,
     MessageWidgetComponent,
-    ConfigurationPageComponent,
     SpinnerComponent,
     StylesPageComponent,
-    CheckboxComponent,
+    ViewArticlePageComponent,
   ],
   imports: [
     ReactiveFormsModule,
@@ -98,6 +101,7 @@ import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.com
       CreateArticleEffects,
       GetMetadataEffect,
       PutMetadataEffect,
+			ProjectsEffects,
     ])
   ],
   providers: [
