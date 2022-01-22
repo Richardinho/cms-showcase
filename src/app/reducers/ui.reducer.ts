@@ -19,11 +19,9 @@ export const initialState: UI = {
   id_of_article_under_edit: '',
   articleLinks: [],
   loading: false,
-	projects: [],
 };
 
-const projectsResponseReducer = (state: any, action: any) => {
-	console.log('project response reducer', action);
+const projectsResponseReducer = (state: UI, action: any) => {
 	return {
 		...state,
 		projects: action.projectsJSON,

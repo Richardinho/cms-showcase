@@ -29,8 +29,15 @@ export interface Articles {
 export interface Project {
 	id: string;
 	title: string;
-	href: '';
-	tags: Array<Tag>;
+	href: string;
+	tag1: string;
+	tag2: string;
+	tag3: string;
+	underEdit: boolean;
+}
+
+export interface Projects {
+	[id: string]: Project;
 }
 
 export interface UI {
@@ -38,7 +45,6 @@ export interface UI {
   id_of_article_under_edit: string;
   articleLinks: Array<any>;
   loading: boolean;
-	projects: Array<Project>;
 }
 
 export interface Intro {
@@ -48,6 +54,7 @@ export interface Intro {
 
 export interface AppState {
   articles: Articles;
+	projects: Projects;
   ui: UI;
   jwt_token: string;
   metadata: Metadata;

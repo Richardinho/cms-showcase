@@ -9,9 +9,9 @@ import { Article } from '../model';
 import { environment } from '../../environments/environment';
 import { articleToFormData } from '../utils/article-to-form-data';
 
-// todo: this should probably live in store?
-// For example, I should be able to configure this within the CMS: add, remove tags etc.
-export const tagData: string[] = ['angular', 'javascript', 'css', 'react', 'html-5'];
+// todo: this should probably live in store? For example, I should be able to
+// configure this within the CMS: add, remove tags etc.
+export const tagData: string[] = [ 'angular', 'css', 'html-5', 'javascript', 'react' ];
 
 @Injectable({
   providedIn: 'root'

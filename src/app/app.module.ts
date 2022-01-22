@@ -26,11 +26,13 @@ import { AuthorisationService } from './services/authorisation.service';
 import { MessageService } from './services/message.service';
 
 import { MessageWidgetComponent } from './components/message-widget/message-widget.component';
+import { ProjectEditFormComponent } from './components/project-edit-form/project-edit-form.component';
 import { articlesReducer } from './reducers/articles.reducer';
 import { introReducer } from './reducers/intro.reducer';
 import { uiReducer } from './reducers/ui.reducer';
 import { logInReducer } from './reducers/logged-in.reducer';
 import { metadataReducer } from './reducers/metadata.reducer';
+import { projectsReducer } from './reducers/projects.reducer';
 
 // add this to styles page
 import { SpinnerComponent } from './pages/configuration-page/spinner';
@@ -55,6 +57,7 @@ import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.com
 @NgModule({
   declarations: [
 		IntroPageComponent,
+		ProjectEditFormComponent,
 		MenuPageComponent,
 		PageNotFoundComponent,
 		ProjectsPageComponent,
@@ -83,6 +86,7 @@ import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.com
       // change name of this reducer
       jwt_token: logInReducer,
       metadata: metadataReducer,
+			projects: projectsReducer,
     }),
 		StoreDevtoolsModule.instrument({
       maxAge: 25, // Retains last 25 states

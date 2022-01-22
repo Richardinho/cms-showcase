@@ -1,0 +1,59 @@
+@import '../../../variables';
+
+.input-container {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	align-items: center;
+	column-gap: 4px;
+	grid-template-areas:
+	"label input"
+	". error"
+}
+
+.input.ng-dirty.ng-invalid {
+	border-color: $error-color;
+}
+
+.label {
+	text-align: right;
+}
+
+.error {
+  margin: 0 4px;
+  padding-bottom: 4px;
+  color: $error-color;
+  font-size: 12px;
+  grid-area: error;
+	opacity: 0;
+}
+
+.error.show-error {
+	opacity: 1;
+}
+
+.tags {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 10px;
+}
+
+.tags-error {
+	color: $error-color;
+	font-size: 12px;
+	opacity: 0;
+}
+
+.tags-error.show-error {
+	opacity: 1;
+}
+
+.footer {
+	display: flex;
+	flex-wrap: nowrap;
+	align-items: center;
+}
+
+.button-group {
+	margin-left: auto;
+}

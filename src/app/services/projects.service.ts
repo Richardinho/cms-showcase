@@ -26,7 +26,9 @@ export class ProjectService {
     return this.http.get<any>(url, httpOptions)
       .pipe(
         map((data) => {
-          return data.projects;
+          return data.projects.map(project => {
+						return { ...project, underEdit: false };
+					});
         }),
         catchError((error: HttpErrorResponse) => {
           if (error.status) {

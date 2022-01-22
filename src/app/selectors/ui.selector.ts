@@ -8,4 +8,4 @@ export const selectSaving = createSelector(
   (state: UI) => state.saving
 );
 
-export const selectProjects = (state: AppState) => state?.ui?.projects;
+

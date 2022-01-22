@@ -23,6 +23,7 @@
 
 .container {
   padding: $size-gutter;
+	overflow: scroll;
 	position: absolute;
 	left: 0;
 	right: 0;
@@ -49,33 +50,73 @@
 	}
 }
 
-.input-container {
-	display: grid;
-	grid-template-columns: auto 1fr;
+/* project links */
+.project-label {
+  margin-right: 4px;
+  font-weight: bold;
+	display: inline-block;
+}
+
+.project-label::after {
+  content: ":";
+}
+
+.title {
+  font-size: 20px;
+  line-height: 1.5;
+  margin: 10px 0;
+}
+
+.href {
+  margin: 10px 0;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: nowrap;
 	align-items: center;
-	column-gap: 4px;
-	grid-template-areas:
-	"label input"
-	". error"
+  justify-content: flex-start;
+  line-height: 1.5;
+  font-size: 14px;
+  margin: 10px 0;
 }
 
-.input.ng-dirty.ng-invalid {
-	border-color: $error-color;
+.published {
+  margin: 10px 0;
 }
 
-.label {
-	text-align: right;
+.tags ul {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
 }
 
-.error {
-  margin: 0 4px;
-  padding-bottom: 4px;
-  color: $error-color;
-  font-size: 12px;
-  grid-area: error;
-	opacity: 0;
+.tag {
+  position: relative;
+  padding-left: 8px;
+  padding-right: 8px;
 }
 
-.error.show-error {
-	opacity: 1;
+.tag:nth-child(1) {
+  padding-left: 0;
+}
+
+.tag:last-child::after {
+	content: none;
+}
+
+.tag::after {
+  content: '';
+  position: absolute;
+  z-index: 1;
+  top: 4px;
+  bottom: 4px;
+  left: calc(100% - 1px);
+  background-color: $color-light-blue;
+  width:2px;
+  border-radius: 2px;
+}
+
+.buttons {
+  padding: 8px 0;
 }
