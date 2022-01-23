@@ -34,6 +34,7 @@ export interface Project {
 	tag2: string;
 	tag3: string;
 	underEdit: boolean;
+	published: boolean;
 }
 
 export interface Projects {

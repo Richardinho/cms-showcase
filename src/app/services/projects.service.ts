@@ -45,6 +45,7 @@ export class ProjectService {
 		formData.append('tag2', tag2 || '');
 		formData.append('tag3', tag3 || '');
 		formData.append('id', id);
+		formData.append('published', published);
 
     return this.http.post<any>(url, formData, httpOptions)
       .pipe(
@@ -79,7 +80,8 @@ export class ProjectService {
         map((data) => {
           return data.projects.map(project => {
 						// todo: set underEdit in the reducer
-						return { ...project, underEdit: false };
+						const published = Boolean(parseInt(project.published));
+						return { ...project, underEdit: false, published, };
 					});
         }),
         catchError((error: HttpErrorResponse) => {

@@ -10,6 +10,7 @@ import {
 	editProject,
 	deleteProject,
 	projectDeletedResponse,
+	saveProject,
 } from '../../actions/projects.action';
 
 @Component({
@@ -34,6 +35,11 @@ export class ProjectsPageComponent {
 
 	editProject(id: string) {
 		this.store.dispatch(editProject({ id, edit: true }));
+	}
+
+	publishProject(project: Project, published: boolean) {
+		const updatedProject = { ...project, published };
+		this.store.dispatch(saveProject({ project: updatedProject }));
 	}
 
 	deleteProject(id: string) {

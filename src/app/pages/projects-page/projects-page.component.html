@@ -29,8 +29,13 @@
 					
 					<div class="buttons">
 						<button class="button" (click)="editProject(project.id)">edit</button>
-						<button class="button" >publish</button>
-						<button class="button" (click)="deleteProject(project.id)">delete</button>
+						<ng-container *ngIf="!project.published">
+							<button class="button" (click)="publishProject(project, true)">publish</button>
+						</ng-container>
+						<ng-container *ngIf="project.published">
+							<button class="button" (click)="publishProject(project, false)">unpublish</button>
+						</ng-container>
+						<button class="button" (click)="deleteProject(project)">delete</button>
 					</div>
 				</ng-container>
 			</li>
