@@ -14,6 +14,18 @@ export class ProjectService {
     private http: HttpClient,
   ) {}
 
+	deleteProject(id: string, token: string) {
+		const url = environment.blogDomain + `/index.php/api/projects/${id}`;
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': `Basic ${token}`,
+      })
+    };
+
+    return this.http.delete(url, httpOptions);
+	}
+
 	updateProject(project: any, token: string) {
 		const url = environment.blogDomain + '/index.php/api/projects';
 

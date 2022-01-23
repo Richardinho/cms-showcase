@@ -28,3 +28,13 @@ export const projectSavedResponse = createAction(
 	'[Projects] Project Saved Response',
 	props<{ id: string }>(),
 );
+
+export const deleteProject = createAction(
+	'[Projects] DeleteProject',
+	props<{ id: string }>(),
+);
+
+export const projectDeletedResponse = createAction(
+	'[Projects] Project Deleted Response',
+	props<{ id: string }>(),
+);

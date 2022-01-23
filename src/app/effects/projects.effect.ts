@@ -11,6 +11,8 @@ import {
 	projectsResponse,
 	projectSavedResponse,
 	saveProject,
+	deleteProject,
+	projectDeletedResponse,
 } from '../actions/projects.action';
 import { unauthorisedResponse } from '../actions/unauthorised-response.action';
 import { genericError } from '../actions/generic-error.action';
@@ -31,6 +33,22 @@ export class ProjectsEffects {
 		private projectService: ProjectService,
   ) {}
 
+	deleteProject$ = createEffect(() => {
+		return this.actions$.pipe(
+			ofType(deleteProject),
+			withLatestFrom(this.store.pipe(select(selectJWTToken))),
+			mergeMap(([action, token]) => {
+				return this.projectService.deleteProject(action.id, token)
+					.pipe(
+						map(() => projectDeletedResponse({ id: action.id })),
+            catchError((error) => {
+							return of(genericError({ message: 'generic error occurred' }));
+            })
+					);
+			}),
+		);
+	});
+
 	saveProject$ = createEffect(() => {
 		return this.actions$.pipe(
 			ofType(saveProject),
@@ -40,6 +58,7 @@ export class ProjectsEffects {
 					.pipe(
 						map(() => projectSavedResponse({ id: action.project.id })),
             catchError((error) => {
+							console.log('error occurred', error);
 							return of(genericError({ message: 'generic error occurred' }));
             })
 					);

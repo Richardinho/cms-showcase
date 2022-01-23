@@ -5,6 +5,7 @@ import {
 	editProject,
 	projectsResponse,
 	projectSavedResponse,
+	projectDeletedResponse,
 } from '../actions/projects.action';
 
 const initialState = null;
@@ -52,12 +53,22 @@ export const projectSavedResponseReducer = (state: any, action: any) => {
 	});
 };
 
+export const deleteProjectResponseReducer = (state:any, action:any) => {
+	return state.filter(project => {
+		if (project.id !== action?.id) {
+			return project;
+		}
+	});
+};
+
 const _projectsReducer = createReducer(
 	initialState,
 	on(projectsResponse, projectsResponseReducer),
 	on(editProject, editProjectReducer),
 	on(saveProject, saveProjectReducer),
 	on(projectSavedResponse, projectSavedResponseReducer),
+	// delete project when we get a successful response from the server
+	on(projectDeletedResponse, deleteProjectResponseReducer),
 );
 
 export function projectsReducer(state: AppState, action: any) {
