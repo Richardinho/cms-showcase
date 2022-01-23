@@ -4,6 +4,7 @@ import {
 	saveProject,
 	editProject,
 	projectsResponse,
+	projectSavedResponse,
 } from '../actions/projects.action';
 
 const initialState = null;
@@ -29,7 +30,22 @@ export const saveProjectReducer = (state: any, action: any) => {
 
 	return state.map(project => {
 		if (project.id === action?.project?.id) {
-			return action.project;
+			return { ...project, ...action.project };
+		}
+
+		return project;
+	});
+};
+
+export const projectSavedResponseReducer = (state: any, action: any) => {
+	return state.map(project => {
+		if (project.id === action?.id) {
+			return {
+				...project,
+				// When project changes are saved on the server, we want to 
+				// signal that the edit is over and we can close the form
+				underEdit: false
+			};
 		}
 
 		return project;
@@ -41,6 +57,7 @@ const _projectsReducer = createReducer(
 	on(projectsResponse, projectsResponseReducer),
 	on(editProject, editProjectReducer),
 	on(saveProject, saveProjectReducer),
+	on(projectSavedResponse, projectSavedResponseReducer),
 );
 
 export function projectsReducer(state: AppState, action: any) {

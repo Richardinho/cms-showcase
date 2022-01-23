@@ -23,3 +23,8 @@ export const saveProject = createAction(
 	'[Projects] SaveProject', 
 	props<{project: Project}>(),
 );
+
+export const projectSavedResponse = createAction(
+	'[Projects] Project Saved Response',
+	props<{ id: string }>(),
+);

@@ -32,8 +32,6 @@ const formDataToProject = (project: any, id: string): Project => {
 	result.tag2 = tag2;
 	result.tag3 = tag3;
 
-	result.underEdit = false;
-
 	return result as Project;
 };
 

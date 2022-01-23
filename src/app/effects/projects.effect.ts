@@ -2,13 +2,15 @@ import { Injectable } from '@angular/core';
 
 import { Store, select } from '@ngrx/store';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { tap, withLatestFrom, switchMap, map, catchError } from 'rxjs/operators';
+import { tap, withLatestFrom, mergeMap, switchMap, map, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 
 import {
 	projectsRequest,
 	projectsFoundInCache,
 	projectsResponse,
+	projectSavedResponse,
+	saveProject,
 } from '../actions/projects.action';
 import { unauthorisedResponse } from '../actions/unauthorised-response.action';
 import { genericError } from '../actions/generic-error.action';
@@ -18,6 +20,8 @@ import { AppState } from '../model';
 import { ProjectService } from '../services/projects.service';
 import { UNAUTHORIZED } from '../status-code.constants';
 
+const selectJWTToken = (state: AppState) => state.jwt_token;
+
 @Injectable()
 export class ProjectsEffects {
 
@@ -26,6 +30,22 @@ export class ProjectsEffects {
     private store: Store<AppState>,
 		private projectService: ProjectService,
   ) {}
+
+	saveProject$ = createEffect(() => {
+		return this.actions$.pipe(
+			ofType(saveProject),
+			withLatestFrom(this.store.pipe(select(selectJWTToken))),
+			mergeMap(([action, token]) => {
+				return this.projectService.updateProject(action.project, token)
+					.pipe(
+						map(() => projectSavedResponse({ id: action.project.id })),
+            catchError((error) => {
+							return of(genericError({ message: 'generic error occurred' }));
+            })
+					);
+			}),
+		);
+	});
 
 	getProjects$ = createEffect(() => 
 		this.actions$.pipe(

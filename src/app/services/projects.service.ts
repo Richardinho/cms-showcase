@@ -14,6 +14,45 @@ export class ProjectService {
     private http: HttpClient,
   ) {}
 
+	updateProject(project: any, token: string) {
+		const url = environment.blogDomain + '/index.php/api/projects';
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': `Basic ${token}`,
+      })
+    };
+
+		const formData = new FormData();
+
+		const { id, title, href, tag1, tag2, tag3, published } = project;
+
+		formData.append('title', title);
+		formData.append('href', href);
+		formData.append('tag1', tag1 || '');
+		formData.append('tag2', tag2 || '');
+		formData.append('tag3', tag3 || '');
+		formData.append('id', id);
+
+    return this.http.post<any>(url, formData, httpOptions)
+      .pipe(
+        map((data) => {
+					return of(data);
+        }),
+        catchError((error: HttpErrorResponse) => {
+          if (error.status) {
+            return throwError({
+              status: error.status
+            });
+          } else {
+            return throwError({
+              message: 'an error occurred'
+            });
+          }
+        })
+      );
+	}
+
 	getProjects(token: string) {
 		const url = environment.blogDomain + '/index.php/api/projects';
 
@@ -27,6 +66,7 @@ export class ProjectService {
       .pipe(
         map((data) => {
           return data.projects.map(project => {
+						// todo: set underEdit in the reducer
 						return { ...project, underEdit: false };
 					});
         }),
