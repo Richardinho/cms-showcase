@@ -38,10 +38,6 @@ export interface Project {
 	published: boolean;
 }
 
-export interface Projects {
-	[id: string]: Project;
-}
-
 export interface UI {
   saving: boolean;
   id_of_article_under_edit: string;
@@ -56,7 +52,7 @@ export interface Intro {
 
 export interface AppState {
   articles: Articles;
-	projects: Projects;
+	projects: Array<Project>;
   ui: UI;
   jwt_token: string;
   metadata: Metadata;

@@ -11,7 +11,7 @@ export const projectsFoundInCache = createAction(
 
 export const projectsResponse = createAction(
 	'[Projects] Projects Response',
-	props<{ projectsJSON: any }>()
+	props<{ projects: Array<Project> }>()
 );
 
 export const editProject = createAction(

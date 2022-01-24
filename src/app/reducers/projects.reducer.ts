@@ -20,8 +20,8 @@ const createId = () => {
 
 const initialState = null;
 
-export const projectsResponseReducer = (state: any, action: any) => {
-	return action.projectsJSON;
+export const projectsResponseReducer = (state: Array<Project>, action: any) => {
+	return action.projects;
 };
 
 export const editProjectReducer = (state: any, action: any) => {

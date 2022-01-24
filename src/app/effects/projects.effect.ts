@@ -21,7 +21,7 @@ import { unauthorisedResponse } from '../actions/unauthorised-response.action';
 import { genericError } from '../actions/generic-error.action';
 
 import { selectProjectsWithJWTToken } from '../selectors/project.selector';
-import { AppState } from '../model';
+import { AppState, Project } from '../model';
 import { ProjectService } from '../services/projects.service';
 import { UNAUTHORIZED } from '../status-code.constants';
 
@@ -98,8 +98,8 @@ export class ProjectsEffects {
 				} else {
 				 return this.projectService.getProjects(token)
 					 .pipe(
-							map(projectsJSON => {
-								return projectsResponse({ projectsJSON });
+							map((projects: Array<Project>) => {
+								return projectsResponse({ projects });
 							}),
 							catchError((error) => {
 								if (error.status) {
