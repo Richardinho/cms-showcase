@@ -10,7 +10,8 @@
 	". error"
 }
 
-.input.ng-dirty.ng-invalid {
+.input.ng-dirty.ng-invalid,
+.input.ng-touched.ng-invalid {
 	border-color: $error-color;
 }
 

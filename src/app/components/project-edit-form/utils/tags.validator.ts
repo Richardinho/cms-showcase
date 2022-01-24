@@ -21,3 +21,7 @@ export const tagsValidator = (control: FormGroup) => {
 
  	return null;
 };
+
+export const isNewProject = (id: string | number) => {
+	return ("" + id).startsWith('_');
+};

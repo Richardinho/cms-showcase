@@ -6,7 +6,7 @@ import {
 	Validators,
 } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { tagsValidator } from './utils/tags.validator';
+import { tagsValidator, isNewProject } from './utils/tags.validator';
 import { Project, AppState } from '../../model';
 import { Observable } from 'rxjs';
 import {
@@ -79,12 +79,17 @@ export class ProjectEditFormComponent {
 					this.project.tag3), tagsValidator),
 		});
 
-		this.newProject = ("" + this.project.id).startsWith('_');
+		this.newProject = isNewProject(this.project.id);
 	}
 
 	save() {
-		this.store.dispatch(saveProject({ 
-			project: formDataToProject(this.form.value, this.project.id) }));
+		const metadata = { 
+			project: formDataToProject(this.form.value, this.project.id)
+		};
+
+		const action = saveProject(metadata);
+
+		this.store.dispatch(action);
 	}
 
 	saveNewProject() {
@@ -98,7 +103,14 @@ export class ProjectEditFormComponent {
 	}
 
 	cancel() {
-		this.store.dispatch(editProject({ id: this.project.id, edit: false }));
+		const metadata = { 
+			id: this.project.id,
+			edit: false,
+		};
+
+		const action = editProject(metadata);
+
+		this.store.dispatch(action);
 	}
 
 	get tagList() {
