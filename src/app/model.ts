@@ -18,6 +18,7 @@ export interface Article {
   tags: Array<Tag>;
 }
 
+
 export interface Metadata {
   github_url: string;
 }

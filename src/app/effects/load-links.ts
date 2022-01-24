@@ -30,7 +30,6 @@ export class LoadArticleLinksEffects {
         withLatestFrom(this.store.pipe(select(selectArticlesWithJWTToken)))
       )),
       switchMap(([action, { articles, token }]) => {
-				console.log('BLAHALALALALA', articles, token);
         if(token) {
           return this.articleService.getArticles(token)
             .pipe(

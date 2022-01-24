@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import { throwError, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
+import { Project } from '../model';
+import { transformDataToProjects } from './utils/transform-data-to-projects';
 
 @Injectable({
   providedIn: 'root'
@@ -66,7 +68,7 @@ export class ProjectService {
       );
 	}
 
-	getProjects(token: string) {
+	getProjects(token: string): Observable<Array<Project>> {
 		const url = environment.blogDomain + '/index.php/api/projects';
 
     const httpOptions = {
@@ -77,12 +79,8 @@ export class ProjectService {
 
     return this.http.get<any>(url, httpOptions)
       .pipe(
-        map((data) => {
-          return data.projects.map(project => {
-						// todo: set underEdit in the reducer
-						const published = Boolean(parseInt(project.published));
-						return { ...project, underEdit: false, published, };
-					});
+        map((data: any) => {
+					return transformDataToProjects(data?.projects || []);
         }),
         catchError((error: HttpErrorResponse) => {
           if (error.status) {

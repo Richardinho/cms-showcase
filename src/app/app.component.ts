@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { AppState } from './model';
 import { loggedInSelector } from './selectors/logged-in.selector';
@@ -10,7 +10,7 @@ import { logOut } from './actions/log-in.action';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'cms';
   loggedIn$: any;
 
