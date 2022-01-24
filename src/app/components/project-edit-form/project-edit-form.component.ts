@@ -9,7 +9,11 @@ import { Store } from '@ngrx/store';
 import { tagsValidator } from './utils/tags.validator';
 import { Project, AppState } from '../../model';
 import { Observable } from 'rxjs';
-import { editProject, saveProject } from '../../actions/projects.action';
+import {
+	editProject,
+	saveProject,
+	saveNewProjectRequest,
+} from '../../actions/projects.action';
 
 import { tagData } from '../../services/article.service';
 
@@ -19,6 +23,7 @@ const formDataToProject = (project: any, id: string): Project => {
 	result.title = project.title;
 	result.href = project.href;
 	result.id = id;
+	result.published = project.published;
 
 	const [tag1=null, tag2=null, tag3=null] = Object.keys(project.tags).sort().reduce((result, tag) => {
 		if (project.tags[tag]) {
@@ -58,22 +63,38 @@ export class ProjectEditFormComponent {
 	@Input()
 	project: Project;
 
+	newProject: boolean;
+
 	form: FormGroup;
 
 	ngOnInit() {
 		this.form = new FormGroup({
 			title: new FormControl(this.project.title, Validators.required),
 			href: new FormControl(this.project.href, Validators.required),
+			published: new FormControl(this.project.published),
 			tags: new FormGroup(
 				buildTagsFormGroup(
 					this.project.tag1,
 					this.project.tag2,
 					this.project.tag3), tagsValidator),
 		});
+
+		this.newProject = ("" + this.project.id).startsWith('_');
 	}
 
 	save() {
-		this.store.dispatch(saveProject({ project: formDataToProject(this.form.value, this.project.id) }));
+		this.store.dispatch(saveProject({ 
+			project: formDataToProject(this.form.value, this.project.id) }));
+	}
+
+	saveNewProject() {
+		const metadata = {
+			project: formDataToProject(this.form.value, this.project.id),
+		};
+
+		const action = saveNewProjectRequest(metadata);
+
+		this.store.dispatch(action);
 	}
 
 	cancel() {

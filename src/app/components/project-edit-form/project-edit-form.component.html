@@ -24,7 +24,12 @@
 		</div>
 
 		<div class="button-group">
-			<button [disabled]="formDisabled" (click)="save()" class="button">save edits</button>
+			<ng-container *ngIf="!newProject">
+				<button [disabled]="formDisabled" (click)="save()" class="button">save edits</button>
+			</ng-container>
+			<ng-container *ngIf="newProject">
+				<button (click)="saveNewProject()" class="button">save new project</button>
+			</ng-container>
 			<button (click)="cancel()" class="button">cancel</button>
 		</div>
 	</div>

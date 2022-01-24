@@ -38,3 +38,21 @@ export const projectDeletedResponse = createAction(
 	'[Projects] Project Deleted Response',
 	props<{ id: string }>(),
 );
+
+// creates new project locally in store (NOT on server)
+export const createProjectRequest = createAction(
+	'[Projects] Project Create Request',
+);
+
+// saves the new project to the server
+export const saveNewProjectRequest = createAction(
+	'[Projects] Project Save New Project Request',
+	props<{ project: Project }>(),
+);
+
+// after response from server that project has been created. Will include new id generated
+// on the server
+export const createNewProjectResponse = createAction(
+	'[Projects] Project Save New Project Response',
+	props<{ project: any; currentId: string }>(),
+);

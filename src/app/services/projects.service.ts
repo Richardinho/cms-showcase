@@ -50,7 +50,7 @@ export class ProjectService {
     return this.http.post<any>(url, formData, httpOptions)
       .pipe(
         map((data) => {
-					return of(data);
+					return data.project;
         }),
         catchError((error: HttpErrorResponse) => {
           if (error.status) {

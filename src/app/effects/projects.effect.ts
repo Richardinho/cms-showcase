@@ -11,8 +11,11 @@ import {
 	projectsResponse,
 	projectSavedResponse,
 	saveProject,
+	saveNewProjectRequest,
 	deleteProject,
 	projectDeletedResponse,
+	createNewProjectResponse,
+
 } from '../actions/projects.action';
 import { unauthorisedResponse } from '../actions/unauthorised-response.action';
 import { genericError } from '../actions/generic-error.action';
@@ -45,6 +48,22 @@ export class ProjectsEffects {
 							return of(genericError({ message: 'generic error occurred' }));
             })
 					);
+			}),
+		);
+	});
+
+	saveNewProject = createEffect(() => {
+		return this.actions$.pipe(
+			ofType(saveNewProjectRequest),
+			withLatestFrom(this.store.pipe(select(selectJWTToken))),
+			switchMap(([action, token]) => {
+				return this.projectService.updateProject(action.project, token)
+				.pipe(
+					map((project) => createNewProjectResponse({ project, currentId: action?.project?.id })),
+					catchError((error) => {
+						return of(genericError({ message: 'generic error occurred' }));
+					})
+				);
 			}),
 		);
 	});

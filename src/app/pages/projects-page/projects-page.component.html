@@ -6,6 +6,9 @@
 
 	<div class="container">
 		<h2 class="page-title">Projects</h2>
+		<div class="cta-header">
+			<button (click)="createProject()" class="button">create project</button>
+		</div>
 		<ul>
 			<li *ngFor="let project of projectLinks$ | async" class="project-item">
 				<ng-container *ngIf="project.underEdit">
@@ -35,7 +38,7 @@
 						<ng-container *ngIf="project.published">
 							<button class="button" (click)="publishProject(project, false)">unpublish</button>
 						</ng-container>
-						<button class="button" (click)="deleteProject(project)">delete</button>
+						<button class="button" (click)="deleteProject(project.id)">delete</button>
 					</div>
 				</ng-container>
 			</li>

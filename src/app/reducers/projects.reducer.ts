@@ -6,7 +6,16 @@ import {
 	projectsResponse,
 	projectSavedResponse,
 	projectDeletedResponse,
+	createProjectRequest,
+	createNewProjectResponse,
 } from '../actions/projects.action';
+
+let latestId = 1;
+
+const createId = () => {
+	latestId++;
+	return '_' + latestId;
+}
 
 const initialState = null;
 
@@ -61,6 +70,36 @@ export const deleteProjectResponseReducer = (state:any, action:any) => {
 	});
 };
 
+export const createProjectRequestReducer = (state: any, action: any) => {
+	const newProject: Project = {
+		id: createId(),
+		title: '',
+		href: '',
+		tag1: '',
+		tag2: '',
+		tag3: '',
+		underEdit: true,
+		published: false,
+	};
+
+	return [ newProject, ...state ];
+};
+
+export const createNewProjectResponseReducer = (state: any, action: any) => {
+
+	return state.map(project => {
+		if (project.id === action.currentId) {
+			return {
+				...action.project,
+				published: Boolean(parseInt(action.project.published, 10)),
+				underEdit: false,
+			};
+		}
+
+		return project;
+	});
+}
+
 const _projectsReducer = createReducer(
 	initialState,
 	on(projectsResponse, projectsResponseReducer),
@@ -69,6 +108,8 @@ const _projectsReducer = createReducer(
 	on(projectSavedResponse, projectSavedResponseReducer),
 	// delete project when we get a successful response from the server
 	on(projectDeletedResponse, deleteProjectResponseReducer),
+	on(createProjectRequest, createProjectRequestReducer),
+	on(createNewProjectResponse, createNewProjectResponseReducer),
 );
 
 export function projectsReducer(state: AppState, action: any) {

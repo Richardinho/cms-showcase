@@ -11,6 +11,7 @@ import {
 	deleteProject,
 	projectDeletedResponse,
 	saveProject,
+	createProjectRequest,
 } from '../../actions/projects.action';
 
 @Component({
@@ -27,9 +28,7 @@ export class ProjectsPageComponent {
   ) {}
 
 	ngOnInit() {
-
 		this.projectLinks$ = this.store.pipe(select(selectProjectLinks));
-
 		this.store.dispatch(projectsRequest());
 	}
 
@@ -40,6 +39,11 @@ export class ProjectsPageComponent {
 	publishProject(project: Project, published: boolean) {
 		const updatedProject = { ...project, published };
 		this.store.dispatch(saveProject({ project: updatedProject }));
+	}
+
+	createProject() {
+		const action = createProjectRequest();
+		this.store.dispatch(action);
 	}
 
 	deleteProject(id: string) {
