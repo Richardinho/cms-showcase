@@ -34,6 +34,11 @@ export const deleteProject = createAction(
 	props<{ id: string }>(),
 );
 
+export const deleteLocalProject = createAction(
+	'[Projects] DeleteLocalProject',
+	props<{ id: string }>(),
+);
+
 export const projectDeletedResponse = createAction(
 	'[Projects] Project Deleted Response',
 	props<{ id: string }>(),

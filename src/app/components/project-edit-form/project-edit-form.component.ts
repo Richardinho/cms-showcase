@@ -12,6 +12,7 @@ import { Observable } from 'rxjs';
 import {
 	editProject,
 	saveProject,
+	deleteLocalProject,
 	saveNewProjectRequest,
 } from '../../actions/projects.action';
 
@@ -109,6 +110,16 @@ export class ProjectEditFormComponent {
 		};
 
 		const action = editProject(metadata);
+
+		this.store.dispatch(action);
+	}
+
+	cancelNewProject() {
+		const metadata = {
+			id: this.project.id,
+		}
+
+		const action = deleteLocalProject(metadata);
 
 		this.store.dispatch(action);
 	}

@@ -8,6 +8,7 @@ import {
 	projectDeletedResponse,
 	createProjectRequest,
 	createNewProjectResponse,
+	deleteLocalProject,
 } from '../actions/projects.action';
 
 let latestId = 1;
@@ -110,6 +111,7 @@ const _projectsReducer = createReducer(
 	on(projectDeletedResponse, deleteProjectResponseReducer),
 	on(createProjectRequest, createProjectRequestReducer),
 	on(createNewProjectResponse, createNewProjectResponseReducer),
+	on(deleteLocalProject, deleteProjectResponseReducer),
 );
 
 export function projectsReducer(state: AppState, action: any) {

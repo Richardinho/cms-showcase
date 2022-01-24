@@ -26,11 +26,12 @@
 		<div class="button-group">
 			<ng-container *ngIf="!newProject">
 				<button [disabled]="formDisabled" (click)="save()" class="button">save edits</button>
+				<button (click)="cancel()" class="button">cancel</button>
 			</ng-container>
 			<ng-container *ngIf="newProject">
 				<button [disabled]="formDisabled" (click)="saveNewProject()" class="button">save new project</button>
+				<button (click)="cancelNewProject()" class="button">cancel</button>
 			</ng-container>
-			<button (click)="cancel()" class="button">cancel</button>
 		</div>
 	</div>
 </ng-container>
