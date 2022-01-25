@@ -17,38 +17,9 @@ import {
 } from '../../actions/projects.action';
 
 import { tagData } from '../../services/article.service';
+import { formDataToProject } from './utils/form-data-to-project';
+import { buildTagsFormGroup } from './utils/build-tags-form-group';
 
-const formDataToProject = (project: any, id: string): Project => {
-	const result: any = {};
-
-	result.title = project.title;
-	result.href = project.href;
-	result.id = id;
-	result.published = project.published;
-
-	const [tag1=null, tag2=null, tag3=null] = Object.keys(project.tags).sort().reduce((result, tag) => {
-		if (project.tags[tag]) {
-			return [...result, tag];
-		}
-
-		return result;
-	}, []);	
-
-	result.tag1 = tag1;
-	result.tag2 = tag2;
-	result.tag3 = tag3;
-
-	return result as Project;
-};
-
-const buildTagsFormGroup = (...tags) => {
-
-	const result = tagData.reduce((result, tag) => {
-		return { ...result, [tag]: new FormControl(tags.includes(tag)) };
-	}, {});
-
-	return result;new FormGroup(result);
-};
 
 @Component({
 	selector: 'project-edit-form',
