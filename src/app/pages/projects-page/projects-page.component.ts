@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 import { DialogService } from '../../services/dialog.service';
 import { Project, AppState } from '../../model';
-import { selectProjectLinks } from '../../selectors/project.selector';
+import { selectProjects } from '../../selectors/project.selector';
 import {
 	projectsRequest,
 	editProject,
@@ -28,7 +28,7 @@ export class ProjectsPageComponent {
   ) {}
 
 	ngOnInit() {
-		this.projectLinks$ = this.store.pipe(select(selectProjectLinks));
+		this.projectLinks$ = this.store.pipe(select(selectProjects));
 		this.store.dispatch(projectsRequest());
 	}
 
