@@ -11,6 +11,10 @@ import { Component } from '@angular/core';
       height: 100%;
     }
 
+		svg {
+			vertical-align: middle;
+		}
+
     @keyframes spin {
       from {transform:rotate(0deg);}
       to {transform:rotate(360deg);}

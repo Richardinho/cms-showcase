@@ -9,6 +9,8 @@ import { FormArray, FormGroup, FormControl } from '@angular/forms';
 export class StylesPageComponent {
   blahFormControl: FormControl = new FormControl(false);
 
+	ctaLoading: boolean = false;
+
   public formGroup: FormGroup = new FormGroup({
     tags: new FormArray([
       new FormControl(true),
@@ -21,4 +23,8 @@ export class StylesPageComponent {
   get mytags(): FormArray {
     return this.formGroup.get('tags') as FormArray;
   }
+
+	clickOnCTA() {
+		this.ctaLoading = !this.ctaLoading;
+	}
 }

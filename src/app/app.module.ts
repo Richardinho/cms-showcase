@@ -27,6 +27,7 @@ import { MessageService } from './services/message.service';
 
 import { MessageWidgetComponent } from './components/message-widget/message-widget.component';
 import { ProjectEditFormComponent } from './components/project-edit-form/project-edit-form.component';
+import { CTAComponent } from './components/cta/cta.component';
 import { articlesReducer } from './reducers/articles.reducer';
 import { introReducer } from './reducers/intro.reducer';
 import { uiReducer } from './reducers/ui.reducer';
@@ -56,10 +57,11 @@ import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.com
 
 @NgModule({
   declarations: [
+		CTAComponent,
 		IntroPageComponent,
-		ProjectEditFormComponent,
 		MenuPageComponent,
 		PageNotFoundComponent,
+		ProjectEditFormComponent,
 		ProjectsPageComponent,
     AppComponent,
     ArticlePageComponent,

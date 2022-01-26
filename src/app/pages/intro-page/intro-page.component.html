@@ -1,12 +1,8 @@
 <div class="cta-bar">
-	<button
-		class="button"
-		[disabled]="saveDisabled$ | async"
-		(click)="saveEdit()">Save&nbsp;edit</button>
-
-		<div class="spinner">
-			<spinner-component *ngIf="showLoader$ | async" ></spinner-component>
-		</div>
+	<cms-cta
+		(click)="saveEdit()"
+		[loading]="showLoader$ | async"
+		[disabled]="saveDisabled$ | async">Save Edit</cms-cta>
 </div>
 
 <!-- only purpose of this div is to so the container div can be relative to it: is there a better way? -->
@@ -21,7 +17,7 @@
 				data-test="edit-pane"
 				formControlName="body"
 				class="input"
-				>/textarea>
+				></textarea>
 		</div>
 
 		<div class="article-pane">
