@@ -48,7 +48,7 @@ export const saveProjectReducer = (state: any, action: any) => {
 	});
 };
 
-export const projectSavedResponseReducer = (state: any, action: any) => {
+export const projectSavedResponseReducer = (state: Array<Project>, action: any) => {
 	return state.map(project => {
 		if (project.id === action?.id) {
 			return {
@@ -86,9 +86,9 @@ export const createProjectRequestReducer = (state: any, action: any) => {
 	return [ newProject, ...state ];
 };
 
-export const createNewProjectResponseReducer = (state: any, action: any) => {
+export const createNewProjectResponseReducer = (state: Array<Project>, action: any) => {
 
-	return state.map(project => {
+	return state.map((project: Project) => {
 		if (project.id === action.currentId) {
 			return {
 				...action.project,
@@ -114,7 +114,7 @@ const _projectsReducer = createReducer(
 	on(deleteLocalProject, deleteProjectResponseReducer),
 );
 
-export function projectsReducer(state: AppState, action: any) {
+export function projectsReducer(state: Array<Project>, action: any) {
 	return _projectsReducer(state, action);
 }
 

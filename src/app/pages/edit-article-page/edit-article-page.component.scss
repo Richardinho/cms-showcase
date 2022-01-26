@@ -104,4 +104,13 @@ textarea {
   resize: vertical;
 }
 
+.tags-error {
+	color: $error-color;
+	font-size: 12px;
+	opacity: 0;
+}
+
+.tags-error.show-error {
+	opacity: 1;
+}
 

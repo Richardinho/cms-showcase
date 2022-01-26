@@ -8,14 +8,9 @@
 <div class="links-container">
 	<ul data-test="article-page" class="links">
 
-		<li
-				*ngFor="let article of articles$ | async"
-				[class.unsaved]="!article.saved"
-				class="link">
+		<li *ngFor="let article of articles$ | async" class="link">
 
 			<span>{{article.title}}</span>
-			&nbsp;
-			<span *ngIf="!article.saved">unsaved changes</span>
 
 			<div class="button-panel">
 

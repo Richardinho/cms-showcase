@@ -5,153 +5,109 @@ import { Observable } from 'rxjs';
 import { throwError, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 
-import { Article } from '../model';
+import {
+	Article,
+	ArticleLink,
+	RawArticle,
+	EditArticleView,
+} from '../model';
+
 import { environment } from '../../environments/environment';
-import { articleToFormData } from '../utils/article-to-form-data';
+
+import {
+	rawArticleToArticleLink,
+	rawArticleToArticle,
+	articleToRawArticle,
+} from '../utils/article-to-form-data';
+
+import { articles } from './data/articles';
 
 // todo: this should probably live in store? For example, I should be able to
 // configure this within the CMS: add, remove tags etc.
 export const tagData: string[] = [ 'angular', 'css', 'html-5', 'javascript', 'react' ];
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class ArticleService {
 
+	nextId = 100;
+
   tagData: string[] = tagData;
 
-  constructor(
-    private http: HttpClient,
-  ) {}
+  constructor() {}
 
-  getArticle(id: number | string, token: string) {
-    const url = environment.blogDomain + '/index.php/api/article/' + id;
+  getArticle(id: string, token: string): Observable<Article> {
+		const rawArticle: RawArticle = articles.find((article) => {
+			return article.id === id;
+		});
 
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Authorization': `Basic ${token}`,
-      })
-    };
+		const article: Article = rawArticleToArticle(rawArticle);
 
-    return this.http.get<any>(url, httpOptions)
-      .pipe(
-        map((data) => {
-          return data;
-        }),
-        catchError((error: HttpErrorResponse) => {
-          if (error.status) {
-            return throwError({
-              status: error.status
-            });
-          } else {
-            return throwError({
-              message: 'an error occurred'
-            });
-          }
-        })
-      );
+		return of(article);
   }
 
-  getArticles(token: any): Observable<Array<Article>> {
-		console.log('get articles');
-    const url = environment.blogDomain + '/index.php/api/articles/';
+  getArticleLinks(token: string): Observable<Array<ArticleLink>> {
 
-    return this._get(url, token).pipe(
-      map(data => {
-        return data.articles;
-      }),
-    );
+		const links: Array<ArticleLink> = articles.map((rawArticle: RawArticle) => {
+			return rawArticleToArticleLink(rawArticle);
+		});
+
+		return of(links);
   }
 
   createArticle(token: any) {
-    const formData = new FormData();
+		const id = "" + (++this.nextId);
 
-    const url = environment.blogDomain + '/index.php/api/article/';
+		articles.push({
+			"id": id,
+			"title": "babababa black sheep",
+			"date_created": "Nov 28 2020",
+			"date_edited": "",
+			"body": "sfsf",
+			"author": "Richard",
+			"summary": "",
+			"tag1": null,
+			"tag2": null,
+			"tag3": null,
+			"published": false
+		});
 
-    const httpOptions = {
-      // should I used Basic here?
-      headers: new HttpHeaders({
-        'Authorization': `Basic ${token}`,
-        'enctype': 'multipart/form-data'
-      })
-    };
-
-    return this.http
-      .put<any>(url, formData, httpOptions)
-      .pipe(map(data => data.id));
+		return of(id);
   }
 
-  updateArticle(article: Article, token: any) {
-    const url = environment.blogDomain + '/index.php/api/article/' + article.id;
-    const formData: FormData = articleToFormData(article);
+  updateArticle(article: Article, token: string) {
+		const index = articles.findIndex(item => {
+			return article.id === item.id;
+		});
 
-    return this._post(url, formData, token);
+		articles[index] = articleToRawArticle(article, articles[index]);
+
+		return of({
+			message: 'article saved',
+		});
   }
 
   deleteArticle(articleId: any, token: any) {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Authorization': `Basic ${token}`,
-        'enctype': 'multipart/form-data'
-      })
-    };
+		const indexOfArticle = articles.findIndex(article => {
+			return article.id === articleId;
+		});
 
-    const url = environment.blogDomain + `/index.php/api/article/${articleId}`;
+		articles.splice(indexOfArticle, 1);
 
-    return this.http.delete(url, httpOptions);
+		return of({});
   }
 
   publish(articleId: any, publish: any, token:any) {
-		console.log('publish', articleId, publish, token);
-    const formData = new FormData();
-    const url = environment.blogDomain + '/index.php/api/publish/' + articleId;
+		console.log('publish', articleId, publish);
+		const indexOfArticle = articles.findIndex(article => {
+			return article.id === articleId;
+		});
+		console.log(indexOfArticle);
 
-    formData.append('published', publish);
+		articles[indexOfArticle].published = publish;
 
-    return this._post(url, formData, token);
-  }
-
-  _get(url: any, token: any) {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Authorization': `Basic ${token}`,
-      })
-    };
-
-    return this.http.get<any>(url, httpOptions);
-  }
-
-  _post(url: any, formData: any, token: any) {
-
-    if (!token) {
-
-      return throwError({
-        message: 'You are not logged in. No JWT token in localStorage',
-        status: 401,
-      });
-
-    } else {
-
-      const httpOptions = {
-        headers: new HttpHeaders({
-          'Authorization': `Basic ${token}`,
-          'enctype': 'multipart/form-data'
-        })
-      };
-
-      return this.http.post<any>(url, formData, httpOptions).pipe(
-        catchError((error: HttpErrorResponse) => {
-          if (error.status) {
-            return throwError({
-              status: error.status
-            });
-          } else {
-            return throwError({
-              message: 'an error occurred'
-            });
-          }
-        })
-      );
-    }
+		return of({ id: articleId, published: publish });
   }
 }

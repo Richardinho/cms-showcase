@@ -1,3 +1,4 @@
+/*
 import {
 	jsonToArticle,
 	deleteArticleResponseReducer
@@ -5,7 +6,6 @@ import {
 
 import { Article } from '../model';
 
-/*
 
 describe('articles.reducer', () => {
 	describe('deleteArticleResponseReducer()', () => {

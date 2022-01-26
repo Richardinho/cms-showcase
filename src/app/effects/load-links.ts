@@ -31,7 +31,7 @@ export class LoadArticleLinksEffects {
       )),
       switchMap(([action, { articles, token }]) => {
         if(token) {
-          return this.articleService.getArticles(token)
+          return this.articleService.getArticleLinks(token)
             .pipe(
               map((articleLinks) => articleLinksResponse({ articleLinks, articles })),
               catchError((error) => {

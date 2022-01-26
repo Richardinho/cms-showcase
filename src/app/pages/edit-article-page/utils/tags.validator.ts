@@ -1,10 +1,16 @@
+import { FormGroup } from '@angular/forms';
 const MAX_NUM_TAGS = 3;
 
-export const tagsValidator = (control) => {
-  const numberSelected = control
-    .controls
-    .filter(ctrl => ctrl.value)
-    .length;
+export const tagsValidator = (control: FormGroup) => {
+
+	const numberSelected = Object.keys(control.controls).reduce((numberSelected, key) => {
+		const selected = control?.controls[key]?.value;
+		if (selected) {
+			return numberSelected + 1;
+		}
+
+		return numberSelected;
+	}, 0);
 
   if (numberSelected > MAX_NUM_TAGS) {
     return {
@@ -12,5 +18,5 @@ export const tagsValidator = (control) => {
     };
   }
 
-  return null;
+ 	return null;
 };

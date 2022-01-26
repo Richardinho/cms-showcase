@@ -29,9 +29,6 @@ import { tagsValidator } from './utils/tags.validator';
   styleUrls: ['./edit-article-page.component.scss']
 })
 export class EditArticlePageComponent implements OnInit {
-  article$: Observable<Article>;
-  saving$: Observable<boolean>;
-  unsavedChanges$: Observable<boolean>;
 
   constructor(
     private route: ActivatedRoute,
@@ -40,33 +37,54 @@ export class EditArticlePageComponent implements OnInit {
     private store: Store<AppState>
   ) {}
 
-  private formGroup: FormGroup = new FormGroup({
-    id: new FormControl(''),
-    body: new FormControl('', Validators.required),
-    title: new FormControl('', Validators.required),
-    summary: new FormControl('', Validators.required),
-    tags: new FormArray([
-      new FormControl(true),
-      new FormControl(true),
-      new FormControl(true),
-      new FormControl(false),
-      ], tagsValidator),
-  });
+  article$: Observable<Article>;
+  saving$: Observable<boolean>;
+  unsavedChanges$: Observable<boolean>;
+
+	formGroup: FormGroup;
+
+	title: string = '';
+	summary: string = '';
+	body: string = '';
 
   ngOnInit() {
+		this.formGroup = new FormGroup({
+			id: new FormControl(''),
+			body: new FormControl('', Validators.required),
+			title: new FormControl('', Validators.required),
+			summary: new FormControl('', Validators.required),
+			tags: new FormGroup({
+				'angular': new FormControl(false),
+				'html-5': new FormControl(false),
+				'javascript': new FormControl(false),
+				'react': new FormControl(false),
+				'css': new FormControl(false),
+			}, tagsValidator),
+		});
+
+		//  fetch article from store
+    this.article$ = this.store.pipe(select(selectArticleUnderEdit));
+
+    this.article$.subscribe(article => {
+      if (article) {
+				this.title = article.title;
+				this.summary = article.summary;
+				this.body = article.body;
+
+        this.formGroup
+          .patchValue(articleToFormGroup(article),
+            { emitEvent: false });
+      }
+    });
+
     //  todo: use this variable: e.g. have a spinner
     this.saving$ = this.store.pipe(select(selectSaving));
     this.unsavedChanges$ = this.store.pipe(select(selectUnsavedChanges));
 
-    /*
-     *  Whenever a form input value changes, we update the store
-     */
-
-    //  todo: get tag data from somewhere else. e.g the store
     this.formGroup.valueChanges.subscribe(formArticle => {
-      this.store.dispatch(articleChanged({
-        articlePatchData: createArticlePatchData(formArticle, this.articleService.tagData),
-      }));
+			this.title = formArticle.title;
+			this.summary = formArticle.summary;
+			this.body = formArticle.body;
     });
 
     /*
@@ -82,27 +100,27 @@ export class EditArticlePageComponent implements OnInit {
         id,
         redirectUrl: '/edit-article/' + id }));
     });
-
-		//  fetch article from store
-    this.article$ = this.store.pipe(select(selectArticleUnderEdit));
-
-		// when article in store is updated, update form group
-    this.article$.subscribe(article => {
-      if (article) {
-        this.formGroup
-          .patchValue(articleToFormGroup(article),
-            { emitEvent: false });
-      }
-    });
   }
 
-  saveEdit() {
-    if (this.formGroup.valid) {
-      this.store.dispatch(saveArticle());
-    }
+  save() {
+		const metadata = {
+			article: this.formGroup.value,
+		};
+
+		const action = saveArticle(metadata);
+
+		this.store.dispatch(action);
   }
 
-  get mytags(): FormArray {
-    return this.formGroup.get('tags') as FormArray;
-  }
+	get tags() {
+		return this.formGroup.get('tags');
+	}
+
+	get tagList() {
+		return this.articleService.tagData;
+	}
+
+	get formDisabled() {
+		return this.formGroup.invalid;
+	}
 }

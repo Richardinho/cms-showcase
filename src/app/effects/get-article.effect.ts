@@ -4,7 +4,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { EMPTY, of } from 'rxjs';
 import { map, switchMap, catchError, concatMap, withLatestFrom } from 'rxjs/operators';
 
-import { AppState } from '../model';
+import { AppState, Article } from '../model';
 
 import { ArticleService } from '../services/article.service';
 
@@ -14,7 +14,7 @@ import { genericError } from '../actions/generic-error.action';
 import { getArticleResponse } from '../actions/get-article-response.action';
 import { unauthorisedResponse } from '../actions/unauthorised-response.action';
 
-import { selectArticleWithToken } from '../selectors/article.selector';
+import { selectArticleWithToken, selectJWTToken } from '../selectors/article.selector';
 
 import { UNAUTHORIZED } from '../status-code.constants';
 
@@ -25,17 +25,12 @@ export class GetArticleEffects {
     this.actions$.pipe(
       ofType(articleRequest),
       concatMap(action => of(action).pipe(
-        withLatestFrom(this.store.pipe(select(selectArticleWithToken, { id : action.id })))
+        withLatestFrom(this.store.pipe(select(selectJWTToken)))
       )),
-      switchMap(([action, article]) => {
-				// check if article is in the store before fetching from the server
-        if (article.article) {
-          return of(articleFoundInCache({id: action.id}));
-        }
-
-        return this.articleService.getArticle(action.id, article.token)
+			switchMap(([action, token]) => {
+        return this.articleService.getArticle(action.id, token)
           .pipe(
-            map((articleJSON) => getArticleResponse({ articleJSON })),
+            map((article: Article) => getArticleResponse({ article })),
             catchError((error) => {
               if (error.status) {
                 //  if we are unauthorised, we will dispatch an unauthorised response which results

@@ -59,7 +59,7 @@ export class ProjectsEffects {
 			switchMap(([action, token]) => {
 				return this.projectService.updateProject(action.project, token)
 				.pipe(
-					map((project) => createNewProjectResponse({ project, currentId: action?.project?.id })),
+					map((project: Project) => createNewProjectResponse({ project, currentId: action.project.id })),
 					catchError((error) => {
 						return of(genericError({ message: 'generic error occurred' }));
 					})

@@ -1,3 +1,4 @@
+/*
 import { articleToFormData } from './article-to-form-data';
 import { Article } from '../model';
 import { formDataToObj } from './utils';
@@ -33,3 +34,4 @@ describe('formDataToObj()', () => {
     });
   });
 });
+*/

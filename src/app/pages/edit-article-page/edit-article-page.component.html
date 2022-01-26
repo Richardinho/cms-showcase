@@ -1,7 +1,8 @@
 <div class="cta-bar">
 	<button
+		[disabled]="formDisabled"
 		class="button"
-		(click)="saveEdit()">Save&nbsp;edit</button>
+		(click)="save()">Save&nbsp;edit</button>
 </div>
 
 <div class="outer-container">
@@ -41,40 +42,30 @@
 
 
 				<div class="select-tags-container">
-					<p class="select-tags-caption">Select up to 3 tags to associate with this article Richard</p>
-
-					<p
-						 class="select-tags-error-message"
-						 [class.select-tags-error-message__hidden]="mytags.valid"
-						 >
-						 You may not select more than 3 tags.
-					</p>
-
-					<div formArrayName="tags">
-						<div class="checkbox"
-							*ngFor="let tag of mytags.controls; let i=index"
-							>
+					<div class="tags" formGroupName="tags">
+						<ng-container *ngFor="let tag of tagList">
 							<cms-checkbox
-								[formControlName]="i"
-								cbId={{i}}
-								label={{articleService.tagData[i]}}></cms-checkbox>
-						</div>
+								[formControlName]="tag"
+								[cbId]="tag"
+								label={{tag}}></cms-checkbox>
+						</ng-container>
 					</div>
+					<div [class.show-error]="tags.invalid" class="tags-error">You are only allowed to select 3 tags</div>
 
 				</div>
 			</div>
 
 			<div class="article-pane">
-				<h2 class="article-header">{{(article$|async)?.title}}</h2>
+				<h2 class="article-header">{{title}}</h2>
 
 				<div
 					class="article-summary"
-					[innerHTML]="(article$|async)?.summary | markdownToHTML"
+					[innerHTML]="summary | markdownToHTML"
 					></div>
 
 				<div
 					class="article-content"
-					[innerHTML]="(article$|async)?.body | markdownToHTML"
+					[innerHTML]="body | markdownToHTML"
 					></div>
 
 			</div>

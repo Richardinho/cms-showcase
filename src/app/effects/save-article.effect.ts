@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { map, mergeMap, catchError, concatMap, withLatestFrom } from 'rxjs/operators';
 
-import { AppState } from '../model';
+import { AppState, EditArticleView, Article } from '../model';
 
 import { ArticleService } from '../services/article.service';
 
@@ -15,6 +15,8 @@ import { unauthorisedResponse } from '../actions/unauthorised-response.action';
 
 import { selectArticleUnderEditWithToken } from '../selectors/article.selector';
 import { UNAUTHORIZED } from '../status-code.constants';
+import { mergeCachedAndEditedArticles } from './utils/merge-cached-and-edited-articles';
+
 
 @Injectable()
 export class SaveArticleEffects {
@@ -25,16 +27,18 @@ export class SaveArticleEffects {
       concatMap(action => of(action).pipe( // combine this action with article from store and JWT
         withLatestFrom(this.store.pipe(select(selectArticleUnderEditWithToken)))
       )),
-      mergeMap(([action, article]) => {
-        return this.articleService.updateArticle(article.article, article.token)
+      mergeMap(([ action, {article: cachedArticle, token}]) => {
+				const editedArticle: EditArticleView = action.article;
+
+				const article: Article = mergeCachedAndEditedArticles(cachedArticle, editedArticle);
+
+        return this.articleService.updateArticle(article, token)
           .pipe(
-            map(() => (articleSavedResponse({ articleJSON : article.article }))),
+            map(() => (articleSavedResponse({ article }))),
             catchError((error) => {
               if (error.status) {
                 if (error.status === UNAUTHORIZED) {
-                  const redirectUrl = '/edit-article/' + article.article.id;
-
-                  return of(unauthorisedResponse({ redirectUrl }));
+                  return of(genericError({ message: 'unauthorised' }));
                 } else {
                   return of(genericError({ message: 'Server error occurred' }));
                 }

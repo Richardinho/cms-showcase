@@ -15,6 +15,7 @@ import { navigateToEditPageRequest } from '../../actions/navigate-to-edit-page-r
 import { deleteArticle } from '../../actions/delete-article.action';
 
 const CONFIRMATION_MESSAGE = 'Are you sure that you want to delete this article?';
+
 @Component({
   selector: 'app-view-article-page',
   templateUrl: './view-article-page.component.html',
@@ -32,10 +33,8 @@ export class ViewArticlePageComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-		// pipe article from store whenever it's updated
     this.article$ = this.store.pipe(select(selectArticleUnderEdit));
 
-		// when route changes, fetch new article
     this.route.paramMap.subscribe((params: ParamMap) => {
       const id = params.get('id');
 

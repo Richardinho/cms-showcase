@@ -1,7 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store, select } from '@ngrx/store';
+import { Observable } from 'rxjs';
 
-import { AppState } from '../../model';
+import { AppState, ArticleLink } from '../../model';
 
 //import { navigateAway } from './actions/navigate-away';
 
@@ -16,37 +17,44 @@ import { createArticleRequest } from '../../actions/create-article.action';
   templateUrl: './article-page.component.html',
   styleUrls: ['./article-page.component.scss']
 })
-export class ArticlePageComponent implements OnInit, OnDestroy {
-  articles$: any;
+export class ArticlePageComponent implements OnInit {
+  articles$: Observable<Array<ArticleLink>>;
 
   constructor(
     private store: Store<AppState>
   ) {}
 
   ngOnInit() {
-		// dispatch action to request links
     this.store.dispatch(requestArticleLinks());
 
-		// configure stream of links from store
     this.articles$ = this.store.pipe(select(selectArticleLinks));
   }
 
-  publish(articleId: any) {
-    this.store.dispatch(requestPublishArticle({ id: articleId, publish: true }));
-  }
+  publish(articleId: string) {
+		const metadata = {
+			id: articleId,
+			publish: true,
+		};
 
-  unpublish(articleId: any) {
-		const metadata = { id: articleId, publish: false };
 		const action = requestPublishArticle(metadata);
+
     this.store.dispatch(action);
   }
 
-  ngOnDestroy() {
-    //this.store.dispatch(navigateAway());
+  unpublish(articleId: string) {
+		const metadata = {
+			id: articleId,
+			publish: false
+		};
+
+		const action = requestPublishArticle(metadata);
+
+    this.store.dispatch(action);
   }
 
 	createArticle() {
 		const action = createArticleRequest();
+
 		this.store.dispatch(action);
 	}
 }

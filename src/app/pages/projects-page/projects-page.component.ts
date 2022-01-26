@@ -43,6 +43,7 @@ export class ProjectsPageComponent {
 
 	createProject() {
 		const action = createProjectRequest();
+
 		this.store.dispatch(action);
 	}
 

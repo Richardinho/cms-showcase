@@ -95,20 +95,20 @@ export class ProjectEditFormComponent {
 		this.store.dispatch(action);
 	}
 
-	get tagList() {
-		return tagData;
-	}
-
-	get tags() {
-		return this.form.get('tags');
-	}
-
 	get title() {
 		return this.form.get('title');
 	}
 
 	get href() {
 		return this.form.get('href');
+	}
+
+	get tags() {
+		return this.form.get('tags');
+	}
+
+	get tagList() {
+		return tagData;
 	}
 
 	get formDisabled() {

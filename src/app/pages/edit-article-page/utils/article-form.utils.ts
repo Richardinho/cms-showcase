@@ -1,5 +1,6 @@
 import { FormArticle } from './form-article.interface';
 import { Article } from '../../../model';
+import { tagData } from '../../../services/article.service';
 
 /*
  * functions for working with data relating to the Angular FormGroup in the edit-article component
@@ -10,7 +11,6 @@ interface ArticleFormGroup {
   title: string;
   summary: string;
   body: string;
-  tags: boolean[];
 }
 
 /*
@@ -18,16 +18,24 @@ interface ArticleFormGroup {
  *  an Angular form group
  */
 
-export const articleToFormGroup = (article: Article): ArticleFormGroup => {
+export const articleToFormGroup = (article: Article): any => {
   const obj: any = {};
 
   obj.id = article.id;
   obj.title = article.title;
   obj.summary = article.summary;
   obj.body = article.body;
-  obj.tags = article.tags.map(tag => tag.value);
 
-  return obj as ArticleFormGroup;
+	const selectedTags = [article.tag1, article.tag2, article.tag3];
+
+	obj.tags = tagData.reduce((result, tag) => {
+		return {
+			...result,
+			[tag]: selectedTags.includes(tag),
+		};
+	}, {});
+	
+	return obj;
 };
 
 /*
@@ -44,7 +52,18 @@ export const createArticlePatchData = (formData, tagData): any => {
   obj.body = formData.body;
   obj.summary = formData.summary;
   obj.saved = false;
-  obj.tags = formData.tags.map((tag, index) => ({ name: tagData[index], value: tag }));
+
+	const [tag1=null, tag2=null, tag3=null] = Object.keys(formData.tags).sort().reduce((result, tag) => {
+		if (formData.tags[tag]) {
+			return [...result, tag];
+		}
+
+		return result;
+	}, []);	
+
+	obj.tag1 = tag1;
+	obj.tag2 = tag2;
+	obj.tag3 = tag3;
 
   return obj;
 };

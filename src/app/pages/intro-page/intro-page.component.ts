@@ -5,22 +5,24 @@ import {
   Validators } from '@angular/forms';
 import { Observable, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Article } from '../../model';
+import { Article, Intro } from '../../model';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../model';
 import { introSavedChanges, selectIntro } from '../../selectors/intro.selector';
 import { selectShowLoader } from '../../selectors/show-loader.selector';
 
-import { introChanged } from '../../actions/intro-changed.action';
-import { introRequest } from '../../actions/intro-request.action';
-import { saveIntro } from '../../actions/save-intro.action';
+import {
+	introChanged,
+	introRequest,
+	saveIntro,
+} from '../../actions/intro-request.action';
 
 @Component({
   templateUrl: './intro-page.component.html',
 	styleUrls: ['./intro-page.component.scss'],
 })
 export class IntroPageComponent {
-  intro$: Observable<any>;
+  intro$: Observable<Intro>;
 	showLoader$: Observable<boolean>;
 	disableSaveButton$: Observable<boolean>;
 
@@ -45,13 +47,11 @@ export class IntroPageComponent {
 			})
 		); 
 
-		//  when form changes, update store (note: updating the server is a different action).
 		this.fGroup.valueChanges.subscribe(fg => {
 			const metadata = { ...fg, saved: false };
 			this.store.dispatch(introChanged(metadata));
 		});
 
-		//  when intro in store is updated, update form
 		this.intro$ = this.store.pipe(select(selectIntro));
 		this.intro$.subscribe(intro => {
 			if (intro) {
@@ -59,7 +59,6 @@ export class IntroPageComponent {
 			}
 		});
 
-		//  dispatch action to request intro data from server
 		this.store.dispatch(introRequest());
 	}
 

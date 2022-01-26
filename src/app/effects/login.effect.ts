@@ -59,7 +59,6 @@ export class LogInEffects {
     this.actions$.pipe(
       ofType(logInRequest),
       switchMap(action => { 
-				console.log('log in request');
         return this.authorisationService.logIn(action.username, action.password)
           .pipe(
             map(({ jwt_token }) => logInResponse({ redirectUrl: action.redirectUrl, jwt_token })),
@@ -89,16 +88,6 @@ export class LogInEffects {
     return this.actions$.pipe(
       ofType(logInResponse),
       tap((action) => {
-        const token = action.jwt_token;
-        const segments = token.split('.');
-        const payload = JSON.parse(atob(segments[1]));
-        const expiry = payload.exp * 1000;
-        const currentTime = (new Date()).valueOf();
-
-        setTimeout(() => {
-          this.store.dispatch(sessionExpired());
-          alert('Your log-in session has expired. You will have to log in before saving anything to the server');
-        }, expiry - currentTime);
 
         this.router.navigate([action.redirectUrl]);
       }),

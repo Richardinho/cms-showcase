@@ -8,16 +8,65 @@ interface Tag {
   value: boolean;
 }
 
-export interface Article {
-  title: string;
-  id: string;
-  body: string;
-  summary: string;
-  saved: boolean;
-  published: boolean;
-  tags: Array<Tag>;
+export interface RawArticle {
+	id: string;
+	title: string;
+	date_created: string;
+	date_edited: string;
+	body: string;
+	author: string;
+	summary: string;
+	tag1: string | null;
+	tag2: string | null;
+	tag3: string | null;
+	published: boolean;
 }
 
+export interface Article {
+  id: string;
+  title: string;
+  body: string;
+  summary: string;
+  published: boolean;
+	tag1: string;
+	tag2: string;
+	tag3: string;
+	// deprecate
+  saved?: boolean;
+}
+
+export interface ArticleLink {
+	id: string;
+	published: boolean;
+	title: string;
+}
+
+export interface EditArticleView {
+
+	id: string;
+	title: string;
+	body: string;
+	summary: string;
+	tags: {
+		[tag: string]: boolean;
+	}
+}
+
+export interface Project {
+	id: string;
+	title: string;
+	href: string;
+	underEdit: boolean;
+	published: boolean;
+	tag1: string;
+	tag2: string;
+	tag3: string;
+}
+
+export interface Intro {
+	body: string;
+	saved: boolean;
+}
 
 export interface Metadata {
   github_url: string;
@@ -27,27 +76,11 @@ export interface Articles {
   [id: string]: Article;
 }
 
-export interface Project {
-	id: string;
-	title: string;
-	href: string;
-	tag1: string;
-	tag2: string;
-	tag3: string;
-	underEdit: boolean;
-	published: boolean;
-}
-
 export interface UI {
   saving: boolean;
   id_of_article_under_edit: string;
   articleLinks: Array<any>;
   loading: boolean;
-}
-
-export interface Intro {
-	body: string;
-	saved: boolean;
 }
 
 export interface AppState {

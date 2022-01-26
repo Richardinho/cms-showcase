@@ -10,13 +10,16 @@ import { IntroService } from '../services/intro.service';
 import { MessageService, ERROR } from '../services/message.service';
 
 import { genericError } from '../actions/generic-error.action';
-import { introChanged, nullAction } from '../actions/intro-changed.action';
+
 import {
 	introRequest,
 	introSaved,
-	introNotSavedToServer } from '../actions/intro-request.action';
-import { introFoundInCache } from '../actions/intro-found-in-cache.action';
-import { saveIntro } from '../actions/save-intro.action';
+	introNotSavedToServer,
+	saveIntro,
+	introFoundInCache,
+	introChanged,
+} from '../actions/intro-request.action';
+
 import { unauthorisedResponse } from '../actions/unauthorised-response.action';
 
 import { UNAUTHORIZED } from '../status-code.constants';
@@ -46,8 +49,6 @@ export class GetIntroEffects {
 			withLatestFrom(this.store.pipe(select(selectIntroWithJWTToken))),
       switchMap(([action, { jwt, intro }]) => {
 
-				// check to see if intro body text is already in store.
-				// if so, we'll just use that so just signal this.
 				if (intro?.body) {
 					return of(introFoundInCache());
 				}
@@ -59,8 +60,6 @@ export class GetIntroEffects {
 						}),
             catchError((error) => {
               if (error.status) {
-                //  if we are unauthorised, we will dispatch an unauthorised response which results
-                //  in redirection to login page
                 if (error.status === UNAUTHORIZED) {
                   return of(unauthorisedResponse({ redirectUrl: '/home' }));
                 } else {

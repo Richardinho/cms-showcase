@@ -10,41 +10,13 @@ import { tagData } from '../services/article.service';
 export const initialState = {};
 
 
-// todo: replace with createArticleFactory(json?: any): Article
-export const jsonToArticle = (json: any): Article => {
-  const obj: any = {};
-
-  obj.title = json.title;
-  obj.id = json.id;
-  obj.body = json.body;
-  obj.summary = json.summary;
-  obj.published = json.published;
-  obj.saved = true;
-  obj.tags = [];
-
-  obj.tags = tagData.map((tag:any) => {
-    const name = tag;
-    const value = tag === json.tag1
-      || tag === json.tag2
-      || tag === json.tag3;
-
-    return {
-      name,
-      value
-    };
-  });
-
-  return obj as Article;
-};
-
+// store article in articles cache
+// note that if article is already in cache, it will be overwritten
 export const getArticleResponseReducer = (state:any, action:any): Articles => {
-  const article: Article = jsonToArticle(action.articleJSON);
-
-  if (article && article.id) {
-		return {...state, [article.id]: article };
-  }
-
-  return { ...state };
+	return {
+		...state,
+		[action.article.id]: action.article,
+	};
 };
 
 export const articleChangedReducer = (state:any, action:any) => {

@@ -1,28 +1,50 @@
-import { Article } from '../model';
+import {
+	Article,
+	RawArticle,
+	ArticleLink,
+} from '../model';
 
-/*
- *  Takes an article that is stored in our store and converts it to form data that we can send to the server
- */
+export const articleToRawArticle = (article: Article, rawArticle: RawArticle): RawArticle => {
 
-export const articleToFormData = (article: Article): FormData => {
-  const formData = new FormData();
+	const result: any = {};
 
-  formData.append('title', article.title);
-  formData.append('id', article.id);
-  formData.append('body', article.body);
-  formData.append('summary', article.summary);
-  formData.append('published', article.published.toString());
+	result.body = article.body;
+	result.id = article.id;
+	result.published = article.published;
+	result.summary = article.summary;
+	result.tag1 = article.tag1;
+	result.tag2 = article.tag2;
+	result.tag3 = article.tag3;
+	result.title = article.title;
 
-  const tags = article.tags;
+	result.date_created = rawArticle.date_created;
+	result.date_edited = rawArticle.date_edited;
+	result.author = rawArticle.author;
 
-  tags
-    .filter(tag => {
-      return tag.value;
-    })
-    .slice(0, 3)
-    .forEach((tag, index) => {
-      formData.append(`tag${index + 1}`, tag.name);
-    });
+	return result as RawArticle;
+};
 
-  return formData;
+export const rawArticleToArticle = (rawArticle: RawArticle): Article => {
+	const result: any = {};
+
+	result.body = rawArticle.body;
+	result.id = rawArticle.id;
+	result.published = rawArticle.published;
+	result.summary = rawArticle.summary;
+	result.tag1 = rawArticle.tag1;
+	result.tag2 = rawArticle.tag2;
+	result.tag3 = rawArticle.tag3;
+	result.title = rawArticle.title;
+
+	return result as Article;
+};
+
+export const rawArticleToArticleLink = (rawArticle: RawArticle): ArticleLink => {
+	const result: any = {};
+
+	result.id = rawArticle.id;
+	result.published = rawArticle.published;
+	result.title = rawArticle.title;
+
+	return result as ArticleLink;
 };
