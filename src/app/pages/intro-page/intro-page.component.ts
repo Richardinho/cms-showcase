@@ -4,7 +4,8 @@ import {
   FormGroup,
   Validators } from '@angular/forms';
 import { Observable, combineLatest } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { merge, of } from 'rxjs';
+import { map, startWith, tap } from 'rxjs/operators';
 import { Article, Intro } from '../../model';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../model';
@@ -15,6 +16,7 @@ import {
 	introChanged,
 	introRequest,
 	saveIntro,
+	introStatusChanged,
 } from '../../actions/intro-request.action';
 
 @Component({
@@ -24,7 +26,9 @@ import {
 export class IntroPageComponent {
   intro$: Observable<Intro>;
 	showLoader$: Observable<boolean>;
-	disableSaveButton$: Observable<boolean>;
+	saveDisabled$: Observable<boolean>;
+
+	body$: Observable<string>;
 
   fGroup: FormGroup = new FormGroup({
     body: new FormControl('', Validators.required),
@@ -37,34 +41,43 @@ export class IntroPageComponent {
 	ngOnInit() {
     this.showLoader$ = this.store.pipe(select(selectShowLoader));
 
+
+		this.fGroup.valueChanges.subscribe(intro => {
+			const metadata = { saved: false, body: intro.body };
+
+			this.store.dispatch(introChanged(metadata));
+		});
+
 		const savedChanges$: Observable<boolean> = this.store.pipe(
 			select(introSavedChanges),
 		);
 
-		this.disableSaveButton$ = combineLatest(savedChanges$, this.fGroup.statusChanges).pipe(
-			map(([savedChanges, status]) => {
-				return savedChanges || status === 'INVALID';
-			})
-		); 
-
-		this.fGroup.valueChanges.subscribe(fg => {
-			const metadata = { ...fg, saved: false };
-			this.store.dispatch(introChanged(metadata));
-		});
+		this.saveDisabled$ = merge(
+			this.fGroup.statusChanges.pipe(
+				map(status => status !== 'VALID')
+			),
+			savedChanges$,
+		);
 
 		this.intro$ = this.store.pipe(select(selectIntro));
+
+		this.body$ = this.intro$.pipe(
+			map(intro => intro.body),
+		);
+
 		this.intro$.subscribe(intro => {
 			if (intro) {
-				this.fGroup.patchValue(intro, { emitEvent: false });
+				this.fGroup.patchValue(intro, {emitEvent: false});
 			}
 		});
 
 		this.store.dispatch(introRequest());
+
 	}
 
 	saveEdit() {
-		if (this.fGroup.valid) {
-			this.store.dispatch(saveIntro());
-		}
+		const action = saveIntro();
+
+		this.store.dispatch(action);
 	}
 }

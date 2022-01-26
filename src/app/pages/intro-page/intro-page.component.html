@@ -1,7 +1,7 @@
 <div class="cta-bar">
 	<button
-		[disabled]="disableSaveButton$ | async"
 		class="button"
+		[disabled]="saveDisabled$ | async"
 		(click)="saveEdit()">Save&nbsp;edit</button>
 
 		<div class="spinner">
@@ -21,13 +21,13 @@
 				data-test="edit-pane"
 				formControlName="body"
 				class="input"
-				></textarea>
+				>/textarea>
 		</div>
 
 		<div class="article-pane">
 			<div
 				class="article-content"
-				[innerHTML]="(intro$|async)?.body | markdownToHTML"
+				[innerHTML]="(body$|async) | markdownToHTML"
 				></div>
 		</div>
 	</div>

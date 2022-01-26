@@ -18,7 +18,7 @@ import {
 	rawArticleToArticleLink,
 	rawArticleToArticle,
 	articleToRawArticle,
-} from '../utils/article-to-form-data';
+} from './utils/article-to-form-data';
 
 import { articles } from './data/articles';
 

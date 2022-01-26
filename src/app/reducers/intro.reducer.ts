@@ -53,7 +53,7 @@ const _introReducer = createReducer(
 	initialState,
 	on(introChanged, introChangedReducer),
 	on(saveIntro, introSaveRequestReducer),
-	on(introNotSavedToServer, introNotSavedReducer)
+	on(introNotSavedToServer, introNotSavedReducer),
 );
 
 export function introReducer(state: Intro, action: any) {

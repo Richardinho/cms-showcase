@@ -63,6 +63,10 @@ export interface Project {
 	tag3: string;
 }
 
+export interface RawIntro {
+	intro_text: string
+}
+
 export interface Intro {
 	body: string;
 	saved: boolean;

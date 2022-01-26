@@ -43,6 +43,7 @@ $error-color: orange;
 
 .edit-pane {
 	display: grid;
+	background-color: white;
 	grid-template-rows: auto 1fr;
   padding: $half-unit;
 }

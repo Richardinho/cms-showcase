@@ -1,4 +1,5 @@
 import { createAction, props } from '@ngrx/store';
+import { FormControlStatus } from '@angular/forms';
 
 // intro page requests intro from server
 export const introRequest = createAction(
@@ -16,6 +17,7 @@ export const saveIntro = createAction(
   '[Intro] Save Intro',
 );
 
+
 // after intro has been saved to server
 export const introSaved = createAction('[Intro] IntroSaved');
 
@@ -27,6 +29,11 @@ export const introFoundInCache = createAction(
 // input has been made into intro form
 export const introChanged = createAction(
   '[Intro] Intro Changed',
-  props<{ body: string, saved: boolean }>()
+  props<{ saved: boolean }>()
 );
 
+export const introStatusChanged = createAction(
+	'[Intro] Intro Status Changed',
+	props<{ status: FormControlStatus }>(),
+
+);

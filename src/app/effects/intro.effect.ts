@@ -4,7 +4,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { tap, map, mergeMap, switchMap, catchError, concatMap, withLatestFrom } from 'rxjs/operators';
 
-import { AppState } from '../model';
+import { AppState, Intro } from '../model';
 
 import { IntroService } from '../services/intro.service';
 import { MessageService, ERROR } from '../services/message.service';
@@ -33,12 +33,6 @@ export const selectIntroWithJWTToken = (state: AppState) => {
 	};
 };
 
-const mapResponseJSONForStore = (srcJSON) => {
-	const result: any = {};
-	result.body = srcJSON.intro_text;
-	result.saved = true;
-	return result;
-}
 
 @Injectable()
 export class GetIntroEffects {
@@ -55,8 +49,8 @@ export class GetIntroEffects {
 
         return this.introService.getIntro(jwt)
           .pipe(
-            map((introJSON) => {
-							return introChanged(mapResponseJSONForStore(introJSON))
+            map((intro: Intro) => {
+							return introChanged(intro)
 						}),
             catchError((error) => {
               if (error.status) {
