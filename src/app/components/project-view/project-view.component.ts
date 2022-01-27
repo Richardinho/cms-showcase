@@ -14,7 +14,7 @@ import { selectLoadingTokens } from '../../selectors/ui.selector';
 import {
 	editProject,
 	deleteProjectRequest,
-	saveProject,
+	saveProjectRequest,
 } from '../../actions/projects.action';
 
 @Component({
@@ -63,7 +63,7 @@ export class ProjectViewComponent implements OnInit {
 			published,
 		};
 
-		this.store.dispatch(saveProject({
+		this.store.dispatch(saveProjectRequest({
 			loadingToken: '',
 			project: updatedProject
 		}));

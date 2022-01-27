@@ -1,10 +1,10 @@
 import { createReducer, on } from '@ngrx/store';
 import { AppState, Project } from '../model';
 import {
-	saveProject,
+	saveProjectRequest,
 	editProject,
 	projectsResponse,
-	projectSavedResponse,
+	saveProjectResponse,
 	createProjectRequest,
 	createNewProjectResponse,
 	deleteLocalProject,
@@ -122,8 +122,8 @@ const _projectsReducer = createReducer(
 	initialState,
 	on(projectsResponse, projectsResponseReducer),
 	on(editProject, editProjectReducer),
-	on(saveProject, saveProjectReducer),
-	on(projectSavedResponse, projectSavedResponseReducer),
+	on(saveProjectRequest, saveProjectReducer),
+	on(saveProjectResponse, projectSavedResponseReducer),
 	on(createProjectRequest, createProjectRequestReducer),
 	on(createNewProjectResponse, createNewProjectResponseReducer),
 	on(deleteLocalProject, deleteProjectResponseReducer),

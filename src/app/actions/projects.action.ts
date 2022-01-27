@@ -20,12 +20,12 @@ export const editProject = createAction(
 );
 
 /** SAVE PROJECT **/
-export const saveProject = createAction(
+export const saveProjectRequest = createAction(
 	'[Projects] SaveProject', 
 	props<{ project: Project; loadingToken: string }>(),
 );
 
-export const projectSavedResponse = createAction(
+export const saveProjectResponse = createAction(
 	'[Projects] Project Saved Response',
 	props<{ loadingToken: string; id: string }>(),
 );

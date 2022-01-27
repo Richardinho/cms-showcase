@@ -9,8 +9,8 @@ import {
 	projectsRequest,
 	projectsFoundInCache,
 	projectsResponse,
-	projectSavedResponse,
-	saveProject,
+	saveProjectResponse,
+	saveProjectRequest,
 	saveNewProjectRequest,
 
 	deleteProjectRequest,
@@ -78,12 +78,12 @@ export class ProjectsEffects {
 
 	saveProject$ = createEffect(() => {
 		return this.actions$.pipe(
-			ofType(saveProject),
+			ofType(saveProjectRequest),
 			withLatestFrom(this.store.pipe(select(selectJWTToken))),
 			mergeMap(([action, token]) => {
 				return this.projectService.updateProject(action.project, token)
 					.pipe(
-						map(() => projectSavedResponse({
+						map(() => saveProjectResponse({
 							loadingToken: action.loadingToken,
 							id: action.project.id,
 						})),

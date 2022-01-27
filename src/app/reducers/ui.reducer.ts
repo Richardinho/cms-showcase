@@ -21,10 +21,10 @@ import { updateMetadataRequest, updateMetadataResponse } from '../actions/update
 // actions
 import {
 	projectsResponse,
-	saveProject,
+	saveProjectRequest,
 	deleteProjectRequest, 
 	deleteProjectResponse,
-	projectSavedResponse,
+	saveProjectResponse,
 	saveNewProjectRequest,
 	createNewProjectResponse,
 } from '../actions/projects.action';
@@ -104,14 +104,14 @@ const _uiReducer = createReducer(initialState,
 		loadingTokens: state.loadingTokens.filter(token => token !== action.loadingToken),
 	})),
 
-	on(saveProject, (state: UI, action: any) => ({
+	on(saveProjectRequest, (state: UI, action: any) => ({
 		...state,
 		// todo: remove loading property (and in other reducers)
 		loading: true,
 		loadingTokens: [...state.loadingTokens, action.loadingToken],
 	})),
 
-	on(projectSavedResponse, (state: UI, action: any) => ({
+	on(saveProjectResponse, (state: UI, action: any) => ({
 		...state,
 		loading: false,
 		loadingTokens: state.loadingTokens.filter(token => token !== action.loadingToken)

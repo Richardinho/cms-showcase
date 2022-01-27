@@ -19,7 +19,7 @@ import { selectLoadingTokens } from '../../selectors/ui.selector';
 // actions
 import {
 	editProject,
-	saveProject,
+	saveProjectRequest,
 	deleteLocalProject,
 	saveNewProjectRequest,
 } from '../../actions/projects.action';
@@ -92,7 +92,7 @@ export class ProjectEditFormComponent {
 			loadingToken: this.saveProjectToken,
 		};
 
-		const action = saveProject(metadata);
+		const action = saveProjectRequest(metadata);
 
 		this.store.dispatch(action);
 	}
