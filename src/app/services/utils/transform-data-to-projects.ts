@@ -1,6 +1,6 @@
 import { Project } from '../../model';
 
-export const transformDataToProjects = (data: any): Array<Project> => {
+export const transformDataToProjects = (data: Array<any>): Array<Project> => {
 
 	if (Array.isArray(data)) {
 

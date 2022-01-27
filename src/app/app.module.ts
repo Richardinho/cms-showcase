@@ -54,6 +54,7 @@ import { ProjectsEffects } from './effects/projects.effect';
 
 import { CheckboxComponent } from './components/checkbox/checkbox.component';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
+import { ProjectViewComponent } from './components/project-view/project-view.component';
 
 @NgModule({
   declarations: [
@@ -74,6 +75,7 @@ import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.com
     SpinnerComponent,
     StylesPageComponent,
     ViewArticlePageComponent,
+    ProjectViewComponent,
   ],
   imports: [
     ReactiveFormsModule,

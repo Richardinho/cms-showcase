@@ -19,30 +19,37 @@ export const editProject = createAction(
 	props<{ id: string; edit: boolean }>()
 );
 
+/** SAVE PROJECT **/
 export const saveProject = createAction(
 	'[Projects] SaveProject', 
-	props<{project: Project}>(),
+	props<{ project: Project; loadingToken: string }>(),
 );
 
 export const projectSavedResponse = createAction(
 	'[Projects] Project Saved Response',
-	props<{ id: string }>(),
+	props<{ loadingToken: string; id: string }>(),
 );
+/////////
 
+
+
+/*  DELETE PROJECT */
 export const deleteProject = createAction(
 	'[Projects] DeleteProject',
-	props<{ id: string }>(),
+	props<{ id: string; loadingToken: string }>(),
 );
+
+export const projectDeletedResponse = createAction(
+	'[Projects] Project Deleted Response',
+	props<{ id: string; loadingToken: string }>(),
+);
+///////////
 
 export const deleteLocalProject = createAction(
 	'[Projects] DeleteLocalProject',
 	props<{ id: string }>(),
 );
 
-export const projectDeletedResponse = createAction(
-	'[Projects] Project Deleted Response',
-	props<{ id: string }>(),
-);
 
 // creates new project locally in store (NOT on server)
 export const createProjectRequest = createAction(
@@ -52,12 +59,12 @@ export const createProjectRequest = createAction(
 // saves the new project to the server
 export const saveNewProjectRequest = createAction(
 	'[Projects] Project Save New Project Request',
-	props<{ project: Project }>(),
+	props<{ project: Project; loadingToken: string }>(),
 );
 
 // after response from server that project has been created. Will include new id generated
 // on the server
 export const createNewProjectResponse = createAction(
 	'[Projects] Project Save New Project Response',
-	props<{ project: any; currentId: string }>(),
+	props<{ project: any; currentId: string; loadingToken: string}>(),
 );

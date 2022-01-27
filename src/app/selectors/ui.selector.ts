@@ -8,4 +8,9 @@ export const selectSaving = createSelector(
   (state: UI) => state.saving
 );
 
+export const selectLoadingTokens = createSelector(
+	selectUI,
+	(state: UI) => state.loadingTokens,
+);
+
 

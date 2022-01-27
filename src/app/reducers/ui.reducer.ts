@@ -17,13 +17,24 @@ import { articleLinksResponse } from '../actions/article-links-response';
 import { publishArticleResponse } from '../actions/publish-article-response';
 import { updateLinks } from './utils';
 import { updateMetadataRequest, updateMetadataResponse } from '../actions/update-metadata.action';
-import { projectsResponse } from '../actions/projects.action';
+
+// actions
+import {
+	projectsResponse,
+	saveProject,
+	deleteProject, 
+	projectDeletedResponse,
+	projectSavedResponse,
+	saveNewProjectRequest,
+	createNewProjectResponse,
+} from '../actions/projects.action';
 
 export const initialState: UI = {
   saving: false,
   id_of_article_under_edit: '',
   articleLinks: [],
-  loading: false,
+  loading: false, // todo: remove
+	loadingTokens: [],
 };
 
 const projectsResponseReducer = (state: UI, action: any) => {
@@ -82,6 +93,41 @@ const _uiReducer = createReducer(initialState,
 	on(introNotSavedToServer, state => ({ ...state, loading: false })),
 	on(introSaved, state => ({ ...state, loading: false })),
 	on(projectsResponse, projectsResponseReducer),
+
+	on(saveNewProjectRequest, (state: UI, action: any) => ({
+		...state,
+		loadingTokens: [...state.loadingTokens, action.loadingToken],
+	})),
+
+	on(createNewProjectResponse, (state: UI, action: any) => ({
+		...state,
+		loadingTokens: state.loadingTokens.filter(token => token !== action.loadingToken),
+	})),
+
+	on(saveProject, (state: UI, action: any) => ({
+		...state,
+		// todo: remove loading property (and in other reducers)
+		loading: true,
+		loadingTokens: [...state.loadingTokens, action.loadingToken],
+	})),
+
+	on(projectSavedResponse, (state: UI, action: any) => ({
+		...state,
+		loading: false,
+		loadingTokens: state.loadingTokens.filter(token => token !== action.loadingToken)
+	})),
+
+	on(deleteProject, (state: UI, action: any) => ({
+		...state,
+		loadingTokens: [...state.loadingTokens, action.loadingToken],
+		loading: true,
+	})),
+
+	on(projectDeletedResponse, (state: UI, action: any) => ({
+		...state,
+		loading: false,
+		loadingTokens: state.loadingTokens.filter(token => token !== action.loadingToken),
+	})),
 );
 
 export function uiReducer(state: UI, action: any) {

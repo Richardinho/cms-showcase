@@ -43,7 +43,10 @@ export class ProjectsEffects {
 			mergeMap(([action, token]) => {
 				return this.projectService.deleteProject(action.id, token)
 					.pipe(
-						map(() => projectDeletedResponse({ id: action.id })),
+						map(() => projectDeletedResponse({
+							loadingToken: action.loadingToken,
+						  id: action.id,
+						})),
             catchError((error) => {
 							return of(genericError({ message: 'generic error occurred' }));
             })
@@ -59,7 +62,10 @@ export class ProjectsEffects {
 			switchMap(([action, token]) => {
 				return this.projectService.updateProject(action.project, token)
 				.pipe(
-					map((project: Project) => createNewProjectResponse({ project, currentId: action.project.id })),
+					map((project: Project) => createNewProjectResponse({
+						project,
+						loadingToken: action.loadingToken,
+						currentId: action.project.id })),
 					catchError((error) => {
 						return of(genericError({ message: 'generic error occurred' }));
 					})
@@ -75,7 +81,10 @@ export class ProjectsEffects {
 			mergeMap(([action, token]) => {
 				return this.projectService.updateProject(action.project, token)
 					.pipe(
-						map(() => projectSavedResponse({ id: action.project.id })),
+						map(() => projectSavedResponse({
+							loadingToken: action.loadingToken,
+							id: action.project.id,
+						})),
             catchError((error) => {
 							console.log('error occurred', error);
 							return of(genericError({ message: 'generic error occurred' }));

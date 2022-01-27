@@ -9,6 +9,7 @@ import {
 	createProjectRequest,
 	createNewProjectResponse,
 	deleteLocalProject,
+	deleteProject,
 } from '../actions/projects.action';
 
 let latestId = 1;
@@ -41,7 +42,10 @@ export const saveProjectReducer = (state: any, action: any) => {
 
 	return state.map(project => {
 		if (project.id === action?.project?.id) {
-			return { ...project, ...action.project };
+			return {
+				...project,
+				...action.project,
+			};
 		}
 
 		return project;
@@ -55,7 +59,7 @@ export const projectSavedResponseReducer = (state: Array<Project>, action: any) 
 				...project,
 				// When project changes are saved on the server, we want to 
 				// signal that the edit is over and we can close the form
-				underEdit: false
+				underEdit: false,
 			};
 		}
 
@@ -81,6 +85,7 @@ export const createProjectRequestReducer = (state: any, action: any) => {
 		tag3: '',
 		underEdit: true,
 		published: false,
+		saved: true,
 	};
 
 	return [ newProject, ...state ];
@@ -101,17 +106,29 @@ export const createNewProjectResponseReducer = (state: Array<Project>, action: a
 	});
 }
 
+export const deleteProjectRequestReducer = (state: Array<Project>, action: any) => {
+	return state.map(project => {
+		if (project.id === action.id) {
+			return {
+				...project,
+			};
+		}
+
+		return project;
+	});
+};
+
 const _projectsReducer = createReducer(
 	initialState,
 	on(projectsResponse, projectsResponseReducer),
 	on(editProject, editProjectReducer),
 	on(saveProject, saveProjectReducer),
 	on(projectSavedResponse, projectSavedResponseReducer),
-	// delete project when we get a successful response from the server
 	on(projectDeletedResponse, deleteProjectResponseReducer),
 	on(createProjectRequest, createProjectRequestReducer),
 	on(createNewProjectResponse, createNewProjectResponseReducer),
 	on(deleteLocalProject, deleteProjectResponseReducer),
+	on(deleteProject, deleteProjectRequestReducer),
 );
 
 export function projectsReducer(state: Array<Project>, action: any) {

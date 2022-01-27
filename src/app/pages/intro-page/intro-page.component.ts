@@ -41,7 +41,6 @@ export class IntroPageComponent {
 	ngOnInit() {
     this.showLoader$ = this.store.pipe(select(selectShowLoader));
 
-
 		this.fGroup.valueChanges.subscribe(intro => {
 			const metadata = { saved: false, body: intro.body };
 

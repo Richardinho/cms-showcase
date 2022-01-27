@@ -5,10 +5,18 @@ import {
 	FormControl,
 	Validators,
 } from '@angular/forms';
-import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { tap, map } from 'rxjs/operators';
+import { Store, select } from '@ngrx/store';
+
 import { tagsValidator, isNewProject } from './utils/tags.validator';
 import { Project, AppState } from '../../model';
-import { Observable } from 'rxjs';
+
+//  selectors
+import { selectShowLoader } from '../../selectors/show-loader.selector';
+import { selectLoadingTokens } from '../../selectors/ui.selector';
+
+// actions
 import {
 	editProject,
 	saveProject,
@@ -39,6 +47,12 @@ export class ProjectEditFormComponent {
 
 	form: FormGroup;
 
+	savingProject$: Observable<boolean>;
+	savingNewProject$: Observable<boolean>;
+
+	saveProjectToken: string;
+	saveNewProjectToken: string;
+
 	ngOnInit() {
 		this.form = new FormGroup({
 			title: new FormControl(this.project.title, Validators.required),
@@ -52,11 +66,30 @@ export class ProjectEditFormComponent {
 		});
 
 		this.newProject = isNewProject(this.project.id);
+
+		this.saveProjectToken = this.project.id + 'sp';
+
+		this.savingProject$ = this.store.pipe(
+			select(selectLoadingTokens),
+			map((loadingTokens: Array<string>) => {
+				return loadingTokens.includes(this.saveProjectToken);
+			}),
+		);
+
+		this.saveNewProjectToken = this.project.id + 'snp';
+
+		this.savingNewProject$ = this.store.pipe(
+			select(selectLoadingTokens),
+			map((loadingTokens: Array<string>) => {
+				return loadingTokens.includes(this.saveNewProjectToken);
+			}),
+		);
 	}
 
 	save() {
 		const metadata = { 
-			project: formDataToProject(this.form.value, this.project.id)
+			project: formDataToProject(this.form.value, this.project.id),
+			loadingToken: this.saveProjectToken,
 		};
 
 		const action = saveProject(metadata);
@@ -67,6 +100,7 @@ export class ProjectEditFormComponent {
 	saveNewProject() {
 		const metadata = {
 			project: formDataToProject(this.form.value, this.project.id),
+			loadingToken: this.saveNewProjectToken,
 		};
 
 		const action = saveNewProjectRequest(metadata);
@@ -111,6 +145,7 @@ export class ProjectEditFormComponent {
 		return tagData;
 	}
 
+	// todo: base this on form validity AND saved state
 	get formDisabled() {
 		return this.form.invalid;
 	}

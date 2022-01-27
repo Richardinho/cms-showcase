@@ -1,0 +1,32 @@
+<div class="title">{{project.title}}</div>
+<div class="href"><span class="project-label">href</span>{{project.href}}</div>
+<div class="tags">
+	<div class="project-label">tags</div>
+	<ul>
+		<li *ngIf="project.tag1" class="tag">{{project.tag1}}</li>
+		<li *ngIf="project.tag2" class="tag">{{project.tag2}}</li>
+		<li *ngIf="project.tag3" class="tag">{{project.tag3}}</li>
+	</ul>
+</div>
+
+<div class="published">
+	<span class="project-label">published</span>{{project.published}}</div>
+
+<div class="buttons">
+	<button class="button" (click)="editProject()">edit</button>
+
+	<ng-container *ngIf="!project.published">
+		<cms-cta
+			(click)="publishProject(true)">publish</cms-cta>
+	</ng-container>
+
+	<ng-container *ngIf="project.published">
+		<cms-cta
+			(click)="publishProject(false)">unpublish</cms-cta>
+	</ng-container>
+
+	<cms-cta
+		[loading]="deletingProject$ | async"
+		(click)="deleteProject()">delete</cms-cta>
+
+</div>

@@ -1,3 +1,4 @@
+import { FormControlStatus } from '@angular/forms';
 /*
  *  This is as the article is stored in the database, and as we receive it from the server
  *  We need to convert it into a different form for display and form controls
@@ -61,6 +62,7 @@ export interface Project {
 	tag1: string;
 	tag2: string;
 	tag3: string;
+	saved?: boolean;
 }
 
 export interface RawIntro {
@@ -85,6 +87,7 @@ export interface UI {
   id_of_article_under_edit: string;
   articleLinks: Array<any>;
   loading: boolean;
+	loadingTokens: Array<string>;
 }
 
 export interface AppState {

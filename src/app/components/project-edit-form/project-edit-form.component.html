@@ -25,11 +25,24 @@
 
 		<div class="button-group">
 			<ng-container *ngIf="!newProject">
-				<button [disabled]="formDisabled" (click)="save()" class="button">save edits</button>
+
+				<!-- todo: cta should also be disabled whilst in a loading state -->
+				<cms-cta
+					[disabled]="formDisabled"
+					[loading]="savingProject$ | async"
+					(click)="save()">save edits</cms-cta>
+
 				<button (click)="cancel()" class="button">cancel</button>
 			</ng-container>
+
 			<ng-container *ngIf="newProject">
-				<button [disabled]="formDisabled" (click)="saveNewProject()" class="button">save new project</button>
+
+				<cms-cta
+					[disabled]="formDisabled"
+					[loading]="savingNewProject$ | async"
+					(click)="saveNewProject()"
+					>save new project</cms-cta>
+
 				<button (click)="cancelNewProject()" class="button">cancel</button>
 			</ng-container>
 		</div>

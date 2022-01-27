@@ -16,30 +16,7 @@
 				</ng-container>
 
 				<ng-container *ngIf="!project.underEdit">
-					<div class="title">{{project.title}}</div>
-					<div class="href"><span class="project-label">href</span>{{project.href}}</div>
-					<div class="tags">
-						<div class="project-label">tags</div>
-						<ul>
-							<li *ngIf="project.tag1" class="tag">{{project.tag1}}</li>
-							<li *ngIf="project.tag2" class="tag">{{project.tag2}}</li>
-							<li *ngIf="project.tag3" class="tag">{{project.tag3}}</li>
-						</ul>
-					</div>
-
-					<div class="published">
-						<span class="project-label">published</span>{{project.published}}</div>
-					
-					<div class="buttons">
-						<button class="button" (click)="editProject(project.id)">edit</button>
-						<ng-container *ngIf="!project.published">
-							<button class="button" (click)="publishProject(project, true)">publish</button>
-						</ng-container>
-						<ng-container *ngIf="project.published">
-							<button class="button" (click)="publishProject(project, false)">unpublish</button>
-						</ng-container>
-						<button class="button" (click)="deleteProject(project.id)">delete</button>
-					</div>
+					<cms-project-view [project]="project"></cms-project-view>
 				</ng-container>
 			</li>
 		</ul>
