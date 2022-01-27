@@ -7,7 +7,7 @@ import { Project, AppState } from '../../model';
 import { selectProjects } from '../../selectors/project.selector';
 import { selectShowLoader } from '../../selectors/show-loader.selector';
 import {
-	projectsRequest,
+	getProjectsRequest,
 	createProjectRequest,
 } from '../../actions/projects.action';
 
@@ -28,15 +28,13 @@ export class ProjectsPageComponent {
 	ngOnInit() {
 
 		this.projectLinks$ = this.store.pipe(select(selectProjects));
-		this.store.dispatch(projectsRequest());
+		this.store.dispatch(getProjectsRequest());
 	}
-
 
 	createProject() {
 		const action = createProjectRequest();
 
 		this.store.dispatch(action);
 	}
-
 }
 

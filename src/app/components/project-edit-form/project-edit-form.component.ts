@@ -5,6 +5,7 @@ import {
 	FormControl,
 	Validators,
 } from '@angular/forms';
+
 import { Observable } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
@@ -18,7 +19,7 @@ import { selectLoadingTokens } from '../../selectors/ui.selector';
 
 // actions
 import {
-	editProject,
+	openEditForm,
 	saveProjectRequest,
 	deleteLocalProject,
 	saveNewProjectRequest,
@@ -114,7 +115,7 @@ export class ProjectEditFormComponent {
 			edit: false,
 		};
 
-		const action = editProject(metadata);
+		const action = openEditForm(metadata);
 
 		this.store.dispatch(action);
 	}

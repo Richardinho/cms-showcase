@@ -2,11 +2,11 @@ import { createReducer, on } from '@ngrx/store';
 import { AppState, Project } from '../model';
 import {
 	saveProjectRequest,
-	editProject,
-	projectsResponse,
+	openEditForm,
+	getProjectsResponse,
 	saveProjectResponse,
 	createProjectRequest,
-	createNewProjectResponse,
+	saveNewProjectResponse,
 	deleteLocalProject,
 	deleteProjectRequest,
 	deleteProjectResponse,
@@ -21,11 +21,11 @@ const createId = () => {
 
 const initialState = null;
 
-export const projectsResponseReducer = (state: Array<Project>, action: any) => {
+export const getProjectsResponseReducer = (state: Array<Project>, action: any) => {
 	return action.projects;
 };
 
-export const editProjectReducer = (state: any, action: any) => {
+export const openEditFormReducer = (state: any, action: any) => {
 	return state.map(project => {
 		if (project.id === action.id) {
 			return {
@@ -38,7 +38,7 @@ export const editProjectReducer = (state: any, action: any) => {
 	});
 };
 
-export const saveProjectReducer = (state: any, action: any) => {
+export const saveProjectRequestReducer = (state: any, action: any) => {
 
 	return state.map(project => {
 		if (project.id === action?.project?.id) {
@@ -52,7 +52,7 @@ export const saveProjectReducer = (state: any, action: any) => {
 	});
 };
 
-export const projectSavedResponseReducer = (state: Array<Project>, action: any) => {
+export const saveProjectResponseReducer = (state: Array<Project>, action: any) => {
 	return state.map(project => {
 		if (project.id === action?.id) {
 			return {
@@ -91,7 +91,7 @@ export const createProjectRequestReducer = (state: any, action: any) => {
 	return [ newProject, ...state ];
 };
 
-export const createNewProjectResponseReducer = (state: Array<Project>, action: any) => {
+export const saveNewProjectResponseReducer = (state: Array<Project>, action: any) => {
 
 	return state.map((project: Project) => {
 		if (project.id === action.currentId) {
@@ -120,16 +120,21 @@ export const deleteProjectRequestReducer = (state: Array<Project>, action: any) 
 
 const _projectsReducer = createReducer(
 	initialState,
-	on(projectsResponse, projectsResponseReducer),
-	on(editProject, editProjectReducer),
-	on(saveProjectRequest, saveProjectReducer),
-	on(saveProjectResponse, projectSavedResponseReducer),
-	on(createProjectRequest, createProjectRequestReducer),
-	on(createNewProjectResponse, createNewProjectResponseReducer),
-	on(deleteLocalProject, deleteProjectResponseReducer),
+	on(getProjectsResponse, getProjectsResponseReducer),
+
+	on(openEditForm, openEditFormReducer),
 
 	on(deleteProjectRequest, deleteProjectRequestReducer),
 	on(deleteProjectResponse, deleteProjectResponseReducer),
+
+	on(saveProjectRequest, saveProjectRequestReducer),
+	on(saveProjectResponse, saveProjectResponseReducer),
+
+	on(saveNewProjectResponse, saveNewProjectResponseReducer),
+
+	on(createProjectRequest, createProjectRequestReducer),
+
+	on(deleteLocalProject, deleteProjectResponseReducer),
 );
 
 export function projectsReducer(state: Array<Project>, action: any) {

@@ -12,7 +12,7 @@ import { selectLoadingTokens } from '../../selectors/ui.selector';
 
 // actions
 import {
-	editProject,
+	openEditForm,
 	deleteProjectRequest,
 	saveProjectRequest,
 } from '../../actions/projects.action';
@@ -53,7 +53,7 @@ export class ProjectViewComponent implements OnInit {
 			edit: true
 		};
 
-		this.store.dispatch(editProject(metadata));
+		this.store.dispatch(openEditForm(metadata));
 	}
 
 	publishProject(published: boolean) {

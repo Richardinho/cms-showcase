@@ -20,13 +20,13 @@ import { updateMetadataRequest, updateMetadataResponse } from '../actions/update
 
 // actions
 import {
-	projectsResponse,
+	getProjectsResponse,
 	saveProjectRequest,
 	deleteProjectRequest, 
 	deleteProjectResponse,
 	saveProjectResponse,
 	saveNewProjectRequest,
-	createNewProjectResponse,
+	saveNewProjectResponse,
 } from '../actions/projects.action';
 
 export const initialState: UI = {
@@ -37,7 +37,7 @@ export const initialState: UI = {
 	loadingTokens: [],
 };
 
-const projectsResponseReducer = (state: UI, action: any) => {
+const getProjectsResponseReducer = (state: UI, action: any) => {
 	return {
 		...state,
 		projects: action.projectsJSON,
@@ -92,14 +92,14 @@ const _uiReducer = createReducer(initialState,
 	on(saveIntro, state => ({ ...state, loading: true })),
 	on(introNotSavedToServer, state => ({ ...state, loading: false })),
 	on(introSaved, state => ({ ...state, loading: false })),
-	on(projectsResponse, projectsResponseReducer),
+	on(getProjectsResponse, getProjectsResponseReducer),
 
 	on(saveNewProjectRequest, (state: UI, action: any) => ({
 		...state,
 		loadingTokens: [...state.loadingTokens, action.loadingToken],
 	})),
 
-	on(createNewProjectResponse, (state: UI, action: any) => ({
+	on(saveNewProjectResponse, (state: UI, action: any) => ({
 		...state,
 		loadingTokens: state.loadingTokens.filter(token => token !== action.loadingToken),
 	})),

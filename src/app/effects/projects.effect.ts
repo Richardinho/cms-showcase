@@ -2,23 +2,35 @@ import { Injectable } from '@angular/core';
 
 import { Store, select } from '@ngrx/store';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { tap, withLatestFrom, mergeMap, switchMap, map, catchError } from 'rxjs/operators';
+
+import {
+	tap,
+	withLatestFrom,
+	mergeMap,
+	switchMap,
+	map,
+	catchError
+} from 'rxjs/operators';
+
 import { of } from 'rxjs';
 
 import {
-	projectsRequest,
 	projectsFoundInCache,
-	projectsResponse,
-	saveProjectResponse,
+
+	getProjectsRequest,
+	getProjectsResponse,
+
 	saveProjectRequest,
+	saveProjectResponse,
+
 	saveNewProjectRequest,
+	saveNewProjectResponse,
 
 	deleteProjectRequest,
 	deleteProjectResponse,
 
-	createNewProjectResponse,
-
 } from '../actions/projects.action';
+
 import { unauthorisedResponse } from '../actions/unauthorised-response.action';
 import { genericError } from '../actions/generic-error.action';
 
@@ -38,43 +50,34 @@ export class ProjectsEffects {
 		private projectService: ProjectService,
   ) {}
 
-	deleteProject$ = createEffect(() => {
-		return this.actions$.pipe(
-			ofType(deleteProjectRequest),
-			withLatestFrom(this.store.pipe(select(selectJWTToken))),
-			mergeMap(([action, token]) => {
-				return this.projectService.deleteProject(action.id, token)
-					.pipe(
-						map(() => deleteProjectResponse({
-							loadingToken: action.loadingToken,
-						  id: action.id,
-						})),
-            catchError((error) => {
-							return of(genericError({ message: 'generic error occurred' }));
-            })
-					);
+	getProjects$ = createEffect(() => 
+		this.actions$.pipe(
+			ofType(getProjectsRequest),
+			withLatestFrom(this.store.pipe(select(selectProjectsWithJWTToken))),
+			switchMap(([action, {token, projects}]) => {
+				if (projects && projects.length) {
+					return of(projectsFoundInCache());
+				} else {
+				 return this.projectService.getProjects(token)
+					 .pipe(
+							map((projects: Array<Project>) => {
+								return getProjectsResponse({ projects });
+							}),
+							catchError((error) => {
+								if (error.status) {
+									if (error.status === UNAUTHORIZED) {
+										return of(genericError({ message: 'Server error occured' }));
+									} else {
+										return of(genericError({ message: 'Server error occured' }));
+									}
+								} else {
+									return of(genericError({ message: 'check your network' }));
+								}
+							}),
+				 );
+				}
 			}),
-		);
-	});
-
-	saveNewProject = createEffect(() => {
-		return this.actions$.pipe(
-			ofType(saveNewProjectRequest),
-			withLatestFrom(this.store.pipe(select(selectJWTToken))),
-			switchMap(([action, token]) => {
-				return this.projectService.updateProject(action.project, token)
-				.pipe(
-					map((project: Project) => createNewProjectResponse({
-						project,
-						loadingToken: action.loadingToken,
-						currentId: action.project.id })),
-					catchError((error) => {
-						return of(genericError({ message: 'generic error occurred' }));
-					})
-				);
-			}),
-		);
-	});
+		));
 
 	saveProject$ = createEffect(() => {
 		return this.actions$.pipe(
@@ -96,35 +99,42 @@ export class ProjectsEffects {
 		);
 	});
 
-	getProjects$ = createEffect(() => 
-		this.actions$.pipe(
-			ofType(projectsRequest),
-			// if we're on this page, the token must exist.
-			// Should we handle the case where it doesn't exist?
-			withLatestFrom(this.store.pipe(select(selectProjectsWithJWTToken))),
-			switchMap(([action, {token, projects}]) => {
-				if (projects && projects.length) {
-					// projects are already in store. Just signal this.
-					return of(projectsFoundInCache());
-				} else {
-				 return this.projectService.getProjects(token)
-					 .pipe(
-							map((projects: Array<Project>) => {
-								return projectsResponse({ projects });
-							}),
-							catchError((error) => {
-								if (error.status) {
-									if (error.status === UNAUTHORIZED) {
-										return of(genericError({ message: 'Server error occured' }));
-									} else {
-										return of(genericError({ message: 'Server error occured' }));
-									}
-								} else {
-									return of(genericError({ message: 'check your network' }));
-								}
-							}),
-				 );
-				}
+	saveNewProject$ = createEffect(() => {
+		return this.actions$.pipe(
+			ofType(saveNewProjectRequest),
+			withLatestFrom(this.store.pipe(select(selectJWTToken))),
+			switchMap(([action, token]) => {
+				return this.projectService.updateProject(action.project, token)
+				.pipe(
+					map((project: Project) => saveNewProjectResponse({
+						project,
+						loadingToken: action.loadingToken,
+						currentId: action.project.id
+					})),
+					catchError((error) => {
+						return of(genericError({ message: 'generic error occurred' }));
+					})
+				);
 			}),
-		));
+		);
+	});
+
+	deleteProject$ = createEffect(() => {
+		return this.actions$.pipe(
+			ofType(deleteProjectRequest),
+			withLatestFrom(this.store.pipe(select(selectJWTToken))),
+			mergeMap(([action, token]) => {
+				return this.projectService.deleteProject(action.id, token)
+					.pipe(
+						map(() => deleteProjectResponse({
+							loadingToken: action.loadingToken,
+						  id: action.id,
+						})),
+            catchError((error) => {
+							return of(genericError({ message: 'generic error occurred' }));
+            })
+					);
+			}),
+		);
+	});
 }
