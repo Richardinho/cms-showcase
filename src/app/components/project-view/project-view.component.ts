@@ -13,7 +13,7 @@ import { selectLoadingTokens } from '../../selectors/ui.selector';
 // actions
 import {
 	editProject,
-	deleteProject,
+	deleteProjectRequest,
 	saveProject,
 } from '../../actions/projects.action';
 
@@ -73,7 +73,7 @@ export class ProjectViewComponent implements OnInit {
 		this.dialogService.confirm('Are you sure that you want to delete this project?')
 			.subscribe((canDelete: any) => {
 				if (canDelete) {
-					this.store.dispatch(deleteProject({
+					this.store.dispatch(deleteProjectRequest({
 						loadingToken: this.deleteProjectToken,
 						id: this.project.id,
 					}));

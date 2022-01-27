@@ -1,5 +1,5 @@
 import { transformDataToProjects } from '../transform-data-to-projects';
-const data = [
+const data: Array<any> = [
 	{
 		"id": "1",
 		"title": "alpha",

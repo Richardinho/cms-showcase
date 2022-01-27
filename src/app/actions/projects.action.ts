@@ -34,12 +34,12 @@ export const projectSavedResponse = createAction(
 
 
 /*  DELETE PROJECT */
-export const deleteProject = createAction(
+export const deleteProjectRequest = createAction(
 	'[Projects] DeleteProject',
 	props<{ id: string; loadingToken: string }>(),
 );
 
-export const projectDeletedResponse = createAction(
+export const deleteProjectResponse = createAction(
 	'[Projects] Project Deleted Response',
 	props<{ id: string; loadingToken: string }>(),
 );

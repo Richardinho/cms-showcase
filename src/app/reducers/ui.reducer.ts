@@ -22,8 +22,8 @@ import { updateMetadataRequest, updateMetadataResponse } from '../actions/update
 import {
 	projectsResponse,
 	saveProject,
-	deleteProject, 
-	projectDeletedResponse,
+	deleteProjectRequest, 
+	deleteProjectResponse,
 	projectSavedResponse,
 	saveNewProjectRequest,
 	createNewProjectResponse,
@@ -117,13 +117,13 @@ const _uiReducer = createReducer(initialState,
 		loadingTokens: state.loadingTokens.filter(token => token !== action.loadingToken)
 	})),
 
-	on(deleteProject, (state: UI, action: any) => ({
+	on(deleteProjectRequest, (state: UI, action: any) => ({
 		...state,
 		loadingTokens: [...state.loadingTokens, action.loadingToken],
 		loading: true,
 	})),
 
-	on(projectDeletedResponse, (state: UI, action: any) => ({
+	on(deleteProjectResponse, (state: UI, action: any) => ({
 		...state,
 		loading: false,
 		loadingTokens: state.loadingTokens.filter(token => token !== action.loadingToken),

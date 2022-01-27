@@ -12,8 +12,10 @@ import {
 	projectSavedResponse,
 	saveProject,
 	saveNewProjectRequest,
-	deleteProject,
-	projectDeletedResponse,
+
+	deleteProjectRequest,
+	deleteProjectResponse,
+
 	createNewProjectResponse,
 
 } from '../actions/projects.action';
@@ -38,12 +40,12 @@ export class ProjectsEffects {
 
 	deleteProject$ = createEffect(() => {
 		return this.actions$.pipe(
-			ofType(deleteProject),
+			ofType(deleteProjectRequest),
 			withLatestFrom(this.store.pipe(select(selectJWTToken))),
 			mergeMap(([action, token]) => {
 				return this.projectService.deleteProject(action.id, token)
 					.pipe(
-						map(() => projectDeletedResponse({
+						map(() => deleteProjectResponse({
 							loadingToken: action.loadingToken,
 						  id: action.id,
 						})),

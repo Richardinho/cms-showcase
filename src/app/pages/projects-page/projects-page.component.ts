@@ -8,10 +8,6 @@ import { selectProjects } from '../../selectors/project.selector';
 import { selectShowLoader } from '../../selectors/show-loader.selector';
 import {
 	projectsRequest,
-	editProject,
-	deleteProject,
-	projectDeletedResponse,
-	saveProject,
 	createProjectRequest,
 } from '../../actions/projects.action';
 

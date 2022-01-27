@@ -5,11 +5,11 @@ import {
 	editProject,
 	projectsResponse,
 	projectSavedResponse,
-	projectDeletedResponse,
 	createProjectRequest,
 	createNewProjectResponse,
 	deleteLocalProject,
-	deleteProject,
+	deleteProjectRequest,
+	deleteProjectResponse,
 } from '../actions/projects.action';
 
 let latestId = 1;
@@ -124,11 +124,12 @@ const _projectsReducer = createReducer(
 	on(editProject, editProjectReducer),
 	on(saveProject, saveProjectReducer),
 	on(projectSavedResponse, projectSavedResponseReducer),
-	on(projectDeletedResponse, deleteProjectResponseReducer),
 	on(createProjectRequest, createProjectRequestReducer),
 	on(createNewProjectResponse, createNewProjectResponseReducer),
 	on(deleteLocalProject, deleteProjectResponseReducer),
-	on(deleteProject, deleteProjectRequestReducer),
+
+	on(deleteProjectRequest, deleteProjectRequestReducer),
+	on(deleteProjectResponse, deleteProjectResponseReducer),
 );
 
 export function projectsReducer(state: Array<Project>, action: any) {
