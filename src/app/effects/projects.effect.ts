@@ -50,6 +50,10 @@ export class ProjectsEffects {
 		private projectService: ProjectService,
   ) {}
 
+	/*
+	 *  Either get projects from the server or from the cache if they're already there
+	 */
+
 	getProjects$ = createEffect(() => 
 		this.actions$.pipe(
 			ofType(getProjectsRequest),

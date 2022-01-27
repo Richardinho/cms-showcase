@@ -50,7 +50,7 @@ export class CheckboxComponent implements ControlValueAccessor {
   disabled = false;
 
   writeValue(val: any) {
-    this.formControl.setValue(val, {emitEvent: false});
+    this.formControl.setValue(val, { emitEvent: false});
   }
 
   registerOnChange(fn: (val: any) => void) {

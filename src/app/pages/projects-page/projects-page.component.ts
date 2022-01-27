@@ -5,7 +5,6 @@ import { Observable } from 'rxjs';
 import { DialogService } from '../../services/dialog.service';
 import { Project, AppState } from '../../model';
 import { selectProjects } from '../../selectors/project.selector';
-import { selectShowLoader } from '../../selectors/show-loader.selector';
 import {
 	getProjectsRequest,
 	createProjectRequest,

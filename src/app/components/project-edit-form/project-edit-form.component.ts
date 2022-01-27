@@ -14,7 +14,6 @@ import { tagsValidator, isNewProject } from './utils/tags.validator';
 import { Project, AppState } from '../../model';
 
 //  selectors
-import { selectShowLoader } from '../../selectors/show-loader.selector';
 import { selectLoadingTokens } from '../../selectors/ui.selector';
 
 // actions

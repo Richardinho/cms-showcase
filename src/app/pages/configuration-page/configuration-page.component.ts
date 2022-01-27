@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AppState } from '../../model';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 
@@ -8,7 +8,6 @@ import { metadataRequest } from '../../actions/metadata.action';
 import { updateMetadataRequest } from '../../actions/update-metadata.action';
 
 import { selectMetadata } from '../../selectors/metadata.selector';
-import { selectShowLoader } from '../../selectors/show-loader.selector';
 import {
   FormArray,
   FormControl,
@@ -41,7 +40,7 @@ export class ConfigurationPageComponent implements OnInit {
 
   ngOnInit() {
 		// configure loader component
-    this.showLoader$ = this.store.pipe(select(selectShowLoader));
+    this.showLoader$ = of(true);
 
 		// when metadata in store is updated, update form
     this.metadata$ = this.store.pipe(select(selectMetadata));

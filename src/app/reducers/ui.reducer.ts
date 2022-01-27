@@ -33,7 +33,6 @@ export const initialState: UI = {
   saving: false,
   id_of_article_under_edit: '',
   articleLinks: [],
-  loading: false, // todo: remove
 	loadingTokens: [],
 };
 

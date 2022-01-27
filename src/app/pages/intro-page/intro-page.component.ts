@@ -10,7 +10,6 @@ import { Article, Intro } from '../../model';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../model';
 import { introSavedChanges, selectIntro } from '../../selectors/intro.selector';
-import { selectShowLoader } from '../../selectors/show-loader.selector';
 
 import {
 	introChanged,
@@ -39,7 +38,6 @@ export class IntroPageComponent {
   ) {}
 
 	ngOnInit() {
-    this.showLoader$ = this.store.pipe(select(selectShowLoader));
 
 		this.fGroup.valueChanges.subscribe(intro => {
 			const metadata = { saved: false, body: intro.body };
