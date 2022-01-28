@@ -38,6 +38,16 @@
   height: 30px;
   margin-left: $half-unit;
 }
-
-
   
+.error {
+  margin: 0 4px;
+	padding-top: 4px;
+  padding-bottom: 4px;
+  color: $error-color;
+  font-size: 12px;
+	opacity: 0;
+}
+
+.error.show-error {
+	opacity: 1;
+}

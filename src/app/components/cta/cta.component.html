@@ -1,5 +1,9 @@
 
-<button [class.loading]="loading" [disabled]="disabled" class="button">
+<button
+	(click)="clickHandler()"
+	[class.loading]="loading"
+	[disabled]="disabled"
+	class="button">
 	<span class="text">
 		<ng-content></ng-content>
 	</span>

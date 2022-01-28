@@ -86,8 +86,17 @@ const _uiReducer = createReducer(initialState,
   on(articleSavedResponse, state => ({ ...state, saving: false })),
   on(articleLinksResponse, articleLinksResponseReducer),
   on(publishArticleResponse, publishArticleResponseReducer),
-  on(updateMetadataRequest, state => ({ ...state, loading: true })),
-  on(updateMetadataResponse, state => ({ ...state, loading: false })),
+
+  on(updateMetadataRequest, (state: UI, action: any) => ({
+		...state,
+		loadingTokens: [ ...state.loadingTokens, action.loadingToken ],
+	})),
+
+  on(updateMetadataResponse, (state: UI, action: any) => ({
+		...state,
+		loadingTokens: state.loadingTokens.filter(token => token !== action.loadingToken),
+	})),
+
 	on(saveIntro, state => ({ ...state, loading: true })),
 	on(introNotSavedToServer, state => ({ ...state, loading: false })),
 	on(introSaved, state => ({ ...state, loading: false })),
@@ -95,7 +104,9 @@ const _uiReducer = createReducer(initialState,
 
 	on(saveNewProjectRequest, (state: UI, action: any) => ({
 		...state,
-		loadingTokens: [...state.loadingTokens, action.loadingToken],
+		loadingTokens: [
+			...state.loadingTokens, action.loadingToken,
+		],
 	})),
 
 	on(saveNewProjectResponse, (state: UI, action: any) => ({

@@ -9,5 +9,9 @@ export class CTAComponent {
 
 	@Input() loading: boolean;
 	@Input() disabled: boolean;
+	@Input() onClick: any;
 
+	clickHandler() {
+		this.onClick();
+	}
 }

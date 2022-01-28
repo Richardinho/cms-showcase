@@ -1,17 +1,19 @@
 <div class="button-container">
-  <button [disabled]="showLoader$ | async" (click)="update()" class="button">update</button>
-  <div class="spinner">
-    <spinner-component *ngIf="showLoader$ | async" ></spinner-component>
-  </div>
-
+	<cms-cta
+		[disabled]="disabled$ | async"
+		[loading]="showLoader$ | async"
+		[onClick]="update()">update</cms-cta>
 </div>
 
 <div class="content">
 	<div [formGroup]="formGroup" class="input-container">
 		<label class="label" for="git-hub-url">github url</label>
 		<input
-				formControlName="githubUrl"
+				formControlName="github_url"
 				class="input" id="git-hub-url"/>
+		<div
+			[class.show-error]="(githubUrl.dirty || githubUrl.touched) && githubUrl.invalid"
+			class="error">you must provide a URL</div>
 	</div>
 
 	<hr class="horizontal-rule"/>

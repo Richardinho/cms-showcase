@@ -32,7 +32,7 @@ export class PutMetadataEffect {
       )),
       switchMap(([action, token]) => {
         return this.metadataService.putMetadata(token, action.metadata).pipe(
-          map((metadata: any) => updateMetadataResponse({ metadata })),
+          map((metadata: any) => updateMetadataResponse({ metadata, loadingToken: action.loadingToken })),
           catchError((error) => {
             if (error.status) {
               if (error.status === UNAUTHORIZED) {
