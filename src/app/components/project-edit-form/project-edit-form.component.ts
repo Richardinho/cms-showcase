@@ -54,15 +54,18 @@ export class ProjectEditFormComponent {
 	saveNewProjectToken: string;
 
 	ngOnInit() {
+
 		this.form = new FormGroup({
 			title: new FormControl(this.project.title, Validators.required),
 			href: new FormControl(this.project.href, Validators.required),
 			published: new FormControl(this.project.published),
+			/*
 			tags: new FormGroup(
 				buildTagsFormGroup(
 					this.project.tag1,
 					this.project.tag2,
 					this.project.tag3), tagsValidator),
+					*/
 		});
 
 		this.newProject = isNewProject(this.project.id);
@@ -137,9 +140,11 @@ export class ProjectEditFormComponent {
 		return this.form.get('href');
 	}
 
+	/*
 	get tags() {
 		return this.form.get('tags');
 	}
+	 */
 
 	get tagList() {
 		return tagData;

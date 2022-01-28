@@ -53,16 +53,26 @@ export interface EditArticleView {
 	}
 }
 
+export interface RawProject {
+	id: string;
+	title: string;
+	href: string;
+	published: string;
+	tag1: string;
+	tag2: string;
+	tag3: string;
+}
+
 export interface Project {
 	id: string;
 	title: string;
 	href: string;
 	underEdit: boolean;
 	published: boolean;
-	tag1: string;
-	tag2: string;
-	tag3: string;
-	saved?: boolean;
+	tags: {
+		[tag: string]: boolean;
+	},
+	saved: boolean;
 }
 
 export interface RawIntro {

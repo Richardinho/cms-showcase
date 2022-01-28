@@ -1,6 +1,6 @@
-import { Project } from '../../model';
+import { RawProject } from '../../model';
 
-export const projects: Array<any> = [
+export const projects: Array<RawProject> = [
 	{
 		"id": "2",
 		"title": "tofu curry for tea midnight mass",
