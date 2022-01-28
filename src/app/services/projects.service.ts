@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { of } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { Project } from '../model';
-import { projects } from './data/projects';
+import { RawProject, Project } from '../model';
+import { projects as rawProjects } from './data/projects';
+import { rawProjectToProject } from './utils/raw-project-to-project';
 
 let nextId = 100;
 
@@ -33,7 +34,10 @@ export class ProjectService {
 	}
 
 	getProjects(token: string): Observable<Array<Project>> {
-		// todo: put in delay here
+		const projects: Array<Project> = rawProjects.map((project: RawProject) => {
+			return rawProjectToProject(project);
+		});
+
 		return of(projects);
 	}
 }
