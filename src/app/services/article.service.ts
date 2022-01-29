@@ -3,7 +3,7 @@ import { HttpErrorResponse, HttpHeaders, HttpClient } from '@angular/common/http
 
 import { Observable } from 'rxjs';
 import { throwError, of } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { map, catchError, delay } from 'rxjs/operators';
 
 import {
 	Article,
@@ -86,7 +86,7 @@ export class ArticleService {
 
 		return of({
 			message: 'article saved',
-		});
+		}).pipe(delay(4000));
   }
 
   deleteArticle(articleId: any, token: any) {

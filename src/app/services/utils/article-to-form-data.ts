@@ -35,6 +35,7 @@ export const rawArticleToArticle = (rawArticle: RawArticle): Article => {
 	result.tag2 = rawArticle.tag2;
 	result.tag3 = rawArticle.tag3;
 	result.title = rawArticle.title;
+	result.saved = true;
 
 	return result as Article;
 };

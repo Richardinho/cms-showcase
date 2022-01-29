@@ -1,7 +1,7 @@
 import { createReducer, on } from '@ngrx/store';
 import { UI, Article } from '../model';
-import { saveArticle } from '../actions/save-article.action';
-import { articleSavedResponse } from '../actions/article-saved-response.action';
+import { saveArticleRequest } from '../actions/save-article.action';
+import { saveArticleResponse } from '../actions/article-saved-response.action';
 import { articleRequest } from '../actions/edit-article-request.action';
 import { deleteArticleResponse } from '../actions/delete-article-response.action';
 
@@ -81,8 +81,17 @@ const publishArticleResponseReducer = (state: UI, action: any) => ({
 const _uiReducer = createReducer(initialState,
   on(articleRequest, articleRequestReducer),
   on(deleteArticleResponse, deleteArticleReducer),
-  on(saveArticle, state => ({ ...state, saving: true })),
-  on(articleSavedResponse, state => ({ ...state, saving: false })),
+
+  on(saveArticleRequest, (state: UI, action: any) => ({
+		...state,
+		loadingTokens: [ ...state.loadingTokens, action.loadingToken ],
+	})),
+
+	on(saveArticleResponse, (state: UI, action: any) => ({
+		...state, 
+		loadingTokens: state.loadingTokens.filter(token => token !== action.loadingToken),
+	})),
+
   on(articleLinksResponse, articleLinksResponseReducer),
   on(publishArticleResponse, publishArticleResponseReducer),
 

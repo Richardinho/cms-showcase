@@ -1,7 +1,7 @@
 import { Article } from '../model';
 import { createAction, props } from '@ngrx/store';
 
-export const articleSavedResponse = createAction(
+export const saveArticleResponse = createAction(
   '[EditArticle Page] Article Saved Response',
-  props<{ article: Article }>()
+  props<{ loadingToken: string }>()
 );

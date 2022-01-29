@@ -29,11 +29,14 @@ export interface Article {
   body: string;
   summary: string;
   published: boolean;
-	tag1: string;
-	tag2: string;
-	tag3: string;
+	tags?: {
+		[tag: string]: boolean;
+	},
 	// deprecate
-  saved?: boolean;
+	tag1?: string;
+	tag2?: string;
+	tag3?: string;
+  saved: boolean;
 }
 
 export interface ArticleLink {

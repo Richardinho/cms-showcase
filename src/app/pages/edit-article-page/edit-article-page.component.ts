@@ -5,7 +5,8 @@ import {
   FormControl,
   FormGroup,
   Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
+import { tap, map, startWith } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 
 import { ArticleService } from '../../services/article.service';
@@ -15,11 +16,12 @@ import { AppState, Article } from '../../model';
 
 import { articleChanged } from '../../actions/article-changed.action';
 import { articleRequest } from '../../actions/edit-article-request.action';
-import { saveArticle } from '../../actions/save-article.action';
+import { saveArticleRequest } from '../../actions/save-article.action';
 
 import { selectArticleUnderEdit } from '../../selectors/article.selector';
 import { selectSaving } from '../../selectors/ui.selector';
 import { selectUnsavedChanges } from '../../selectors/article.selector';
+import { selectLoadingTokens } from '../../selectors/ui.selector';
 
 import { createArticlePatchData, articleToFormGroup } from './utils/article-form.utils';
 import { tagsValidator } from './utils/tags.validator';
@@ -39,21 +41,22 @@ export class EditArticlePageComponent implements OnInit {
   ) {}
 
   article$: Observable<Article>;
-  saving$: Observable<boolean>;
-  unsavedChanges$: Observable<boolean>;
 
-	formGroup: FormGroup;
 
-	title: string = '';
-	summary: string = '';
-	body: string = '';
+	showLoader$: Observable<boolean>;
+	disabled$: Observable<boolean>;
+
+	form: FormGroup;
 
   ngOnInit() {
-		this.formGroup = new FormGroup({
+
+		this.form = new FormGroup({
 			id: new FormControl(''),
 			body: new FormControl('', Validators.required),
 			title: new FormControl('', Validators.required),
 			summary: new FormControl('', Validators.required),
+
+			/*
 			tags: new FormGroup({
 				'angular': new FormControl(false),
 				'html-5': new FormControl(false),
@@ -61,38 +64,82 @@ export class EditArticlePageComponent implements OnInit {
 				'react': new FormControl(false),
 				'css': new FormControl(false),
 			}, tagsValidator),
+			*/
 		});
 
-		//  fetch article from store
+		/*
+		 *  when form data changes, put this into store
+		 */ 
+
+		this.form.valueChanges.subscribe((value) => {
+			const metadata = {
+				data: value,
+			};
+
+			const action = articleChanged(metadata);
+
+			this.store.dispatch(action);
+		});
+
+		/*
+		 *  get article from store
+		 */
+
     this.article$ = this.store.pipe(select(selectArticleUnderEdit));
+
+
+		/*
+		 *  when data in store changes, put this data into form
+		 */
 
     this.article$.subscribe(article => {
       if (article) {
-				this.title = article.title;
-				this.summary = article.summary;
-				this.body = article.body;
 
-        this.formGroup
+        this.form
           .patchValue(articleToFormGroup(article),
             { emitEvent: false });
       }
     });
 
-    //  todo: use this variable: e.g. have a spinner
-    this.saving$ = this.store.pipe(select(selectSaving));
-    this.unsavedChanges$ = this.store.pipe(select(selectUnsavedChanges));
+		/*
+		 *  show loader animation when request is in transit
+		 */
 
-    this.formGroup.valueChanges.subscribe(formArticle => {
-			this.title = formArticle.title;
-			this.summary = formArticle.summary;
-			this.body = formArticle.body;
-    });
+		this.showLoader$ = this.store.pipe(
+			select(selectLoadingTokens),
+			map((loadingTokens: Array<string>) => loadingTokens.includes('__edit_article__')),
+			startWith(false),
+		);
 
-    /*
-     * when parameters change, we make a request for data
-		 * todo: Could simplify this by just getting a snapshot of the params and then
-		 * dispatching the action. i.e. I don't have to subscribe to paramMap
-     */
+		/*
+		 *  the update CTA should be disabled when:
+		 *  1. changes are in transit to server
+		 *  2. form input is invalid
+		 *  3. there are no local changes requiring to be saved 
+		 */
+
+		const formInvalid$ = this.form.statusChanges.pipe(
+			map(status => (status !== 'VALID')),
+			startWith(false),
+		);
+
+		const saved$ = this.article$.pipe(
+			map(data => {
+				return data.saved;
+			}),
+		);
+
+		this.disabled$ = combineLatest(
+			this.showLoader$,
+			formInvalid$,
+			saved$,
+		).pipe(
+			map(([loading, formInvalid, saved]) => (loading || formInvalid || saved)),
+		);
+
+		/*
+		 *  dispatch request to fetch data from store
+		 */
 
     this.route.paramMap.subscribe((params: ParamMap) => {
       const id = params.get('id');
@@ -103,18 +150,21 @@ export class EditArticlePageComponent implements OnInit {
     });
   }
 
-  save() {
-		const metadata = {
-			article: this.formGroup.value,
+  update(id: string) {
+		return () => {
+			const metadata = {
+				id,
+				loadingToken: '__edit_article__',
+			};
+
+			const action = saveArticleRequest(metadata);
+
+			this.store.dispatch(action);
 		};
-
-		const action = saveArticle(metadata);
-
-		this.store.dispatch(action);
   }
 
 	get tags() {
-		return this.formGroup.get('tags');
+		return this.form.get('tags');
 	}
 
 	get tagList() {
@@ -122,6 +172,6 @@ export class EditArticlePageComponent implements OnInit {
 	}
 
 	get formDisabled() {
-		return this.formGroup.invalid;
+		return this.form.invalid;
 	}
 }

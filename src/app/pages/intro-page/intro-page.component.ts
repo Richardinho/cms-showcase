@@ -53,12 +53,6 @@ export class IntroPageComponent {
 			this.store.dispatch(action);
 		});
 
-		this.showLoader$ = this.store.pipe(
-			select(selectLoadingTokens),
-			map((loadingTokens: Array<string>) => loadingTokens.includes('__intro_body__')),
-			startWith(false),
-		);
-
 		/*
 		 *  get intro from store
 		 */
@@ -75,6 +69,15 @@ export class IntroPageComponent {
 			}
 		});
 
+		/*
+		 *  show loader animation when request is in transit
+		 */
+
+		this.showLoader$ = this.store.pipe(
+			select(selectLoadingTokens),
+			map((loadingTokens: Array<string>) => loadingTokens.includes('__intro_body__')),
+			startWith(false),
+		);
 
 		/*
 		 *  the update CTA should be disabled when:

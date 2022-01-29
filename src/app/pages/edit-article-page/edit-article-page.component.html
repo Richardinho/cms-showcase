@@ -1,15 +1,16 @@
 <div class="cta-bar">
-	<button
-		[disabled]="formDisabled"
-		class="button"
-		(click)="save()">Save&nbsp;edit</button>
+	<cms-cta
+		[disabled]="disabled$ | async"
+		[loading]="showLoader$ | async"
+		[onClick]="update((article$ | async)?.id)">
+		save to server</cms-cta>
 </div>
 
 <div class="outer-container">
 	<div class="container">
 
 		<ng-container *ngIf="article$">
-			<div [formGroup]="formGroup" class="edit-pane">
+			<div [formGroup]="form" class="edit-pane">
 				<div class="input-container">
 					<label
 						for="edit-title"
@@ -40,6 +41,7 @@
 						></textarea>
 				</div>
 
+				<!--
 
 				<div class="select-tags-container">
 					<div class="tags" formGroupName="tags">
@@ -53,19 +55,20 @@
 					<div [class.show-error]="tags.invalid" class="tags-error">You are only allowed to select 3 tags</div>
 
 				</div>
+				-->
 			</div>
 
 			<div class="article-pane">
-				<h2 class="article-header">{{title}}</h2>
+				<h2 class="article-header">{{(article$ | async)?.title}}</h2>
 
 				<div
 					class="article-summary"
-					[innerHTML]="summary | markdownToHTML"
+					[innerHTML]="(article$ | async)?.summary | markdownToHTML"
 					></div>
 
 				<div
 					class="article-content"
-					[innerHTML]="body | markdownToHTML"
+					[innerHTML]="(article$ | async)?.body | markdownToHTML"
 					></div>
 
 			</div>

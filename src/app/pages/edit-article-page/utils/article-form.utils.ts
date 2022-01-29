@@ -25,6 +25,7 @@ export const articleToFormGroup = (article: Article): any => {
   obj.title = article.title;
   obj.summary = article.summary;
   obj.body = article.body;
+	/*
 
 	const selectedTags = [article.tag1, article.tag2, article.tag3];
 
@@ -34,6 +35,7 @@ export const articleToFormGroup = (article: Article): any => {
 			[tag]: selectedTags.includes(tag),
 		};
 	}, {});
+	*/
 	
 	return obj;
 };
