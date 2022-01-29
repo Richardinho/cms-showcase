@@ -8,8 +8,10 @@ import { AppState, EditArticleView, Article } from '../model';
 
 import { ArticleService } from '../services/article.service';
 
-import { saveArticleRequest } from '../actions/save-article.action';
-import { saveArticleResponse } from '../actions/article-saved-response.action';
+import {
+	saveArticleResponse,
+	saveArticleRequest,
+} from '../actions/article.action';
 
 import { genericError } from '../actions/generic-error.action';
 import { unauthorisedResponse } from '../actions/unauthorised-response.action';

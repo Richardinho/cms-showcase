@@ -13,10 +13,7 @@ import { ArticleService } from '../../services/article.service';
 
 import { AppState, Article } from '../../model';
 
-
-import { articleChanged } from '../../actions/article-changed.action';
-import { articleRequest } from '../../actions/edit-article-request.action';
-import { saveArticleRequest } from '../../actions/save-article.action';
+import { putArticleIntoStore, getArticleRequest, saveArticleRequest } from '../../actions/article.action';
 
 import { selectArticleUnderEdit } from '../../selectors/article.selector';
 import { selectSaving } from '../../selectors/ui.selector';
@@ -76,7 +73,7 @@ export class EditArticlePageComponent implements OnInit {
 				data: value,
 			};
 
-			const action = articleChanged(metadata);
+			const action = putArticleIntoStore(metadata);
 
 			this.store.dispatch(action);
 		});
@@ -144,7 +141,7 @@ export class EditArticlePageComponent implements OnInit {
     this.route.paramMap.subscribe((params: ParamMap) => {
       const id = params.get('id');
 
-      this.store.dispatch(articleRequest({
+      this.store.dispatch(getArticleRequest({
         id,
         redirectUrl: '/edit-article/' + id }));
     });

@@ -10,9 +10,9 @@ import { AppState, Article } from '../../model';
 import { selectArticleUnderEdit } from '../../selectors/article.selector';
 import { DialogService } from '../../services/dialog.service';
 
-import { articleRequest } from '../../actions/edit-article-request.action';
+import { deleteArticleRequest, getArticleRequest } from '../../actions/article.action';
+
 import { navigateToEditPageRequest } from '../../actions/navigate-to-edit-page-request';
-import { deleteArticle } from '../../actions/delete-article.action';
 
 const CONFIRMATION_MESSAGE = 'Are you sure that you want to delete this article?';
 
@@ -38,7 +38,7 @@ export class ViewArticlePageComponent implements OnInit {
     this.route.paramMap.subscribe((params: ParamMap) => {
       const id = params.get('id');
 
-      this.store.dispatch(articleRequest({
+      this.store.dispatch(getArticleRequest({
         id,
         redirectUrl: '/view-article/' + id }));
     });
@@ -52,7 +52,7 @@ export class ViewArticlePageComponent implements OnInit {
     this.dialogService.confirm(CONFIRMATION_MESSAGE)
       .subscribe((canDelete: any) => {
         if (canDelete) {
-          this.store.dispatch(deleteArticle({ redirectUrl: '/view-article/'}));
+          this.store.dispatch(deleteArticleRequest({ redirectUrl: '/view-article/'}));
         }});
   }
 }

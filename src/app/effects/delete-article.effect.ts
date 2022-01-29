@@ -9,8 +9,11 @@ import { ArticleService } from '../services/article.service';
 
 import { AppState } from '../model';
 
-import { deleteArticle } from '../actions/delete-article.action';
-import { deleteArticleResponse } from '../actions/delete-article-response.action';
+import {
+	deleteArticleRequest,
+	deleteArticleResponse,
+} from '../actions/article.action';
+
 import { unauthorisedResponse } from '../actions/unauthorised-response.action';
 
 import { selectArticleUnderEditWithToken } from '../selectors/article.selector';
@@ -32,7 +35,7 @@ export class DeleteArticleEffects {
 
   deleteArticle$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(deleteArticle),
+      ofType(deleteArticleRequest),
       concatMap(action => of(action).pipe(
         withLatestFrom(this.store.pipe(select(selectArticleUnderEditWithToken)))
       )),

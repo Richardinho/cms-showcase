@@ -8,9 +8,11 @@ import { AppState } from '../model';
 
 import { ArticleService } from '../services/article.service';
 
-import { articleRequest } from '../actions/edit-article-request.action';
-import { getArticleResponse } from '../actions/get-article-response.action';
-import { articleFoundInCache } from '../actions/article-found-in-cache.action';
+import {
+	getArticleResponse,
+	articleFoundInCache,
+} from '../actions/article.action';
+
 import { unauthorisedResponse } from '../actions/unauthorised-response.action';
 import { genericError } from '../actions/generic-error.action';
 import { publishArticleResponse } from '../actions/publish-article-response';

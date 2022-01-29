@@ -8,10 +8,13 @@ import { AppState, Article } from '../model';
 
 import { ArticleService } from '../services/article.service';
 
-import { articleFoundInCache } from '../actions/article-found-in-cache.action';
-import { articleRequest } from '../actions/edit-article-request.action';
+import {
+	articleFoundInCache,
+	getArticleRequest,
+	getArticleResponse,
+} from '../actions/article.action';
+
 import { genericError } from '../actions/generic-error.action';
-import { getArticleResponse } from '../actions/get-article-response.action';
 import { unauthorisedResponse } from '../actions/unauthorised-response.action';
 
 import { selectArticleWithToken, selectJWTToken } from '../selectors/article.selector';
@@ -23,7 +26,7 @@ export class GetArticleEffects {
 
   getArticle$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(articleRequest),
+      ofType(getArticleRequest),
       concatMap(action => of(action).pipe(
         withLatestFrom(this.store.pipe(select(selectJWTToken)))
       )),

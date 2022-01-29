@@ -11,7 +11,11 @@ import { ArticleService } from '../services/article.service';
 
 import { unauthorisedResponse } from '../actions/unauthorised-response.action';
 import { genericError } from '../actions/generic-error.action';
-import { createArticleRequest, createArticleResponse } from '../actions/create-article.action';
+
+import {
+	createArticleRequest,
+	createArticleResponse,
+} from '../actions/article.action';
 
 import { selectJWTToken } from '../selectors/article.selector';
 

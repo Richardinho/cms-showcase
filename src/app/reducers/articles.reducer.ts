@@ -1,9 +1,12 @@
 import { createReducer, on } from '@ngrx/store';
-import { articleChanged } from '../actions/article-changed.action';
-import { saveArticleRequest } from '../actions/save-article.action';
-import { saveArticleResponse } from '../actions/article-saved-response.action';
-import { deleteArticleResponse } from '../actions/delete-article-response.action';
-import { getArticleResponse } from '../actions/get-article-response.action';
+
+ import {
+  putArticleIntoStore,
+  saveArticleRequest,
+  saveArticleResponse,
+  deleteArticleResponse,
+  getArticleResponse,
+ } from '../actions/article.action';
 
 import { Article, Articles } from '../model';
 import { tagData } from '../services/article.service';
@@ -20,7 +23,7 @@ export const getArticleResponseReducer = (state:any, action:any): Articles => {
 	};
 };
 
-export const articleChangedReducer = (state:Articles, action:any) => {
+export const putArticleIntoStoreReducer = (state:Articles, action:any) => {
   const data = action.data;
 
   const article = state[data.id];
@@ -77,7 +80,7 @@ export const deleteArticleResponseReducer = (state:any, action:any) => {
 const _articlesReducer = createReducer(initialState,
 	on(saveArticleRequest, saveArticleRequestReducer),
   on(getArticleResponse, getArticleResponseReducer),
-  on(articleChanged, articleChangedReducer),
+  on(putArticleIntoStore, putArticleIntoStoreReducer),
   on(deleteArticleResponse, deleteArticleResponseReducer),
 );
 

@@ -1,9 +1,12 @@
 import { createReducer, on } from '@ngrx/store';
 import { UI, Article } from '../model';
-import { saveArticleRequest } from '../actions/save-article.action';
-import { saveArticleResponse } from '../actions/article-saved-response.action';
-import { articleRequest } from '../actions/edit-article-request.action';
-import { deleteArticleResponse } from '../actions/delete-article-response.action';
+
+import {
+	saveArticleRequest,
+	deleteArticleResponse,
+	saveArticleResponse,
+	getArticleRequest,
+} from '../actions/article.action';
 
 import {
 	saveIntroResponse,
@@ -46,7 +49,7 @@ const getProjectsResponseReducer = (state: UI, action: any) => {
  *  set article id when we have navigated to an article or edit page
  */
 
-const articleRequestReducer = (state:UI, action:any) => ({
+const getArticleRequestReducer = (state:UI, action:any) => ({
   ...state,
   id_of_article_under_edit: action.id
 });
@@ -55,7 +58,7 @@ const articleRequestReducer = (state:UI, action:any) => ({
  *  reset article id after deletion
  */
 
-const deleteArticleReducer = (state:UI, action:any) => ({
+const deleteArticleResponseReducer = (state:UI, action:any) => ({
   ...state,
   id_of_article_under_edit: '',
 });
@@ -79,8 +82,8 @@ const publishArticleResponseReducer = (state: UI, action: any) => ({
 });
 
 const _uiReducer = createReducer(initialState,
-  on(articleRequest, articleRequestReducer),
-  on(deleteArticleResponse, deleteArticleReducer),
+  on(getArticleRequest, getArticleRequestReducer),
+  on(deleteArticleResponse, deleteArticleResponseReducer),
 
   on(saveArticleRequest, (state: UI, action: any) => ({
 		...state,
