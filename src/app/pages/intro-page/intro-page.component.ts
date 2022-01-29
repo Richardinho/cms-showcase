@@ -9,12 +9,13 @@ import { map, startWith, tap } from 'rxjs/operators';
 import { Article, Intro } from '../../model';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../model';
-import { introSavedChanges, selectIntro } from '../../selectors/intro.selector';
+import { selectIntro } from '../../selectors/intro.selector';
+import { selectLoadingTokens } from '../../selectors/ui.selector';
 
 import {
-	introChanged,
+	putIntroIntoStore,
 	introRequest,
-	saveIntro,
+	saveIntroRequest,
 	introStatusChanged,
 } from '../../actions/intro-request.action';
 
@@ -25,13 +26,8 @@ import {
 export class IntroPageComponent {
   intro$: Observable<Intro>;
 	showLoader$: Observable<boolean>;
-	saveDisabled$: Observable<boolean>;
-
-	body$: Observable<string>;
-
-  fGroup: FormGroup = new FormGroup({
-    body: new FormControl('', Validators.required),
-  });
+	disabled$: Observable<boolean>;
+	form: FormGroup;
 
   constructor(
     private store: Store<AppState>
@@ -39,42 +35,93 @@ export class IntroPageComponent {
 
 	ngOnInit() {
 
-		this.fGroup.valueChanges.subscribe(intro => {
-			const metadata = { saved: false, body: intro.body };
-
-			this.store.dispatch(introChanged(metadata));
+		this.form = new FormGroup({
+			body: new FormControl('', Validators.required),
 		});
 
-		const savedChanges$: Observable<boolean> = this.store.pipe(
-			select(introSavedChanges),
+		/*
+		 *  when form data changes, put this into store
+		 */ 
+
+		this.form.valueChanges.subscribe(intro => {
+			const metadata = {
+				body: intro.body,
+			};
+
+			const action = putIntroIntoStore(metadata);
+
+			this.store.dispatch(action);
+		});
+
+		this.showLoader$ = this.store.pipe(
+			select(selectLoadingTokens),
+			map((loadingTokens: Array<string>) => loadingTokens.includes('__intro_body__')),
+			startWith(false),
 		);
 
-		this.saveDisabled$ = merge(
-			this.fGroup.statusChanges.pipe(
-				map(status => status !== 'VALID')
-			),
-			savedChanges$,
-		);
+		/*
+		 *  get intro from store
+		 */
 
 		this.intro$ = this.store.pipe(select(selectIntro));
 
-		this.body$ = this.intro$.pipe(
-			map(intro => intro.body),
-		);
+		/*
+		 *  when data in store changes, put this data into form
+		 */
 
 		this.intro$.subscribe(intro => {
 			if (intro) {
-				this.fGroup.patchValue(intro, {emitEvent: false});
+				this.form.patchValue(intro, { emitEvent: false });
 			}
 		});
 
-		this.store.dispatch(introRequest());
 
+		/*
+		 *  the update CTA should be disabled when:
+		 *  1. changes are in transit to server
+		 *  2. form input is invalid
+		 *  3. there are no local changes requiring to be saved 
+		 */
+
+		const formInvalid$ = this.form.statusChanges.pipe(
+			map(status => (status !== 'VALID')),
+			startWith(false),
+		);
+
+		const noLocalChanges$ = this.intro$.pipe(
+			map(data => data.saved),
+		);
+
+		this.disabled$ = combineLatest(
+			this.showLoader$,
+			formInvalid$,
+			noLocalChanges$,
+		).pipe(
+			map(([
+				loading,
+				formInvalid,
+				noLocalChanges
+			]) => {
+				return loading || formInvalid || noLocalChanges; 
+			}),
+		);
+
+		/*
+		 *  dispatch request to fetch data from store
+		 */
+
+		this.store.dispatch(introRequest());
 	}
 
-	saveEdit() {
-		const action = saveIntro();
+	update() {
+		return () => {
+			const metadata = {
+				loadingToken: '__intro_body__',
+			};
 
-		this.store.dispatch(action);
+			const action = saveIntroRequest(metadata);
+
+			this.store.dispatch(action);
+		}
 	}
 }

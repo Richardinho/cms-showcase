@@ -13,13 +13,17 @@ export const introNotSavedToServer = createAction(
 );
 
 // save intro to server
-export const saveIntro = createAction(
+export const saveIntroRequest = createAction(
   '[Intro] Save Intro',
+	props<{ loadingToken: string }>(),
 );
 
 
 // after intro has been saved to server
-export const introSaved = createAction('[Intro] IntroSaved');
+export const saveIntroResponse = createAction(
+	'[Intro] IntroSaved',
+	props<{ loadingToken: string }>(),
+);
 
 // when intro is already in store so we don't need to go to server
 export const introFoundInCache = createAction(
@@ -27,9 +31,9 @@ export const introFoundInCache = createAction(
 );
 
 // input has been made into intro form
-export const introChanged = createAction(
+export const putIntroIntoStore = createAction(
   '[Intro] Intro Changed',
-  props<{ saved: boolean }>()
+	props<{ body: string }>(),
 );
 
 export const introStatusChanged = createAction(

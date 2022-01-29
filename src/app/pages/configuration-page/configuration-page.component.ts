@@ -27,33 +27,31 @@ export class ConfigurationPageComponent implements OnInit {
   metadata$: Observable<any>;
   showLoader$: Observable<boolean>;
 	disabled$: Observable<boolean>;
-	formGroup: FormGroup;
+	form: FormGroup;
 
   constructor(
     private route: ActivatedRoute,
     private store: Store<AppState>,
   ) {}
 
-
-  update() {
-		return () => {
-		  const action = updateMetadataRequest({
-				metadata: this.formGroup.value,
-				loadingToken: '__configuration_github_url__',
-			});
-
-			this.store.dispatch(action);
-		};
-  }
-
   ngOnInit() {
-		// configure loader component
-		this.formGroup = new FormGroup({
+
+		this.form = new FormGroup({
 			github_url: new FormControl('', Validators.required),
 		});
 
-		this.formGroup.valueChanges.subscribe((value) => {
-			this.store.dispatch(putMetadataIntoStore({ metadata: value }));
+		/*
+		 *  when form data changes, put this into store
+		 */ 
+
+		this.form.valueChanges.subscribe((value) => {
+			const metadata = {
+				metadata: value,
+			};
+
+			const action = putMetadataIntoStore(metadata);
+
+			this.store.dispatch(action);
 		});
 
 		this.showLoader$ = this.store.pipe(
@@ -64,9 +62,18 @@ export class ConfigurationPageComponent implements OnInit {
 			startWith(false),
 		);
 
+		/*
+		 *  get metadata from store
+		 */
+
     this.metadata$ = this.store.pipe(select(selectMetadata));
+
+		/*
+		 *  when data in store changes, put this data into form
+		 */
+
     this.metadata$.subscribe(metadata => {
-      this.formGroup
+      this.form
         .patchValue({
 					github_url: metadata.github_url
 				}, { emitEvent: false})
@@ -74,7 +81,7 @@ export class ConfigurationPageComponent implements OnInit {
 
     this.disabled$ = combineLatest(
 			this.showLoader$,
-			this.formGroup.statusChanges.pipe(
+			this.form.statusChanges.pipe(
 				map(status => {
 					return (status !== 'VALID');
 				}),
@@ -88,14 +95,26 @@ export class ConfigurationPageComponent implements OnInit {
 				})
 			);
 
-		// when metadata in store is updated, update form
+		/*
+		 *  dispatch request to fetch data from store
+		 */
 
-		//  dispatch action to request metadata from server
-    this.store.dispatch(metadataRequest());
+			this.store.dispatch(metadataRequest());
+  }
+
+  update() {
+		return () => {
+		  const action = updateMetadataRequest({
+				metadata: this.form.value,
+				loadingToken: '__configuration_github_url__',
+			});
+
+			this.store.dispatch(action);
+		};
   }
 
 	get githubUrl() {
-		return this.formGroup.get('github_url');
+		return this.form.get('github_url');
 	}
 }
 

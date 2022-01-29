@@ -1,8 +1,8 @@
 import { createReducer, on } from '@ngrx/store';
 import {
-	introChanged,
+	putIntroIntoStore,
 	introNotSavedToServer,
-	saveIntro,
+	saveIntroRequest,
 } from '../actions/intro-request.action';
 import { Intro } from '../model';
 
@@ -51,8 +51,8 @@ export const introSaveRequestReducer = (state: Intro, action: any) => {
 
 const _introReducer = createReducer(
 	initialState,
-	on(introChanged, introChangedReducer),
-	on(saveIntro, introSaveRequestReducer),
+	on(putIntroIntoStore, introChangedReducer),
+	on(saveIntroRequest, introSaveRequestReducer),
 	on(introNotSavedToServer, introNotSavedReducer),
 );
 

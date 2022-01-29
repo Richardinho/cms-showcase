@@ -13,11 +13,11 @@ import { genericError } from '../actions/generic-error.action';
 
 import {
 	introRequest,
-	introSaved,
+	saveIntroResponse,
 	introNotSavedToServer,
-	saveIntro,
+	saveIntroRequest,
 	introFoundInCache,
-	introChanged,
+	putIntroIntoStore,
 } from '../actions/intro-request.action';
 
 import { unauthorisedResponse } from '../actions/unauthorised-response.action';
@@ -50,7 +50,7 @@ export class GetIntroEffects {
         return this.introService.getIntro(jwt)
           .pipe(
             map((intro: Intro) => {
-							return introChanged(intro)
+							return putIntroIntoStore(intro)
 						}),
             catchError((error) => {
               if (error.status) {
@@ -67,27 +67,29 @@ export class GetIntroEffects {
       })
     ));
 
-		saveIntro$ = createEffect(() => {
-			return this.actions$.pipe(
-				ofType(saveIntro),
-				withLatestFrom(this.store.pipe(select(selectIntroWithJWTToken))),
-				mergeMap(([action, introWithToken]) => {
-					return this.introService.saveIntro(action, introWithToken).pipe(
-						map(() => {
-							this.messageService.show('changes saved to server');
-							return introSaved();
-						}),
-						catchError((error) => {
-							const metadata = {
-								error,
-							};
+	saveIntro$ = createEffect(() => {
+		return this.actions$.pipe(
+			ofType(saveIntroRequest),
+			withLatestFrom(this.store.pipe(select(selectIntroWithJWTToken))),
+			mergeMap(([action, introWithToken]) => {
+				return this.introService.saveIntro(action, introWithToken).pipe(
+					map(() => {
+						this.messageService.show('changes saved to server');
+						return saveIntroResponse({
+							loadingToken: action.loadingToken,
+						});
+					}),
+					catchError((error) => {
+						const metadata = {
+							error,
+						};
 
-							return of(introNotSavedToServer(metadata));
-						}),
-					);
-				}),
-			);
-		});
+						return of(introNotSavedToServer(metadata));
+					}),
+				);
+			}),
+		);
+	});
 
 	introNotSaved$ = createEffect(() => {
 		return this.actions$.pipe(

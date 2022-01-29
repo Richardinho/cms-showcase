@@ -2,11 +2,11 @@
 	<cms-cta
 		[disabled]="disabled$ | async"
 		[loading]="showLoader$ | async"
-		[onClick]="update()">update</cms-cta>
+		[onClick]="update()">save to server</cms-cta>
 </div>
 
 <div class="content">
-	<div [formGroup]="formGroup" class="input-container">
+	<div [formGroup]="form" class="input-container">
 		<label class="label" for="git-hub-url">github url</label>
 		<input
 				formControlName="github_url"

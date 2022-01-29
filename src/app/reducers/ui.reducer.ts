@@ -6,9 +6,8 @@ import { articleRequest } from '../actions/edit-article-request.action';
 import { deleteArticleResponse } from '../actions/delete-article-response.action';
 
 import {
-	introSaved,
-	introChanged,
-	saveIntro,
+	saveIntroResponse,
+	saveIntroRequest,
 	introNotSavedToServer,
 } from '../actions/intro-request.action';
 
@@ -97,9 +96,18 @@ const _uiReducer = createReducer(initialState,
 		loadingTokens: state.loadingTokens.filter(token => token !== action.loadingToken),
 	})),
 
-	on(saveIntro, state => ({ ...state, loading: true })),
+	on(saveIntroRequest, (state: UI, action: any) => ({
+		...state,
+		loadingTokens: [ ...state.loadingTokens, action.loadingToken ],
+	})),
+
+	on(saveIntroResponse, (state: UI, action: any) => ({
+		...state, 
+		loadingTokens: state.loadingTokens.filter(token => token !== action.loadingToken),
+	})),
+
 	on(introNotSavedToServer, state => ({ ...state, loading: false })),
-	on(introSaved, state => ({ ...state, loading: false })),
+
 	on(getProjectsResponse, getProjectsResponseReducer),
 
 	on(saveNewProjectRequest, (state: UI, action: any) => ({

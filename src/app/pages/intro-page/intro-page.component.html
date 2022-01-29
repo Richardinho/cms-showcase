@@ -1,14 +1,15 @@
 <div class="cta-bar">
 	<cms-cta
-		(click)="saveEdit()"
-		[loading]="false"
-		[disabled]="saveDisabled$ | async">Save Edit</cms-cta>
+		[disabled]="disabled$ | async"
+		[loading]="showLoader$ | async"
+		[onClick]="update()"
+		>save to server</cms-cta>
 </div>
 
 <!-- only purpose of this div is to so the container div can be relative to it: is there a better way? -->
 <div class="outer-container">
 	<div class="container">
-		<div [formGroup]="fGroup" class="edit-pane">
+		<div [formGroup]="form" class="edit-pane">
 			<label
 				for="edit-body"
 				class="label">body text</label>
@@ -23,7 +24,7 @@
 		<div class="article-pane">
 			<div
 				class="article-content"
-				[innerHTML]="(body$|async) | markdownToHTML"
+				[innerHTML]="(intro$|async)?.body | markdownToHTML"
 				></div>
 		</div>
 	</div>
