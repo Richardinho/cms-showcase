@@ -10,11 +10,12 @@ export const transformDataToProjects = (data: Array<any>): Array<Project> => {
 				id: item.id,
 				title: item.title,
 				href: item.href,
-				tag1: item.tag1 || '',
-				tag2: item.tag2 || '',
-				tag3: item.tag3 || '',
+				tags: {
+					foo: true,
+				},
 				underEdit: false,
 				published: Boolean(parseInt(item.published)),
+				saved: true,
 			};
 
 		});

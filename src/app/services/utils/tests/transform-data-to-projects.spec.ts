@@ -1,4 +1,5 @@
 import { transformDataToProjects } from '../transform-data-to-projects';
+/*
 const data: Array<any> = [
 	{
 		"id": "1",
@@ -64,3 +65,4 @@ describe('transformDataToProjects()', () => {
 		]);
 	});
 });
+*/

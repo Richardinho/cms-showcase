@@ -32,10 +32,6 @@ export interface Article {
 	tags?: {
 		[tag: string]: boolean;
 	},
-	// deprecate
-	tag1?: string;
-	tag2?: string;
-	tag3?: string;
   saved: boolean;
 }
 

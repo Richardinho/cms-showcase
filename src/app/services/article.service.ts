@@ -14,11 +14,10 @@ import {
 
 import { environment } from '../../environments/environment';
 
-import {
-	rawArticleToArticleLink,
-	rawArticleToArticle,
-	articleToRawArticle,
-} from './utils/article-to-form-data';
+import { rawArticleToArticleLink } from './utils/article-to-form-data';
+import { articleToRawArticle } from './utils/article-to-raw-article';
+import { rawArticleToArticle } from './utils/raw-article-to-article';
+import { createRawArticle } from './utils/create-raw-article';
 
 import { articles } from './data/articles';
 
@@ -60,19 +59,7 @@ export class ArticleService {
   createArticle(token: any) {
 		const id = "" + (++this.nextId);
 
-		articles.push({
-			"id": id,
-			"title": "babababa black sheep",
-			"date_created": "Nov 28 2020",
-			"date_edited": "",
-			"body": "sfsf",
-			"author": "Richard",
-			"summary": "",
-			"tag1": null,
-			"tag2": null,
-			"tag3": null,
-			"published": false
-		});
+		articles.push(createRawArticle(id));
 
 		return of(id);
   }
@@ -82,7 +69,7 @@ export class ArticleService {
 			return article.id === item.id;
 		});
 
-		articles[index] = articleToRawArticle(article, articles[index]);
+		articles[index] = articleToRawArticle(article);
 
 		return of({
 			message: 'article saved',
@@ -100,11 +87,9 @@ export class ArticleService {
   }
 
   publish(articleId: any, publish: any, token:any) {
-		console.log('publish', articleId, publish);
 		const indexOfArticle = articles.findIndex(article => {
 			return article.id === articleId;
 		});
-		console.log(indexOfArticle);
 
 		articles[indexOfArticle].published = publish;
 
