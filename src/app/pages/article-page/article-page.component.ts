@@ -4,8 +4,6 @@ import { Observable } from 'rxjs';
 
 import { AppState, ArticleLink } from '../../model';
 
-//import { navigateAway } from './actions/navigate-away';
-
 import { selectArticleLinks } from '../../selectors/select-article-links';
 
 import { requestArticleLinks } from '../../actions/request-article-links';
@@ -25,11 +23,15 @@ export class ArticlePageComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+
     this.store.dispatch(requestArticleLinks());
 
     this.articles$ = this.store.pipe(select(selectArticleLinks));
+
   }
 
+	/*
+	 * deprecate: remove from this page and put in edit article page
   publish(articleId: string) {
 		const metadata = {
 			id: articleId,
@@ -51,6 +53,7 @@ export class ArticlePageComponent implements OnInit {
 
     this.store.dispatch(action);
   }
+	*/
 
 	createArticle() {
 		const action = createArticleRequest();
