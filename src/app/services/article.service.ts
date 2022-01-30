@@ -21,10 +21,7 @@ import { createRawArticle } from './utils/create-raw-article';
 
 import { articles } from './data/articles';
 
-// todo: this should probably live in store? For example, I should be able to
-// configure this within the CMS: add, remove tags etc.
-export const tagData: string[] = [ 'angular', 'css', 'html-5', 'javascript', 'react' ];
-
+import { tagData } from '../tag-data';
 
 @Injectable({
   providedIn: 'root'
@@ -70,6 +67,7 @@ export class ArticleService {
 		});
 
 		articles[index] = articleToRawArticle(article);
+		console.log(articles[index]);
 
 		return of({
 			message: 'article saved',

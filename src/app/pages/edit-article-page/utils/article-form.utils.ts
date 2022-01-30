@@ -1,6 +1,6 @@
 import { FormArticle } from './form-article.interface';
 import { Article } from '../../../model';
-import { tagData } from '../../../services/article.service';
+import { tagData } from '../../../tag-data';
 
 /*
  * functions for working with data relating to the Angular FormGroup in the edit-article component
@@ -25,17 +25,7 @@ export const articleToFormGroup = (article: Article): any => {
   obj.title = article.title;
   obj.summary = article.summary;
   obj.body = article.body;
-	/*
-
-	const selectedTags = [article.tag1, article.tag2, article.tag3];
-
-	obj.tags = tagData.reduce((result, tag) => {
-		return {
-			...result,
-			[tag]: selectedTags.includes(tag),
-		};
-	}, {});
-	*/
+	obj.tags = article.tags;
 	
 	return obj;
 };

@@ -24,7 +24,7 @@ import {
 	saveNewProjectRequest,
 } from '../../actions/projects.action';
 
-import { tagData } from '../../services/article.service';
+import { tagData } from '../../tag-data';
 import { formDataToProject } from './utils/form-data-to-project';
 import { buildTagsFormGroup } from './utils/build-tags-form-group';
 

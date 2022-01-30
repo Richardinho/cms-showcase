@@ -22,6 +22,7 @@ import { selectLoadingTokens } from '../../selectors/ui.selector';
 
 import { createArticlePatchData, articleToFormGroup } from './utils/article-form.utils';
 import { tagsValidator } from './utils/tags.validator';
+import { tagData } from '../../tag-data';
 
 @Component({
   selector: 'app-edit-article-page',
@@ -52,8 +53,6 @@ export class EditArticlePageComponent implements OnInit {
 			body: new FormControl('', Validators.required),
 			title: new FormControl('', Validators.required),
 			summary: new FormControl('', Validators.required),
-
-			/*
 			tags: new FormGroup({
 				'angular': new FormControl(false),
 				'html-5': new FormControl(false),
@@ -61,7 +60,6 @@ export class EditArticlePageComponent implements OnInit {
 				'react': new FormControl(false),
 				'css': new FormControl(false),
 			}, tagsValidator),
-			*/
 		});
 
 		/*
@@ -165,7 +163,7 @@ export class EditArticlePageComponent implements OnInit {
 	}
 
 	get tagList() {
-		return this.articleService.tagData;
+		return tagData;
 	}
 
 	get formDisabled() {

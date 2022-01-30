@@ -9,7 +9,7 @@ import { createReducer, on } from '@ngrx/store';
  } from '../actions/article.action';
 
 import { Article, Articles } from '../model';
-import { tagData } from '../services/article.service';
+import { tagData } from '../tag-data';
 
 export const initialState = {};
 

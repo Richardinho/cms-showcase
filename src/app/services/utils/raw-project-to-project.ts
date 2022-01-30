@@ -1,5 +1,5 @@
 import { RawProject, Project } from '../../model';
-import { tagData } from '../../services/article.service';
+import { tagData } from '../../tag-data';
 
 export const rawProjectToProject = (rawProject: RawProject): Project => {
 	const project: any = {};

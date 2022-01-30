@@ -1,5 +1,5 @@
 import { FormControl, FormGroup, FormArray } from '@angular/forms';
-import { tagData } from '../../../services/article.service';
+import { tagData } from '../../../tag-data';
 
 export const buildTagsFormGroup = (...tags) => {
 
