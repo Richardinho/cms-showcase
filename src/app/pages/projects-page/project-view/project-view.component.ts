@@ -3,19 +3,19 @@ import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
-import { DialogService } from '../../services/dialog.service';
-import { Project, AppState } from '../../model';
+import { DialogService } from '../../../services/dialog.service';
+import { Project, AppState } from '../../../model';
 
 // selectors
-import { selectProjects } from '../../selectors/project.selector';
-import { selectLoadingTokens } from '../../selectors/ui.selector';
+import { selectProjects } from '../../../selectors/project.selector';
+import { selectLoadingTokens } from '../../../selectors/ui.selector';
 
 // actions
 import {
 	openEditForm,
 	deleteProjectRequest,
 	saveProjectRequest,
-} from '../../actions/projects.action';
+} from '../../../actions/projects.action';
 
 @Component({
   selector: 'cms-project-view',

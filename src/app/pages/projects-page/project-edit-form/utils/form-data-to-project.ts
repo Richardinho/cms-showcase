@@ -1,4 +1,4 @@
-import { Project } from '../../../model';
+import { Project } from '../../../../model';
 
 export const formDataToProject = (project: any, id: string): Project => {
 	const result: any = {};

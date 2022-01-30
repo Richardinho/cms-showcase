@@ -11,11 +11,11 @@ import { startWith, tap, map } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 
 import { tagsValidator, isNewProject } from './utils/tags.validator';
-import { Project, AppState } from '../../model';
+import { Project, AppState } from '../../../model';
 
 //  selectors
-import { selectLoadingTokens } from '../../selectors/ui.selector';
-import { selectProjects } from '../../selectors/project.selector';
+import { selectLoadingTokens } from '../../../selectors/ui.selector';
+import { selectProjects } from '../../../selectors/project.selector';
 
 // actions
 import {
@@ -24,9 +24,9 @@ import {
 	deleteLocalProject,
 	saveNewProjectRequest,
 	putProjectIntoStore,
-} from '../../actions/projects.action';
+} from '../../../actions/projects.action';
 
-import { tagData } from '../../tag-data';
+import { tagData } from '../../../tag-data';
 import { formDataToProject } from './utils/form-data-to-project';
 import { buildTagsFormGroup } from './utils/build-tags-form-group';
 
