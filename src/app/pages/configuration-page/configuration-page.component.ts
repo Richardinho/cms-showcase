@@ -54,14 +54,6 @@ export class ConfigurationPageComponent implements OnInit {
 			this.store.dispatch(action);
 		});
 
-		this.showLoader$ = this.store.pipe(
-			select(selectLoadingTokens),
-			map((loadingTokens: Array<string>) => {
-				return loadingTokens.includes('__configuration_github_url__')
-			}),
-			startWith(false),
-		);
-
 		/*
 		 *  get metadata from store
 		 */
@@ -79,27 +71,49 @@ export class ConfigurationPageComponent implements OnInit {
 				}, { emitEvent: false})
     });
 
+		/*
+		 *  show loader animation when request is in transit
+		 */
+
+		this.showLoader$ = this.store.pipe(
+			select(selectLoadingTokens),
+			map((loadingTokens: Array<string>) => {
+				return loadingTokens.includes('__configuration_github_url__')
+			}),
+			startWith(false),
+		);
+
+		/*
+		 *  the update CTA should be disabled when:
+		 *  1. changes are in transit to server
+		 *  2. form input is invalid
+		 *  3. there are no local changes requiring to be saved 
+		 */
+
+		const formInvalid$ = this.form.statusChanges.pipe(
+			map(status => {
+				return (status !== 'VALID');
+			}),
+			startWith(false),
+		);
+
+		const saved$ = this.metadata$.pipe(map((data) => {
+			return data.saved;
+		})); 
+
     this.disabled$ = combineLatest(
 			this.showLoader$,
-			this.form.statusChanges.pipe(
-				map(status => {
-					return (status !== 'VALID');
-				}),
-				startWith(false),
-		  ),
-			this.metadata$.pipe(map((data) => {
-				return data.saved;
-			}))).pipe(
-				map(([loading, invalid, saved]) => {
-					return loading || invalid || saved;
-				})
-			);
+			formInvalid$,
+			saved$,
+		).pipe(
+			map(([loading, formInvalid, saved]) => (loading || formInvalid || saved)),
+		);
 
 		/*
 		 *  dispatch request to fetch data from store
 		 */
 
-			this.store.dispatch(metadataRequest());
+		this.store.dispatch(metadataRequest());
   }
 
   update() {
