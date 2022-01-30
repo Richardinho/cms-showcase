@@ -22,18 +22,30 @@
 					[cbId]="tag + '-' + project.id"
 					label={{tag}}></cms-checkbox>
 			</ng-container>
-			<div [class.show-error]="tags.invalid" class="tags-error">You are only allowed to select 3 tags</div>
 		</div>
 		-->
+
+		<div class="tags" formGroupName="tags">
+			<ng-container *ngFor="let tag of tagList">
+
+				<cms-checkbox
+					[formControlName]="tag"
+					[cbId]="tag + '-' + id"
+					label={{tag}}></cms-checkbox>
+
+			</ng-container>
+			<div
+				[class.show-error]="tags.invalid"
+				class="tags-error">You are only allowed to select 3 tags</div>
+		</div>
 
 		<div class="button-group">
 			<ng-container *ngIf="!newProject">
 
-				<!-- todo: cta should also be disabled whilst in a loading state -->
 				<cms-cta
 					[disabled]="formDisabled"
-					[loading]="savingProject$ | async"
-					(click)="save()">save edits</cms-cta>
+					[loading]="showLoader$ | async"
+					[onClick]="save()">save edits</cms-cta>
 
 				<button (click)="cancel()" class="button">cancel</button>
 			</ng-container>
@@ -42,8 +54,8 @@
 
 				<cms-cta
 					[disabled]="formDisabled"
-					[loading]="savingNewProject$ | async"
-					(click)="saveNewProject()"
+					[loading]="showNewProjectLoader$ | async"
+					[onClick]="saveNewProject()"
 					>save new project</cms-cta>
 
 				<button (click)="cancelNewProject()" class="button">cancel</button>

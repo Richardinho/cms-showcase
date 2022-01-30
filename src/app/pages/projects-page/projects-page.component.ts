@@ -35,5 +35,9 @@ export class ProjectsPageComponent {
 
 		this.store.dispatch(action);
 	}
+
+	trackByFn(index, item) {
+		return item.id;
+	}
 }
 

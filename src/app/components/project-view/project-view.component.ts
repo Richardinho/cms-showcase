@@ -80,4 +80,18 @@ export class ProjectViewComponent implements OnInit {
 				}
 			});
 	}
+
+	get tags() {
+
+		return Object.keys(this.project.tags).reduce((memo, key) => {
+			if (this.project.tags[key]) {
+				return [
+					...memo,
+					key,
+				];
+			}
+
+			return memo;
+		}, []);
+	}
 }

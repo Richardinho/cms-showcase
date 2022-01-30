@@ -2,13 +2,11 @@
 <div class="href"><span class="project-label">href</span>{{project.href}}</div>
 <div class="tags">
 	<div class="project-label">tags</div>
-	<!--
-	<ul>
-		<li *ngIf="project.tag1" class="tag">{{project.tag1}}</li>
-		<li *ngIf="project.tag2" class="tag">{{project.tag2}}</li>
-		<li *ngIf="project.tag3" class="tag">{{project.tag3}}</li>
+
+	<ul *ngFor="let tag of tags">
+		<li class="tag">{{tag}}</li>
 	</ul>
-	-->
+
 </div>
 
 <div class="published">

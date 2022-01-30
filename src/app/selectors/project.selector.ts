@@ -10,3 +10,4 @@ export const selectProjectsWithJWTToken = createSelector(
 	(projects: Array<Project>, token: string) => ({ projects, token })
 );
 
+

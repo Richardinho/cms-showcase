@@ -12,9 +12,10 @@ export const deleteLocalProject = createAction(
 	props<{ id: string }>(),
 );
 
-
-
-
+export const putProjectIntoStore = createAction(
+	'[Projects] Put Project Into Store',
+	props<{data: any}>(),
+);
 
 
 /*  DELETE PROJECT */

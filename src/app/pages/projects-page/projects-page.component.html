@@ -10,7 +10,7 @@
 			<button (click)="createProject()" class="button">create project</button>
 		</div>
 		<ul>
-			<li *ngFor="let project of projectLinks$ | async" class="project-item">
+			<li *ngFor="let project of projectLinks$ | async; trackBy: trackByFn" class="project-item">
 				<ng-container *ngIf="project.underEdit">
 					<project-edit-form [project]="project"></project-edit-form>
 				</ng-container>

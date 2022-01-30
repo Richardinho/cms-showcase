@@ -7,7 +7,7 @@ import {
 } from '@angular/forms';
 
 import { Observable } from 'rxjs';
-import { tap, map } from 'rxjs/operators';
+import { startWith, tap, map } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 
 import { tagsValidator, isNewProject } from './utils/tags.validator';
@@ -15,6 +15,7 @@ import { Project, AppState } from '../../model';
 
 //  selectors
 import { selectLoadingTokens } from '../../selectors/ui.selector';
+import { selectProjects } from '../../selectors/project.selector';
 
 // actions
 import {
@@ -22,6 +23,7 @@ import {
 	saveProjectRequest,
 	deleteLocalProject,
 	saveNewProjectRequest,
+	putProjectIntoStore,
 } from '../../actions/projects.action';
 
 import { tagData } from '../../tag-data';
@@ -47,9 +49,10 @@ export class ProjectEditFormComponent {
 
 	form: FormGroup;
 
-	savingProject$: Observable<boolean>;
-	savingNewProject$: Observable<boolean>;
+	showLoader$: Observable<boolean>;
+	showNewProjectLoader$: Observable<boolean>;
 
+	project$: Observable<Project>;
 	saveProjectToken: string;
 	saveNewProjectToken: string;
 
@@ -59,20 +62,75 @@ export class ProjectEditFormComponent {
 			title: new FormControl(this.project.title, Validators.required),
 			href: new FormControl(this.project.href, Validators.required),
 			published: new FormControl(this.project.published),
-			/*
-			tags: new FormGroup(
-				buildTagsFormGroup(
-					this.project.tag1,
-					this.project.tag2,
-					this.project.tag3), tagsValidator),
-					*/
+			tags: new FormGroup({
+				'angular': new FormControl(this.project.tags['angular']),
+				'html-5': new FormControl(this.project.tags['html-5']),
+				'javascript': new FormControl(this.project.tags['javascript']),
+				'react': new FormControl(this.project.tags['react']),
+				'css': new FormControl(this.project.tags['css']),
+			}, tagsValidator),
 		});
 
 		this.newProject = isNewProject(this.project.id);
 
+		/*
+		 *  when form data changes, put this into store
+		 */ 
+
+
+		this.form.valueChanges.subscribe((value) => {
+
+			const metadata = {
+				data: {
+					...value,
+					id: this.project.id,
+				},
+			};
+
+			const action = putProjectIntoStore(metadata);
+
+			this.store.dispatch(action);
+		});
+
+
+		/*
+		 *  get article from store
+		 */
+
+		/*
+		this.project$ = this.store.pipe(
+			select(selectProjects),
+			map((projects) => {
+				return projects.find(project => project.id === this.id);
+			}),
+		);
+		*/
+
+		/*
+		 *  when data in store changes, put this data into form
+		 */
+
+		/*
+		this.project$.subscribe(project => {
+
+			const formData = {
+				title: project.title,
+				href: project.href,
+				published: project.published,
+				tags: project.tags,
+			};
+			this.form.patchValue(formData, {emitEvent: false});
+		});
+		*/
+
+
+		/*
+		 *  show loader animation when request is in transit
+		 */
+
 		this.saveProjectToken = this.project.id + 'sp';
 
-		this.savingProject$ = this.store.pipe(
+		this.showLoader$ = this.store.pipe(
 			select(selectLoadingTokens),
 			map((loadingTokens: Array<string>) => {
 				return loadingTokens.includes(this.saveProjectToken);
@@ -81,34 +139,52 @@ export class ProjectEditFormComponent {
 
 		this.saveNewProjectToken = this.project.id + 'snp';
 
-		this.savingNewProject$ = this.store.pipe(
+		this.showNewProjectLoader$ = this.store.pipe(
 			select(selectLoadingTokens),
 			map((loadingTokens: Array<string>) => {
 				return loadingTokens.includes(this.saveNewProjectToken);
 			}),
 		);
+
+		/*
+		 *  the update CTA should be disabled when:
+		 *  1. changes are in transit to server
+		 *  2. form input is invalid
+		 *  3. there are no local changes requiring to be saved 
+		 */
+
+		 const formInvalid$ = this.form.statusChanges.pipe(
+			 map(status => (status !== 'VALID')),
+			 startWith(false),
+		 );
+
+
 	}
 
 	save() {
-		const metadata = { 
-			project: formDataToProject(this.form.value, this.project.id),
-			loadingToken: this.saveProjectToken,
+		return () => {
+			const metadata = { 
+				loadingToken: this.saveProjectToken,
+				project: this.project,
+			};
+
+			const action = saveProjectRequest(metadata);
+
+			this.store.dispatch(action);
 		};
-
-		const action = saveProjectRequest(metadata);
-
-		this.store.dispatch(action);
 	}
 
 	saveNewProject() {
-		const metadata = {
-			project: formDataToProject(this.form.value, this.project.id),
-			loadingToken: this.saveNewProjectToken,
+		return () => {
+			const metadata = {
+				project: formDataToProject(this.form.value, this.project.id),
+				loadingToken: this.saveNewProjectToken,
+			};
+
+			const action = saveNewProjectRequest(metadata);
+
+			this.store.dispatch(action);
 		};
-
-		const action = saveNewProjectRequest(metadata);
-
-		this.store.dispatch(action);
 	}
 
 	cancel() {
@@ -140,11 +216,9 @@ export class ProjectEditFormComponent {
 		return this.form.get('href');
 	}
 
-	/*
 	get tags() {
 		return this.form.get('tags');
 	}
-	 */
 
 	get tagList() {
 		return tagData;

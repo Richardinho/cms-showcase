@@ -10,6 +10,7 @@ import {
 	deleteLocalProject,
 	deleteProjectRequest,
 	deleteProjectResponse,
+	putProjectIntoStore,
 } from '../actions/projects.action';
 
 let latestId = 1;
@@ -45,6 +46,7 @@ export const saveProjectRequestReducer = (state: any, action: any) => {
 			return {
 				...project,
 				...action.project,
+				saved: true,
 			};
 		}
 
@@ -122,6 +124,22 @@ export const deleteProjectRequestReducer = (state: Array<Project>, action: any) 
 	});
 };
 
+
+export const putProjectIntoStoreReducer = (state: Array<Project>, action: any) => {
+
+	return state.map((project: Project) => {
+		if (project.id == action.data.id) {
+			return {
+				...project,
+				...action.data,
+				saved: false,
+			};
+		} 
+
+		return project;
+	});
+};
+
 const _projectsReducer = createReducer(
 	initialState,
 	on(getProjectsResponse, getProjectsResponseReducer),
@@ -139,7 +157,11 @@ const _projectsReducer = createReducer(
 	on(createProjectRequest, createProjectRequestReducer),
 
 	on(deleteLocalProject, deleteProjectResponseReducer),
+
+	on(putProjectIntoStore, putProjectIntoStoreReducer),
 );
+
+
 
 export function projectsReducer(state: Array<Project>, action: any) {
 	return _projectsReducer(state, action);

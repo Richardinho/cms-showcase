@@ -39,11 +39,8 @@ export class EditArticlePageComponent implements OnInit {
   ) {}
 
   article$: Observable<Article>;
-
-
 	showLoader$: Observable<boolean>;
 	disabled$: Observable<boolean>;
-
 	form: FormGroup;
 
   ngOnInit() {
