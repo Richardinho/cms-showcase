@@ -92,38 +92,6 @@ export class ProjectEditFormComponent {
 			this.store.dispatch(action);
 		});
 
-
-		/*
-		 *  get article from store
-		 */
-
-		/*
-		this.project$ = this.store.pipe(
-			select(selectProjects),
-			map((projects) => {
-				return projects.find(project => project.id === this.id);
-			}),
-		);
-		*/
-
-		/*
-		 *  when data in store changes, put this data into form
-		 */
-
-		/*
-		this.project$.subscribe(project => {
-
-			const formData = {
-				title: project.title,
-				href: project.href,
-				published: project.published,
-				tags: project.tags,
-			};
-			this.form.patchValue(formData, {emitEvent: false});
-		});
-		*/
-
-
 		/*
 		 *  show loader animation when request is in transit
 		 */

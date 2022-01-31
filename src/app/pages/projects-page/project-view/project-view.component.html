@@ -15,18 +15,10 @@
 <div class="buttons">
 	<button class="button" (click)="editProject()">edit</button>
 
-	<ng-container *ngIf="!project.published">
-		<cms-cta
-			(click)="publishProject(true)">publish</cms-cta>
-	</ng-container>
-
-	<ng-container *ngIf="project.published">
-		<cms-cta
-			(click)="publishProject(false)">unpublish</cms-cta>
-	</ng-container>
 
 	<cms-cta
 		[loading]="deletingProject$ | async"
 		(click)="deleteProject()">delete</cms-cta>
+
 
 </div>

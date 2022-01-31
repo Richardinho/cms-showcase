@@ -12,6 +12,13 @@
 		<div [class.show-error]="(href.dirty || href.touched) && href.invalid" class="error">An href is required</div>
 	</div>
 
+	<div>
+		<cms-checkbox
+			formControlName="published"
+			label="published"
+			[cbId]="'pcb_' + project.id"></cms-checkbox>
+	</div>
+
 	<div class="footer">
 
 		<!--
