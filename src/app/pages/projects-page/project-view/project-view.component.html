@@ -13,12 +13,12 @@
 	<span class="project-label">published</span>{{project.published}}</div>
 
 <div class="buttons">
-	<button class="button" (click)="editProject()">edit</button>
-
+	<button
+		class="button"
+		(click)="editProject()">edit</button>
 
 	<cms-cta
 		[loading]="deletingProject$ | async"
 		(click)="deleteProject()">delete</cms-cta>
-
 
 </div>

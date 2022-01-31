@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
-const DEFAULT_MESSAGE = 'blah blah';
+const DEFAULT_MESSAGE = '';
 
 @Injectable({
-  providedIn: 'root',
+	providedIn: 'root',
 })
 export class DialogService {
-  confirm(message?: string): Observable<boolean> {
-    const confirmation = window.confirm(message || DEFAULT_MESSAGE);
+	confirm(message?: string): Observable<boolean> {
+		const confirmation = window.confirm(message || DEFAULT_MESSAGE);
 
-    return of(confirmation);
-  }
+		return of(confirmation);
+	}
 }

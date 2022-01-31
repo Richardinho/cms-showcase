@@ -39,7 +39,7 @@ export class PublishEffects {
         withLatestFrom(this.store.pipe(select(selectJWTToken)))
       )),
       switchMap(([action, token]) => {
-        return this.articleService.publish(action.id, action.publish, token)
+        return this.articleService.publishArticle(action.id, action.publish, token)
           .pipe(
             map((articleJSON) => publishArticleResponse({ articleJSON })),
             catchError((error) => {

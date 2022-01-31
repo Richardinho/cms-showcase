@@ -3,19 +3,15 @@ import { createReducer, on } from '@ngrx/store';
  import {
   putArticleIntoStore,
   saveArticleRequest,
-  saveArticleResponse,
   deleteArticleResponse,
   getArticleResponse,
  } from '../actions/article.action';
 
 import { Article, Articles } from '../model';
-import { tagData } from '../tag-data';
 
 export const initialState = {};
 
 
-// store article in articles cache
-// note that if article is already in cache, it will be overwritten
 export const getArticleResponseReducer = (state:any, action:any): Articles => {
 	return {
 		...state,
@@ -54,6 +50,7 @@ export const saveArticleRequestReducer = (state: Articles, action: any) => {
 		...state,
 		[id]: {
 			...article,
+			// this is an optimistic update: if the save fails, we need to reset it to false.
 			saved: true,
 		},
 	};
@@ -64,7 +61,7 @@ export const saveArticleRequestReducer = (state: Articles, action: any) => {
  *  deletes article out of cache
  */
 
-export const deleteArticleResponseReducer = (state:any, action:any) => {
+export const deleteArticleResponseReducer = (state:Articles, action:any) => {
 	return Object.keys(state).reduce((memo, key) => {
 		if (key === action.id) {
 			return memo;
@@ -78,9 +75,9 @@ export const deleteArticleResponseReducer = (state:any, action:any) => {
 };
 
 const _articlesReducer = createReducer(initialState,
-	on(saveArticleRequest, saveArticleRequestReducer),
   on(getArticleResponse, getArticleResponseReducer),
   on(putArticleIntoStore, putArticleIntoStoreReducer),
+	on(saveArticleRequest, saveArticleRequestReducer),
   on(deleteArticleResponse, deleteArticleResponseReducer),
 );
 

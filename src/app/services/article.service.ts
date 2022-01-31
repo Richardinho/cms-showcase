@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpErrorResponse, HttpHeaders, HttpClient } from '@angular/common/http';
 
-import { Observable } from 'rxjs';
-import { throwError, of } from 'rxjs';
-import { map, catchError, delay } from 'rxjs/operators';
+import { of, Observable } from 'rxjs';
+import { map, delay } from 'rxjs/operators';
 
 import {
 	Article,
@@ -12,16 +10,12 @@ import {
 	EditArticleView,
 } from '../model';
 
-import { environment } from '../../environments/environment';
-
-import { rawArticleToArticleLink } from './utils/article-to-form-data';
+import { rawArticleToArticleLink } from './utils/raw-article-to-article-link';
 import { articleToRawArticle } from './utils/article-to-raw-article';
 import { rawArticleToArticle } from './utils/raw-article-to-article';
 import { createRawArticle } from './utils/create-raw-article';
 
 import { articles } from './data/articles';
-
-import { tagData } from '../tag-data';
 
 @Injectable({
   providedIn: 'root'
@@ -29,8 +23,6 @@ import { tagData } from '../tag-data';
 export class ArticleService {
 
 	nextId = 100;
-
-  tagData: string[] = tagData;
 
   constructor() {}
 
@@ -53,7 +45,7 @@ export class ArticleService {
 		return of(links);
   }
 
-  createArticle(token: any) {
+  createArticle(token: string) {
 		const id = "" + (++this.nextId);
 
 		articles.push(createRawArticle(id));
@@ -67,14 +59,13 @@ export class ArticleService {
 		});
 
 		articles[index] = articleToRawArticle(article);
-		console.log(articles[index]);
 
 		return of({
 			message: 'article saved',
 		}).pipe(delay(4000));
   }
 
-  deleteArticle(articleId: any, token: any) {
+  deleteArticle(articleId: string, token: any) {
 		const indexOfArticle = articles.findIndex(article => {
 			return article.id === articleId;
 		});
@@ -84,7 +75,7 @@ export class ArticleService {
 		return of({});
   }
 
-  publish(articleId: any, publish: any, token:any) {
+  publishArticle(articleId: string, publish: boolean, token:string) {
 		const indexOfArticle = articles.findIndex(article => {
 			return article.id === articleId;
 		});
