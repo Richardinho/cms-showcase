@@ -1,9 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+
 import { Store, select } from '@ngrx/store';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { EMPTY, of } from 'rxjs';
-import { switchMap, tap, map, catchError, concatMap, withLatestFrom } from 'rxjs/operators';
+import { of } from 'rxjs';
+
+import {
+	switchMap,
+	tap,
+	map,
+	catchError,
+	withLatestFrom
+} from 'rxjs/operators';
 
 import { AppState } from '../model';
 
@@ -36,9 +44,7 @@ export class CreateArticleEffects {
   createArticle$ = createEffect(() =>
     this.actions$.pipe(
       ofType(createArticleRequest),
-      concatMap(action => of(action).pipe(
-        withLatestFrom(this.store.pipe(select(selectJWTToken)))
-      )),
+			withLatestFrom(this.store.pipe(select(selectJWTToken))),
       switchMap(([action, token]) => {
         return this.articleService.createArticle(token)
           .pipe(
