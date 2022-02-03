@@ -1,12 +1,12 @@
+import { Injectable, Inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { EMPTY, of } from 'rxjs';
-import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { tap, map, switchMap, catchError } from 'rxjs/operators';
 
 import { AppState } from '../model';
-import { AuthorisationService } from '../services/authorisation.service';
+import { ILoginService, LOGIN_SERVICE } from '../services/interfaces/login.service';
 
 import { genericError } from '../actions/generic-error.action';
 import { logInRequest, logInResponse } from '../actions/log-in.action';
@@ -59,7 +59,7 @@ export class LogInEffects {
     this.actions$.pipe(
       ofType(logInRequest),
       switchMap(action => { 
-        return this.authorisationService.logIn(action.username, action.password)
+        return this.loginService.logIn(action.username, action.password)
           .pipe(
             map(({ jwt_token }) => logInResponse({ redirectUrl: action.redirectUrl, jwt_token })),
             catchError((error) => {
@@ -98,6 +98,6 @@ export class LogInEffects {
     private actions$: Actions,
     private router: Router,
     private store: Store<AppState>,
-    private authorisationService: AuthorisationService,
+    @Inject(LOGIN_SERVICE) private loginService: ILoginService,
   ) {}
 }

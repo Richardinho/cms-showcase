@@ -11,6 +11,7 @@ import { AppComponent } from './app.component';
 import { environment } from '../environments/environment';
 
 import { articleServiceProvider } from './providers/article-service.provider';
+import { loginServiceProvider } from './providers/login-service.provider';
 
 import { ArticlePageComponent } from './pages/article-page/article-page.component';
 import { ConfigurationPageComponent } from './pages/configuration-page/configuration-page.component';
@@ -23,7 +24,6 @@ import { StylesPageComponent } from './pages/styles-page/styles-page.component';
 import { ViewArticlePageComponent } from './pages/view-article-page/view-article-page.component';
 
 import { MarkdownToHTMLPipe } from './pipes/markdown-to-html.pipe';
-import { AuthorisationService } from './services/authorisation.service';
 import { MessageService } from './services/message.service';
 
 import { MessageWidgetComponent } from './components/message-widget/message-widget.component';
@@ -114,10 +114,10 @@ import { ProjectViewComponent } from './pages/projects-page/project-view/project
     ])
   ],
   providers: [
-    AuthorisationService,
     MessageService,
     MetadataService,
 		articleServiceProvider,
+		loginServiceProvider,
   ],
   bootstrap: [AppComponent]
 })

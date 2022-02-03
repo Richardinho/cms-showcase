@@ -1,16 +1,18 @@
 import { Injectable } from '@angular/core';
+import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { throwError, of } from 'rxjs';
+import { environment } from '../../environments/environment';
+import { ILoginService, LoginResponseData } from './interfaces/login.service';
 
-interface LoginResponseData {
-	jwt_token: string;
-}
 
 @Injectable()
-export class AuthorisationService {
+export class ShowcaseLoginService implements ILoginService {
 
-	constructor() {}
+  constructor(
+    private http: HttpClient) {}
 
 	logIn(username: string, password: string) {
+		console.log('SHOW CASE LOGIN');
 		if (password === 'password') {
 
 			return of({
