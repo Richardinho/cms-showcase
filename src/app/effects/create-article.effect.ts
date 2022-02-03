@@ -15,7 +15,7 @@ import {
 
 import { AppState } from '../model';
 
-import { ArticleService } from '../services/article.service';
+import { ShowcaseArticleService } from '../services/showcase-article.service';
 
 import { unauthorisedResponse } from '../actions/unauthorised-response.action';
 import { genericError } from '../actions/generic-error.action';
@@ -66,7 +66,7 @@ export class CreateArticleEffects {
 
   constructor(
     private actions$: Actions,
-    private articleService: ArticleService,
+    private articleService: ShowcaseArticleService,
     private store: Store<AppState>,
     private router: Router,
   ) {}

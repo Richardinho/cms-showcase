@@ -6,7 +6,7 @@ import { map, switchMap, mergeMap, catchError, concatMap, withLatestFrom } from 
 
 import { AppState, EditArticleView, Article } from '../model';
 
-import { ArticleService } from '../services/article.service';
+import { ShowcaseArticleService } from '../services/showcase-article.service';
 
 import {
 	saveArticleResponse,
@@ -50,7 +50,7 @@ export class SaveArticleEffects {
 
   constructor(
     private actions$: Actions,
-    private articleService: ArticleService,
+    private articleService: ShowcaseArticleService,
     private store: Store<AppState>,
   ) {}
 }

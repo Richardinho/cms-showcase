@@ -5,6 +5,7 @@ import { loggedInSelector } from './selectors/logged-in.selector';
 import { Store, select } from '@ngrx/store';
 import { logOut } from './actions/log-in.action';
 
+import { environment } from '../environments/environment';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -18,6 +19,7 @@ export class AppComponent implements OnInit {
 	
   ngOnInit() {
     this.loggedIn$ = this.store.select(loggedInSelector);
+		console.log('THIS iS FOO', environment.foo);
   }
 
 	logOut() {

@@ -6,7 +6,7 @@ import { map, switchMap, catchError, concatMap, withLatestFrom } from 'rxjs/oper
 
 import { AppState, Article } from '../model';
 
-import { ArticleService } from '../services/article.service';
+import { ShowcaseArticleService } from '../services/showcase-article.service';
 
 import {
 	articleFoundInCache,
@@ -53,7 +53,7 @@ export class GetArticleEffects {
 
   constructor(
     private actions$: Actions,
-    private articleService: ArticleService,
+    private articleService: ShowcaseArticleService,
     private store: Store<AppState>,
   ) {}
 }

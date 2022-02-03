@@ -10,6 +10,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { environment } from '../environments/environment';
 
+import { articleServiceProvider } from './providers/article-service.provider';
 
 import { ArticlePageComponent } from './pages/article-page/article-page.component';
 import { ConfigurationPageComponent } from './pages/configuration-page/configuration-page.component';
@@ -116,6 +117,7 @@ import { ProjectViewComponent } from './pages/projects-page/project-view/project
     AuthorisationService,
     MessageService,
     MetadataService,
+		articleServiceProvider,
   ],
   bootstrap: [AppComponent]
 })

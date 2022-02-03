@@ -1,5 +1,5 @@
 import { of, throwError } from 'rxjs';
-import { ArticleService } from './article.service';
+import { ShowcaseArticleService } from './showcase-article.service';
 
 const mockArticles = [
   { title: 'apple' },
@@ -7,8 +7,8 @@ const mockArticles = [
 ];
 
 /*
-describe('ArticleService', () => {
-  let service: ArticleService;
+describe('ShowcaseArticleService', () => {
+  let service: ShowcaseArticleService;
   let authServiceSpy;
   let httpSpy;
 
@@ -21,7 +21,7 @@ describe('ArticleService', () => {
     it('should emit an article', () => {
       //  Given
       httpSpy.get.and.returnValue(of(mockArticles[1]));
-      service = new ArticleService(httpSpy, authServiceSpy);
+      service = new ShowcaseArticleService(httpSpy, authServiceSpy);
 
       //  When
       service.getArticle('').subscribe(article => {
@@ -34,7 +34,7 @@ describe('ArticleService', () => {
       it('should emit an error message', () => {
         //  Given
         httpSpy.get.and.returnValue(throwError({}));
-        service = new ArticleService(httpSpy, authServiceSpy);
+        service = new ShowcaseArticleService(httpSpy, authServiceSpy);
 
         //  When
         service.getArticle('').subscribe(article => {
@@ -49,7 +49,7 @@ describe('ArticleService', () => {
       it('should emit error with status code', () => {
         //  Given
         httpSpy.get.and.returnValue(throwError({ status: 500 }));
-        service = new ArticleService(httpSpy, authServiceSpy);
+        service = new ShowcaseArticleService(httpSpy, authServiceSpy);
 
         //  When
         service.getArticle('').subscribe(article => {
@@ -70,7 +70,7 @@ describe('ArticleService', () => {
     it('should emit an articles array', () => {
       //  Given
       httpSpy.get.and.returnValue(of({ articles: mockArticles }));
-      service = new ArticleService(httpSpy, authServiceSpy);
+      service = new ShowcaseArticleService(httpSpy, authServiceSpy);
 
       //  When
       service.getArticles().subscribe((articles) => {
@@ -83,7 +83,7 @@ describe('ArticleService', () => {
       it('should emit error message', () => {
         //  Given
         httpSpy.get.and.returnValue(throwError({}));
-        service = new ArticleService(httpSpy, authServiceSpy);
+        service = new ShowcaseArticleService(httpSpy, authServiceSpy);
 
         //  When
         service.getArticles().subscribe((articles) => {
@@ -98,7 +98,7 @@ describe('ArticleService', () => {
       it('should emit error with status code', () => {
         //  Given
         httpSpy.get.and.returnValue(throwError({ status: 500 }));
-        service = new ArticleService(httpSpy, authServiceSpy);
+        service = new ShowcaseArticleService(httpSpy, authServiceSpy);
 
         //  When
         service.getArticles().subscribe((articles) => {

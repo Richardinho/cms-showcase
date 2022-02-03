@@ -17,10 +17,10 @@ import { createRawArticle } from './utils/create-raw-article';
 
 import { articles } from './data/articles';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class ArticleService {
+import { IArticleService } from './interfaces/article.service';
+
+@Injectable()
+export class ShowcaseArticleService implements IArticleService {
 
 	nextId = 100;
 
@@ -65,7 +65,7 @@ export class ArticleService {
 		}).pipe(delay(4000));
   }
 
-  deleteArticle(articleId: string, token: any) {
+  deleteArticle(articleId: string, token: string) {
 		const indexOfArticle = articles.findIndex(article => {
 			return article.id === articleId;
 		});

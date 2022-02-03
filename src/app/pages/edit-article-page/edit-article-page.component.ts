@@ -9,7 +9,7 @@ import { combineLatest, Observable } from 'rxjs';
 import { tap, map, startWith } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 
-import { ArticleService } from '../../services/article.service';
+import { ShowcaseArticleService } from '../../services/showcase-article.service';
 
 import { AppState, Article } from '../../model';
 
@@ -34,7 +34,7 @@ export class EditArticlePageComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private articleService: ArticleService,
+    private articleService: ShowcaseArticleService,
     private store: Store<AppState>
   ) {}
 

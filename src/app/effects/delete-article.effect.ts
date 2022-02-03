@@ -5,7 +5,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { EMPTY, of } from 'rxjs';
 import { tap, map, mergeMap, catchError, concatMap, withLatestFrom } from 'rxjs/operators';
 
-import { ArticleService } from '../services/article.service';
+import { ShowcaseArticleService } from '../services/showcase-article.service';
 
 import { AppState } from '../model';
 
@@ -73,7 +73,7 @@ export class DeleteArticleEffects {
   );
   constructor(
     private actions$: Actions,
-    private articleService: ArticleService,
+    private articleService: ShowcaseArticleService,
     private router: Router,
     private store: Store<AppState>,
   ) {}
