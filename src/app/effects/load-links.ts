@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { of } from 'rxjs';
 import { map, switchMap, catchError, concatMap, withLatestFrom } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
@@ -6,7 +6,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 
 import { AppState } from '../model';
 
-import { ShowcaseArticleService } from '../services/showcase-article.service';
+import { ARTICLE_SERVICE, IArticleService } from '../services/interfaces/article.service';
 
 import { unauthorisedResponse } from '../actions/unauthorised-response.action';
 import { genericError } from '../actions/generic-error.action';
@@ -59,7 +59,7 @@ export class LoadArticleLinksEffects {
 
   constructor(
     private actions$: Actions,
-    private articleService: ShowcaseArticleService,
+		@Inject(ARTICLE_SERVICE) private articleService: IArticleService,
     private store: Store<AppState>,
   ) {}
 }

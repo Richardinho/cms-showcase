@@ -19,7 +19,6 @@ export class AppComponent implements OnInit {
 	
   ngOnInit() {
     this.loggedIn$ = this.store.select(loggedInSelector);
-		console.log('THIS iS FOO', environment.foo);
   }
 
 	logOut() {

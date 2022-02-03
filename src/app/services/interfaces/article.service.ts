@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { Injectable } from '@angular/core';
+import { InjectionToken, Injectable } from '@angular/core';
 import {
 	Article,
 	ArticleLink,
@@ -21,4 +21,7 @@ export interface IArticleService {
 	publishArticle(articleId: string, publish: boolean, token: string): Observable<any>;
 
 }
+
+
+export const ARTICLE_SERVICE = new InjectionToken<IArticleService>('article.service'); 
 

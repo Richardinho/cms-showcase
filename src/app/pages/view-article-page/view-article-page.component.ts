@@ -5,7 +5,6 @@ import { Store, select, createSelector, State } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
 import { switchMap, mergeMap } from 'rxjs/operators';
 
-import { ShowcaseArticleService } from '../../services/showcase-article.service';
 import { AppState, Article } from '../../model';
 import { selectArticleUnderEdit } from '../../selectors/article.selector';
 import { DialogService } from '../../services/dialog.service';
@@ -27,7 +26,6 @@ export class ViewArticlePageComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private articleService: ShowcaseArticleService,
     private dialogService: DialogService,
     private store: Store<AppState>
   ) {}

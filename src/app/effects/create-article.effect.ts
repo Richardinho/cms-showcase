@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Store, select } from '@ngrx/store';
@@ -15,7 +15,11 @@ import {
 
 import { AppState } from '../model';
 
-import { ShowcaseArticleService } from '../services/showcase-article.service';
+
+import {
+	ARTICLE_SERVICE,
+	IArticleService
+} from '../services/interfaces/article.service';
 
 import { unauthorisedResponse } from '../actions/unauthorised-response.action';
 import { genericError } from '../actions/generic-error.action';
@@ -66,7 +70,7 @@ export class CreateArticleEffects {
 
   constructor(
     private actions$: Actions,
-    private articleService: ShowcaseArticleService,
+		@Inject(ARTICLE_SERVICE) private articleService: IArticleService,
     private store: Store<AppState>,
     private router: Router,
   ) {}

@@ -1,12 +1,12 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { EMPTY, of } from 'rxjs';
 import { tap, map, mergeMap, catchError, concatMap, withLatestFrom } from 'rxjs/operators';
 
-import { ShowcaseArticleService } from '../services/showcase-article.service';
 
+import { ARTICLE_SERVICE, IArticleService } from '../services/interfaces/article.service';
 import { AppState } from '../model';
 
 import {
@@ -73,7 +73,7 @@ export class DeleteArticleEffects {
   );
   constructor(
     private actions$: Actions,
-    private articleService: ShowcaseArticleService,
+		@Inject(ARTICLE_SERVICE) private articleService: IArticleService,
     private router: Router,
     private store: Store<AppState>,
   ) {}

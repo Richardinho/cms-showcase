@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Inject, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import {
   FormArray,
@@ -9,7 +9,7 @@ import { combineLatest, Observable } from 'rxjs';
 import { tap, map, startWith } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 
-import { ShowcaseArticleService } from '../../services/showcase-article.service';
+import { ARTICLE_SERVICE, IArticleService } from '../../services/interfaces/article.service';
 
 import { AppState, Article } from '../../model';
 
@@ -34,7 +34,7 @@ export class EditArticlePageComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private articleService: ShowcaseArticleService,
+		@Inject(ARTICLE_SERVICE) private articleService: IArticleService,
     private store: Store<AppState>
   ) {}
 

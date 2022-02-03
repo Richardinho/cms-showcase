@@ -64,7 +64,17 @@
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true
-            }
+
+            },
+						"showcase": {
+							"baseHref": "https://richardinho.github.io/cms-showcase/",
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.showcase.ts"
+                }
+              ]
+						}
           },
           "defaultConfiguration": "production"
         },
@@ -76,7 +86,10 @@
             },
             "development": {
               "browserTarget": "cms:build:development"
-            }
+            },
+						"showcase" : {
+							"browserTarget": "cms:build:showcase"
+						}
           },
           "defaultConfiguration": "development"
         },

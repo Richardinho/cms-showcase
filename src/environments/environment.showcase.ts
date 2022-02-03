@@ -1,3 +1,5 @@
 export const environment = {
-	foo: 'this is showcase foo',
+	mode: 'showcase',
+	production: true,
+	blogDomain: 'http://foo.com',
 };
