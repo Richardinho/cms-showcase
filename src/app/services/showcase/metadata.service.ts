@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { of } from 'rxjs';
 import { delay } from 'rxjs/operators';
+import { IMetadataService } from '../interfaces/metadata.service';
 
 
 let serverMetadata = {
@@ -9,7 +10,7 @@ let serverMetadata = {
 };
 
 @Injectable()
-export class MetadataService {
+export class ShowcaseMetadataService implements IMetadataService{
 
 	constructor() {}
 

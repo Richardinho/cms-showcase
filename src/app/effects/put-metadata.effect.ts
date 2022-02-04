@@ -1,25 +1,49 @@
-import { Injectable } from '@angular/core';
-import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { Store, select } from '@ngrx/store';
+import {
+	Inject,
+	Injectable,
+} from '@angular/core';
+
 import { of } from 'rxjs';
-import { map, switchMap, catchError, concatMap, withLatestFrom } from 'rxjs/operators';
+
+import {
+	Actions,
+	createEffect,
+	ofType,
+} from '@ngrx/effects';
+
+import { Store, select } from '@ngrx/store';
+
+import {
+	catchError,
+	concatMap,
+	map,
+	switchMap,
+	withLatestFrom,
+} from 'rxjs/operators';
 
 import { AppState } from '../model';
-import { MetadataService } from '../services/metadata.service';
+
+import {
+	METADATA_SERVICE,
+	IMetadataService,
+} from '../services/interfaces/metadata.service';
 
 import { genericError } from '../actions/generic-error.action';
 import { unauthorisedResponse } from '../actions/unauthorised-response.action';
-import { updateMetadataRequest, updateMetadataResponse } from '../actions/update-metadata.action';
+
+import {
+	updateMetadataRequest,
+	updateMetadataResponse,
+} from '../actions/update-metadata.action';
 
 import {selectJWTToken} from '../selectors/article.selector';
-
 import { UNAUTHORIZED } from '../status-code.constants';
 
 @Injectable()
 export class PutMetadataEffect {
   constructor(
     private actions$: Actions,
-    private metadataService: MetadataService,
+    @Inject(METADATA_SERVICE) private metadataService: IMetadataService,
     private store: Store<AppState>,
   ) {}
 

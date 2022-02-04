@@ -13,6 +13,7 @@ import { environment } from '../environments/environment';
 import { articleServiceProvider } from './providers/article-service.provider';
 import { loginServiceProvider } from './providers/login-service.provider';
 import { introServiceProvider } from './providers/intro-service.provider';
+import { metadataServiceProvider } from './providers/metadata-service.provider';
 
 import { ArticlePageComponent } from './pages/article-page/article-page.component';
 import { ConfigurationPageComponent } from './pages/configuration-page/configuration-page.component';
@@ -43,7 +44,6 @@ import { SpinnerComponent } from './pages/configuration-page/spinner';
 import { NavigationEffects } from './effects/navigation.effect';
 import { DeleteArticleEffects } from './effects/delete-article.effect';
 import { CreateArticleEffects } from './effects/create-article.effect';
-import { MetadataService } from './services/metadata.service';
 import { GetMetadataEffect } from './effects/get-metadata.effect';
 import { PutMetadataEffect } from './effects/put-metadata.effect';
 import { SaveArticleEffects } from './effects/save-article.effect';
@@ -116,7 +116,7 @@ import { ProjectViewComponent } from './pages/projects-page/project-view/project
   ],
   providers: [
     MessageService,
-    MetadataService,
+		metadataServiceProvider,
 		introServiceProvider,
 		articleServiceProvider,
 		loginServiceProvider,

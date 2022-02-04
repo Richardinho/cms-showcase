@@ -1,4 +1,8 @@
-import { Injectable } from '@angular/core';
+import {
+	Inject, 
+	Injectable,
+} from '@angular/core';
+
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store, select } from '@ngrx/store';
 import { of } from 'rxjs';
@@ -9,7 +13,11 @@ import { genericError } from '../actions/generic-error.action';
 import { metadataRequest, metadataResponse } from '../actions/metadata.action';
 import { unauthorisedResponse } from '../actions/unauthorised-response.action';
 
-import { MetadataService } from '../services/metadata.service';
+import {
+	IMetadataService,
+	METADATA_SERVICE,
+} from '../services/interfaces/metadata.service';
+
 import { selectJWTToken } from '../selectors/article.selector';
 import { UNAUTHORIZED } from '../status-code.constants';
 
@@ -17,7 +25,7 @@ import { UNAUTHORIZED } from '../status-code.constants';
 export class GetMetadataEffect {
   constructor(
     private actions$: Actions,
-    private metadataService: MetadataService,
+    @Inject(METADATA_SERVICE) private metadataService: IMetadataService,
     private store: Store<AppState>,
   ) {}
 
