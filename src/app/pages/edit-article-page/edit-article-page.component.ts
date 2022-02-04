@@ -50,6 +50,7 @@ export class EditArticlePageComponent implements OnInit {
 			body: new FormControl('', Validators.required),
 			title: new FormControl('', Validators.required),
 			summary: new FormControl('', Validators.required),
+			published: new FormControl(false),
 			tags: new FormGroup({
 				'angular': new FormControl(false),
 				'html-5': new FormControl(false),

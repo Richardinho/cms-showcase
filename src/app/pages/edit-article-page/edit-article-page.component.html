@@ -41,20 +41,25 @@
 						></textarea>
 				</div>
 
-				<div class="select-tags-container">
-					<div class="tags" formGroupName="tags">
-						<ng-container *ngFor="let tag of tagList">
-							<cms-checkbox
-								[formControlName]="tag"
-								[cbId]="tag"
-								label={{tag}}></cms-checkbox>
-						</ng-container>
-					</div>
-
-					<div
-						[class.show-error]="tags.invalid"
-						class="tags-error">You are only allowed to select 3 tags</div>
+				<div class="publish-checkbox">
+					<cms-checkbox
+						formControlName="published"
+						label="published"
+						[cbId]="publish-article"></cms-checkbox>
 				</div>
+
+				<div class="tags" formGroupName="tags">
+					<ng-container *ngFor="let tag of tagList">
+						<cms-checkbox
+							[formControlName]="tag"
+							[cbId]="tag"
+							label={{tag}}></cms-checkbox>
+					</ng-container>
+				</div>
+
+				<div
+					[class.show-error]="tags.invalid"
+					class="tags-error">You are only allowed to select 3 tags</div>
 			</div>
 
 			<div class="article-pane">

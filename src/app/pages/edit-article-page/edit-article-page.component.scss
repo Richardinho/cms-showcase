@@ -53,8 +53,15 @@
   padding-left: 10px;
 }
 
-.select-tags-container {
-  margin-bottom: 0;
+.publish-checkbox {
+	margin-bottom: 8px;
+}
+
+.tags {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 30px;
 }
 
 .select-tags-error-message {
