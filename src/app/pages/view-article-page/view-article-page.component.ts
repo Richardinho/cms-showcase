@@ -1,15 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { Router } from '@angular/router';
-import { Store, select, createSelector, State } from '@ngrx/store';
-import { Observable, of } from 'rxjs';
-import { switchMap, mergeMap } from 'rxjs/operators';
 
-import { AppState, Article } from '../../model';
-import { selectArticleUnderEdit } from '../../selectors/article.selector';
+import { Observable } from 'rxjs';
+import { map, mergeMap, withLatestFrom } from 'rxjs/operators';
+
+import { Store, select } from '@ngrx/store';
+
+import {
+	AppState,
+	Article,
+} from '../../model';
+
+import { selectJWTToken } from '../../selectors/article.selector';
 import { DialogService } from '../../services/dialog.service';
 
-import { deleteArticleRequest, getArticleRequest } from '../../actions/article.action';
+import {
+	IArticleService,
+	ARTICLE_SERVICE,
+} from '../../services/interfaces/article.service';
+
+import { deleteArticleRequest } from '../../actions/article.action';
 
 import { navigateToEditPageRequest } from '../../actions/navigate-to-edit-page-request';
 
@@ -21,25 +31,22 @@ const CONFIRMATION_MESSAGE = 'Are you sure that you want to delete this article?
   styleUrls: ['./view-article-page.component.scss']
 })
 export class ViewArticlePageComponent implements OnInit {
-  article$: Observable<Article>;
+	article$: Observable<Article>;
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     private dialogService: DialogService,
-    private store: Store<AppState>
+    private store: Store<AppState>,
+		@Inject(ARTICLE_SERVICE) private articleService: IArticleService,
   ) {}
 
   ngOnInit() {
-    this.article$ = this.store.pipe(select(selectArticleUnderEdit));
 
-    this.route.paramMap.subscribe((params: ParamMap) => {
-      const id = params.get('id');
-
-      this.store.dispatch(getArticleRequest({
-        id,
-        redirectUrl: '/view-article/' + id }));
-    });
+		this.article$ = this.route.paramMap.pipe(
+			map((params: ParamMap) => params.get('id')),
+      withLatestFrom(this.store.pipe(select(selectJWTToken))),
+			mergeMap(([id, token]) => this.articleService.getArticle(id, token)),
+		);
   }
 
   editArticle() {

@@ -12,9 +12,7 @@ import {
 } from '../../model';
 
 import { rawArticleToArticleLink } from '../utils/raw-article-to-article-link';
-import { articleToRawArticle } from '../utils/article-to-raw-article';
 import { rawArticleToArticle } from '../utils/raw-article-to-article';
-import { createRawArticle } from '../utils/create-raw-article';
 import { environment } from '../../../environments/environment';
 
 import { articles } from '../data/articles';
