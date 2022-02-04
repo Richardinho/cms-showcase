@@ -14,6 +14,7 @@ import { articleServiceProvider } from './providers/article-service.provider';
 import { loginServiceProvider } from './providers/login-service.provider';
 import { introServiceProvider } from './providers/intro-service.provider';
 import { metadataServiceProvider } from './providers/metadata-service.provider';
+import { projectServiceProvider } from './providers/project-service.provider';
 
 import { ArticlePageComponent } from './pages/article-page/article-page.component';
 import { ConfigurationPageComponent } from './pages/configuration-page/configuration-page.component';
@@ -120,6 +121,7 @@ import { ProjectViewComponent } from './pages/projects-page/project-view/project
 		introServiceProvider,
 		articleServiceProvider,
 		loginServiceProvider,
+		projectServiceProvider,
   ],
   bootstrap: [AppComponent]
 })

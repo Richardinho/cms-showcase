@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { of } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { RawProject, Project } from '../model';
-import { projects as rawProjects } from './data/projects';
-import { rawProjectToProject } from './utils/raw-project-to-project';
+import { RawProject, Project } from '../../model';
+import { projects as rawProjects } from '../data/projects';
+import { rawProjectToProject } from '../utils/raw-project-to-project';
+import { IProjectService } from '../interfaces/project.service';
 
 let nextId = 100;
 
@@ -13,10 +14,8 @@ const createNewId = () => {
 	return '' + nextId;
 };
 
-@Injectable({
-  providedIn: 'root'
-})
-export class ProjectService {
+@Injectable()
+export class ShowcaseProjectService implements IProjectService {
 
   constructor() {}
 

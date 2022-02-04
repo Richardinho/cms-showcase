@@ -1,4 +1,7 @@
-import { Injectable } from '@angular/core';
+import {
+	Inject, 
+	Injectable,
+} from '@angular/core';
 
 import { Store, select } from '@ngrx/store';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
@@ -36,7 +39,12 @@ import { genericError } from '../actions/generic-error.action';
 
 import { selectProjectsWithJWTToken } from '../selectors/project.selector';
 import { AppState, Project } from '../model';
-import { ProjectService } from '../services/projects.service';
+
+import {
+	IProjectService,
+	PROJECT_SERVICE,
+} from '../services/interfaces/project.service';
+
 import { UNAUTHORIZED } from '../status-code.constants';
 
 const selectJWTToken = (state: AppState) => state.jwt_token;
@@ -47,7 +55,7 @@ export class ProjectsEffects {
   constructor(
     private actions$: Actions,
     private store: Store<AppState>,
-		private projectService: ProjectService,
+		@Inject(PROJECT_SERVICE) private projectService: IProjectService,
   ) {}
 
 	/*
