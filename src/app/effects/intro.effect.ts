@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
@@ -6,7 +6,7 @@ import { tap, map, mergeMap, switchMap, catchError, concatMap, withLatestFrom } 
 
 import { AppState, Intro } from '../model';
 
-import { IntroService } from '../services/intro.service';
+import { INTRO_SERVICE, IIntroService } from '../services/interfaces/intro.service';
 import { MessageService, ERROR } from '../services/message.service';
 
 import { genericError } from '../actions/generic-error.action';
@@ -72,7 +72,7 @@ export class GetIntroEffects {
 			ofType(saveIntroRequest),
 			withLatestFrom(this.store.pipe(select(selectIntroWithJWTToken))),
 			mergeMap(([action, introWithToken]) => {
-				return this.introService.saveIntro(action, introWithToken).pipe(
+				return this.introService.saveIntro(introWithToken).pipe(
 					map(() => {
 						this.messageService.show('changes saved to server');
 						return saveIntroResponse({
@@ -112,7 +112,7 @@ export class GetIntroEffects {
 
   constructor(
     private actions$: Actions,
-    private introService: IntroService,
+    @Inject(INTRO_SERVICE) private introService: IIntroService,
     private store: Store<AppState>,
 		private messageService: MessageService,
   ) {}

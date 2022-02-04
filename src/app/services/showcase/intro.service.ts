@@ -2,17 +2,16 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 
-import { Intro } from '../model';
-import { intro } from './data/intro';
-import { rawIntroToIntro } from './utils/raw-intro-to-intro';
+import { Intro } from '../../model';
+import { intro } from '../data/intro';
+import { rawIntroToIntro } from '../utils/raw-intro-to-intro';
+import { IIntroService } from '../interfaces/intro.service';
 
 
-@Injectable({
-  providedIn: 'root'
-})
-export class IntroService {
+@Injectable()
+export class ShowcaseIntroService implements IIntroService {
 
-	saveIntro(action: any, introWithToken: any) {
+	saveIntro(introWithToken: any) {
 		// all changes are persisted to store, so we don't really need to put them into our fake server
 		return of({}).pipe(delay(2000));
 	}
