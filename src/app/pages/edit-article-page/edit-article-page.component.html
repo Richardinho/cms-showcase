@@ -1,81 +1,81 @@
-<div class="cta-bar">
-	<cms-cta
-		[disabled]="disabled$ | async"
-		[loading]="showLoader$ | async"
-		[onClick]="update((article$ | async)?.id)">
-		save to server</cms-cta>
-</div>
-
-<div class="outer-container">
-	<div class="container">
-
-		<ng-container *ngIf="article$">
-			<div [formGroup]="form" class="edit-pane">
-				<div class="input-container">
-					<label
-						for="edit-title"
-						class="label">Title</label>
-					<input
-						id="edit-title"
-						formControlName="title"
-						class="input"/>
-				</div>
-
-				<div class="input-container">
-					<label for="edit-summary" class="label">summary</label>
-					<textarea
-						id="edit-summary"
-						formControlName="summary"
-						class="input"></textarea>
-				</div>
-
-				<div class="input-container">
-					<label
-						for="edit-body"
-						class="label">body text</label>
-					<textarea 
-						id="edit-body"
-						data-test="edit-pane"
-						formControlName="body"
-						class="input"
-						></textarea>
-				</div>
-
-				<div class="publish-checkbox">
-					<cms-checkbox
-						formControlName="published"
-						label="published"
-						[cbId]="publish-article"></cms-checkbox>
-				</div>
-
-				<div class="tags" formGroupName="tags">
-					<ng-container *ngFor="let tag of tagList">
-						<cms-checkbox
-							[formControlName]="tag"
-							[cbId]="tag"
-							label={{tag}}></cms-checkbox>
-					</ng-container>
-				</div>
-
-				<div
-					[class.show-error]="tags.invalid"
-					class="tags-error">You are only allowed to select 3 tags</div>
-			</div>
-
-			<div class="article-pane">
-				<h2 class="article-header">{{(article$ | async)?.title}}</h2>
-
-				<div
-					class="article-summary"
-					[innerHTML]="(article$ | async)?.summary | markdownToHTML"
-					></div>
-
-				<div
-					class="article-content"
-					[innerHTML]="(article$ | async)?.body | markdownToHTML"
-					></div>
-
-			</div>
-		</ng-container>
+<ng-container *ngIf="(article$ | async) as article">
+	<div class="cta-bar">
+		<button
+			[disabled]="updateButtonDisabled"
+			[loading]="showLoader$ | async"
+			(click)="update()">
+			save to server</button>
 	</div>
-</div>
+
+	<div class="outer-container">
+		<div class="container">
+
+				<div [formGroup]="form" class="edit-pane">
+					<div class="input-container">
+						<label
+							for="edit-title"
+							class="label">Title</label>
+						<input
+							id="edit-title"
+							formControlName="title"
+							class="input"/>
+					</div>
+
+					<div class="input-container">
+						<label for="edit-summary" class="label">summary</label>
+						<textarea
+							id="edit-summary"
+							formControlName="summary"
+							class="input"></textarea>
+					</div>
+
+					<div class="input-container">
+						<label
+							for="edit-body"
+							class="label">body text</label>
+						<textarea 
+							id="edit-body"
+							data-test="edit-pane"
+							formControlName="body"
+							class="input"
+							></textarea>
+					</div>
+
+					<div class="publish-checkbox">
+						<cms-checkbox
+							formControlName="published"
+							label="published"
+							[cbId]="publish-article"></cms-checkbox>
+					</div>
+
+					<div class="tags" formGroupName="tags">
+						<ng-container *ngFor="let tag of tagList">
+							<cms-checkbox
+								[formControlName]="tag"
+								[cbId]="tag"
+								label={{tag}}></cms-checkbox>
+						</ng-container>
+					</div>
+
+					<div
+						[class.show-error]="tags.invalid"
+						class="tags-error">You are only allowed to select 3 tags</div>
+				</div>
+
+				<div class="article-pane">
+					<h2 class="article-header">{{article.title}}</h2>
+
+					<div
+						class="article-summary"
+						[innerHTML]="article.summary | markdownToHTML"
+						></div>
+
+					<div
+						class="article-content"
+						[innerHTML]="article.body | markdownToHTML"
+						></div>
+
+				</div>
+		</div>
+	</div>
+</ng-container>

@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 
 import { Observable } from 'rxjs';
 import { map, mergeMap, withLatestFrom } from 'rxjs/operators';
@@ -35,6 +35,7 @@ export class ViewArticlePageComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+		private router: Router,
     private dialogService: DialogService,
     private store: Store<AppState>,
 		@Inject(ARTICLE_SERVICE) private articleService: IArticleService,
@@ -49,8 +50,10 @@ export class ViewArticlePageComponent implements OnInit {
 		);
   }
 
-  editArticle() {
-    this.store.dispatch(navigateToEditPageRequest());
+  editArticle(id: string) {
+		console.log('edit article id');
+    //this.store.dispatch(navigateToEditPageRequest());
+		this.router.navigate(['edit-article', id]);
   }
 
   deleteArticle() {

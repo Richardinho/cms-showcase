@@ -5,20 +5,15 @@ import {
   FormControl,
   FormGroup,
   Validators } from '@angular/forms';
-import { combineLatest, Observable } from 'rxjs';
-import { tap, map, startWith } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map, startWith, mergeMap, withLatestFrom } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 
 import { ARTICLE_SERVICE, IArticleService } from '../../services/interfaces/article.service';
 
 import { AppState, Article } from '../../model';
 
-import { putArticleIntoStore, getArticleRequest, saveArticleRequest } from '../../actions/article.action';
-
-import { selectArticleUnderEdit } from '../../selectors/article.selector';
-import { selectSaving } from '../../selectors/ui.selector';
-import { selectUnsavedChanges } from '../../selectors/article.selector';
-import { selectLoadingTokens } from '../../selectors/ui.selector';
+import { selectJWTToken } from '../../selectors/article.selector';
 
 import { createArticlePatchData, articleToFormGroup } from './utils/article-form.utils';
 import { tagsValidator } from './utils/tags.validator';
@@ -39,9 +34,8 @@ export class EditArticlePageComponent implements OnInit {
   ) {}
 
   article$: Observable<Article>;
-	showLoader$: Observable<boolean>;
-	disabled$: Observable<boolean>;
 	form: FormGroup;
+	loadingInProgress: boolean;
 
   ngOnInit() {
 
@@ -60,101 +54,30 @@ export class EditArticlePageComponent implements OnInit {
 			}, tagsValidator),
 		});
 
-		/*
-		 *  when form data changes, put this into store
-		 */ 
+		this.article$ = this.form.valueChanges;
 
-		this.form.valueChanges.subscribe((value) => {
-			const metadata = {
-				data: value,
-			};
+		this.route.paramMap.pipe(
+			map((params: ParamMap) => params.get('id')),
+			withLatestFrom(this.store.pipe(select(selectJWTToken))),
+			mergeMap(([id, token]) => this.articleService.getArticle(id, token)),
+		).subscribe(article => {
+			this.form.patchValue(articleToFormGroup(article));
+    });
+  }
 
-			const action = putArticleIntoStore(metadata);
+  update() {
+		this.loadingInProgress = true;
 
-			this.store.dispatch(action);
+		this.store.pipe(select(selectJWTToken)).pipe(
+			mergeMap((token) => this.articleService.updateArticle(this.form.value, token)),
+		).subscribe(() => {
+			this.loadingInProgress = false;
 		});
-
-		/*
-		 *  get article from store
-		 */
-
-    this.article$ = this.store.pipe(select(selectArticleUnderEdit));
-
-
-		/*
-		 *  when data in store changes, put this data into form
-		 */
-
-    this.article$.subscribe(article => {
-      if (article) {
-
-        this.form
-          .patchValue(articleToFormGroup(article),
-            { emitEvent: false });
-      }
-    });
-
-		/*
-		 *  show loader animation when request is in transit
-		 */
-
-		this.showLoader$ = this.store.pipe(
-			select(selectLoadingTokens),
-			map((loadingTokens: Array<string>) => loadingTokens.includes('__edit_article__')),
-			startWith(false),
-		);
-
-		/*
-		 *  the update CTA should be disabled when:
-		 *  1. changes are in transit to server
-		 *  2. form input is invalid
-		 *  3. there are no local changes requiring to be saved 
-		 */
-
-		const formInvalid$ = this.form.statusChanges.pipe(
-			map(status => (status !== 'VALID')),
-			startWith(false),
-		);
-
-		const saved$ = this.article$.pipe(
-			map(data => {
-				return data?.saved;
-			}),
-		);
-
-		this.disabled$ = combineLatest(
-			this.showLoader$,
-			formInvalid$,
-			saved$,
-		).pipe(
-			map(([loading, formInvalid, saved]) => (loading || formInvalid || saved)),
-		);
-
-		/*
-		 *  dispatch request to fetch data from store
-		 */
-
-    this.route.paramMap.subscribe((params: ParamMap) => {
-      const id = params.get('id');
-
-      this.store.dispatch(getArticleRequest({
-        id,
-        redirectUrl: '/edit-article/' + id }));
-    });
   }
 
-  update(id: string) {
-		return () => {
-			const metadata = {
-				id,
-				loadingToken: '__edit_article__',
-			};
-
-			const action = saveArticleRequest(metadata);
-
-			this.store.dispatch(action);
-		};
-  }
+	get updateButtonDisabled() {
+		return this.form.invalid || this.loadingInProgress;
+	}
 
 	get tags() {
 		return this.form.get('tags');
@@ -162,9 +85,5 @@ export class EditArticlePageComponent implements OnInit {
 
 	get tagList() {
 		return tagData;
-	}
-
-	get formDisabled() {
-		return this.form.invalid;
 	}
 }
