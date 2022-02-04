@@ -1,7 +1,7 @@
 import {
 	Article,
 	RawArticle,
-} from '../../model';
+} from '../../../model';
 import { rawArticleToArticle } from '../raw-article-to-article';
 
 describe('rawArticleToArticle()', () => {

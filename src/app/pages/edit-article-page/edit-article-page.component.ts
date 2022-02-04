@@ -117,7 +117,7 @@ export class EditArticlePageComponent implements OnInit {
 
 		const saved$ = this.article$.pipe(
 			map(data => {
-				return data.saved;
+				return data?.saved;
 			}),
 		);
 

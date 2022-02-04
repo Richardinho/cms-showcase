@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpErrorResponse, HttpHeaders, HttpClient } from '@angular/common/http';
 
-import { of, Observable } from 'rxjs';
-import { map, delay } from 'rxjs/operators';
+import { of, Observable, throwError } from 'rxjs';
+import { map, delay, catchError } from 'rxjs/operators';
 
 import {
 	Article,
@@ -21,28 +21,44 @@ import { articles } from '../data/articles';
 
 import { IArticleService } from '../interfaces/article.service';
 
+import { articleToFormData } from './utils/article-to-form-data';
+
 @Injectable()
 export class RealArticleService implements IArticleService {
-
-	nextId = 100;
 
   constructor(
     private http: HttpClient,
   ) {}
 
   getArticle(id: string, token: string): Observable<Article> {
-		const rawArticle: RawArticle = articles.find((article) => {
-			return article.id === id;
-		});
+    const url = environment.blogDomain + '/index.php/api/article/' + id;
 
-		const article: Article = rawArticleToArticle(rawArticle);
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': `Basic ${token}`,
+      })
+    };
 
-		return of(article);
+    return this.http.get<RawArticle>(url, httpOptions)
+      .pipe(
+        map((data) => {
+          return rawArticleToArticle(data);
+        }),
+        catchError((error: HttpErrorResponse) => {
+          if (error.status) {
+            return throwError({
+              status: error.status
+            });
+          } else {
+            return throwError({
+              message: 'an error occurred'
+            });
+          }
+        })
+      );
   }
 
   getArticleLinks(token: string): Observable<Array<ArticleLink>> {
-		console.log('this is real service');
-
     const url = environment.blogDomain + '/index.php/api/articles/';
 
     return this._get(url, token).pipe(
@@ -53,43 +69,49 @@ export class RealArticleService implements IArticleService {
   }
 
   createArticle(token: string) {
-		const id = "" + (++this.nextId);
+    const formData = new FormData();
 
-		articles.push(createRawArticle(id));
+    const url = environment.blogDomain + '/index.php/api/article/';
 
-		return of(id);
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': `Basic ${token}`,
+        'enctype': 'multipart/form-data'
+      })
+    };
+
+    return this.http
+      .put<any>(url, formData, httpOptions)
+      .pipe(map(data => data.id));
   }
 
   updateArticle(article: Article, token: string) {
-		const index = articles.findIndex(item => {
-			return article.id === item.id;
-		});
+    const url = environment.blogDomain + '/index.php/api/article/' + article.id;
+    const formData: FormData = articleToFormData(article);
 
-		articles[index] = articleToRawArticle(article);
-
-		return of({
-			message: 'article saved',
-		}).pipe(delay(4000));
+    return this._post(url, formData, token);
   }
 
   deleteArticle(articleId: string, token: string) {
-		const indexOfArticle = articles.findIndex(article => {
-			return article.id === articleId;
-		});
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': `Basic ${token}`,
+        'enctype': 'multipart/form-data'
+      })
+    };
 
-		articles.splice(indexOfArticle, 1);
+    const url = environment.blogDomain + `/index.php/api/article/${articleId}`;
 
-		return of({});
+    return this.http.delete(url, httpOptions);
   }
 
   publishArticle(articleId: string, publish: boolean, token:string) {
-		const indexOfArticle = articles.findIndex(article => {
-			return article.id === articleId;
-		});
+    const formData = new FormData();
+    const url = environment.blogDomain + '/index.php/api/publish/' + articleId;
 
-		articles[indexOfArticle].published = publish;
+    formData.append('published', publish.toString());
 
-		return of({ id: articleId, published: publish });
+    return this._post(url, formData, token);
   }
 
   _get(url: string, token: string) {
@@ -100,5 +122,39 @@ export class RealArticleService implements IArticleService {
     };
 
     return this.http.get<any>(url, httpOptions);
+  }
+
+  _post(url: any, formData: any, token: any) {
+
+    if (!token) {
+
+      return throwError({
+        message: 'You are not logged in. No JWT token in localStorage',
+        status: 401,
+      });
+
+    } else {
+
+      const httpOptions = {
+        headers: new HttpHeaders({
+          'Authorization': `Basic ${token}`,
+          'enctype': 'multipart/form-data'
+        })
+      };
+
+      return this.http.post<any>(url, formData, httpOptions).pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (error.status) {
+            return throwError({
+              status: error.status
+            });
+          } else {
+            return throwError({
+              message: 'an error occurred'
+            });
+          }
+        })
+      );
+    }
   }
 }
