@@ -1,4 +1,4 @@
-import { ShowcaseLoginService } from '../services/showcase-login.service';
+import { ShowcaseLoginService } from '../services/showcase/login.service';
 import { RealLoginService } from '../services/real/login.service';
 import { LOGIN_SERVICE } from '../services/interfaces/login.service';
 import { environment } from '../../environments/environment';

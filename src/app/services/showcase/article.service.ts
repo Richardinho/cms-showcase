@@ -8,16 +8,16 @@ import {
 	ArticleLink,
 	RawArticle,
 	EditArticleView,
-} from '../model';
+} from '../../model';
 
-import { rawArticleToArticleLink } from './utils/raw-article-to-article-link';
-import { articleToRawArticle } from './utils/article-to-raw-article';
-import { rawArticleToArticle } from './utils/raw-article-to-article';
-import { createRawArticle } from './utils/create-raw-article';
+import { rawArticleToArticleLink } from '../utils/raw-article-to-article-link';
+import { articleToRawArticle } from '../utils/article-to-raw-article';
+import { rawArticleToArticle } from '../utils/raw-article-to-article';
+import { createRawArticle } from '../utils/create-raw-article';
 
-import { articles } from './data/articles';
+import { articles } from '../data/articles';
 
-import { IArticleService } from './interfaces/article.service';
+import { IArticleService } from '../interfaces/article.service';
 
 @Injectable()
 export class ShowcaseArticleService implements IArticleService {
