@@ -6,16 +6,23 @@ import {
   FormGroup,
   Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { map, startWith, mergeMap, withLatestFrom } from 'rxjs/operators';
+import {
+	first,
+	map,
+	mergeMap,
+	startWith,
+	withLatestFrom,
+} from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 
 import { ARTICLE_SERVICE, IArticleService } from '../../services/interfaces/article.service';
+import { ERROR, INFO, MessageService } from '../../services/message.service';
 
 import { AppState, Article } from '../../model';
 
 import { JWTToken } from '../../selectors/jwt-token.selector';
 
-import { createArticlePatchData, articleToFormGroup } from './utils/article-form.utils';
+import { articleToFormGroup } from './utils/article-to-form-group';
 import { tagsValidator } from './utils/tags.validator';
 import { tagData } from '../../tag-data';
 
@@ -30,6 +37,7 @@ export class EditArticlePageComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
 		@Inject(ARTICLE_SERVICE) private articleService: IArticleService,
+		private messageService: MessageService,
     private store: Store<AppState>
   ) {}
 
@@ -60,10 +68,15 @@ export class EditArticlePageComponent implements OnInit {
 			map((params: ParamMap) => params.get('id')),
 			withLatestFrom(this.store.pipe(select(JWTToken))),
 			mergeMap(([id, token]) => this.articleService.getArticle(id, token)),
-		).subscribe(article => {
-				const formGroup = articleToFormGroup(article);
-				this.form.patchValue(formGroup);
-    });
+		).subscribe({
+				next: (article: Article) => {
+					const formGroup = articleToFormGroup(article);
+					this.form.patchValue(formGroup);
+				},
+				error: (err) => {
+					this.messageService.show('An error occurred. Please check your network', ERROR);
+				},
+			});
   }
 
   update() {
@@ -71,13 +84,22 @@ export class EditArticlePageComponent implements OnInit {
 
 		this.store.pipe(select(JWTToken)).pipe(
 			mergeMap((token) => this.articleService.updateArticle(this.form.value, token)),
-		).subscribe(() => {
-			this.loadingInProgress = false;
-		});
+		).subscribe({
+				next: (article) => {
+					this.loadingInProgress = false;
+					this.form.markAsPristine();
+					this.messageService.show('Changes saved to server', INFO);
+				},
+				error: (err) => {
+					this.loadingInProgress = false;
+					this.messageService.show('An error occurred', ERROR);
+				},
+			}
+		);
   }
 
 	get updateButtonDisabled() {
-		return this.form.invalid || this.loadingInProgress;
+		return this.form.pristine || this.form.invalid || this.loadingInProgress;
 	}
 
 	get tags() {

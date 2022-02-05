@@ -14,11 +14,9 @@ export interface IArticleService {
 
 	createArticle(token: string): Observable<string>;
 
-	updateArticle(article: Article, token: string): Observable<any>;
+	updateArticle(article: Article, token: string): Observable<Article>;
 
 	deleteArticle(articleId: string, token: string): Observable<any>;
-
-	publishArticle(articleId: string, publish: boolean, token: string): Observable<any>;
 
 }
 

@@ -1,26 +1,47 @@
-import { FormControlStatus } from '@angular/forms';
-/*
- *  This is as the article is stored in the database, and as we receive it from the server
- *  We need to convert it into a different form for display and form controls
- */
 
-interface Tag {
-  name: string;
-  value: boolean;
+export interface RawIntro {
+	intro_text: string
 }
 
 export interface RawArticle {
-	id: string;
-	title: string;
-	date_created: string;
-	date_edited: string;
-	body: string;
 	author: string;
+	body: string;
+	date_created: string | null;
+	date_edited: string | null;
+	id: string;
+	published: boolean; // note that projects have this as 1 or 0
 	summary: string;
 	tag1: string | null;
 	tag2: string | null;
 	tag3: string | null;
-	published: boolean;
+	title: string;
+}
+
+export interface RawProject {
+	href: string;
+	id: string;
+	published: "1" | "0";
+	tag1: string | null;
+	tag2: string | null;
+	tag3: string | null;
+	title: string;
+}
+
+export interface RawArticleLink {
+	id: string;
+	published: false;
+	summary: string;
+	tag1: string | null;
+	tag2: string | null;
+	tag3: string | null;
+	title: string;
+}
+
+export interface RawMetadata {
+	email: string;
+	github_url: string;
+	location: string;
+	website: string;
 }
 
 export interface Article {
@@ -33,6 +54,12 @@ export interface Article {
 		[tag: string]: boolean;
 	},
   saved: boolean;
+}
+
+
+interface Tag {
+  name: string;
+  value: boolean;
 }
 
 export interface ArticleLink {
@@ -52,16 +79,6 @@ export interface EditArticleView {
 	}
 }
 
-export interface RawProject {
-	id: string;
-	title: string;
-	href: string;
-	published: "1" | "0";
-	tag1: string | null;
-	tag2: string | null;
-	tag3: string | null;
-}
-
 export interface Project {
 	id: string;
 	title: string;
@@ -72,11 +89,6 @@ export interface Project {
 		[tag: string]: boolean;
 	},
 	saved?: boolean;
-}
-
-
-export interface RawIntro {
-	intro_text: string
 }
 
 export interface Intro {

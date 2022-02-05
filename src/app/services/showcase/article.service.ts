@@ -41,7 +41,6 @@ export class ShowcaseArticleService implements IArticleService {
 
   getArticleLinks(token: string): Observable<Array<ArticleLink>> {
 
-		console.log('this is the showcase article service');
 		const links: Array<ArticleLink> = articles.map((rawArticle: RawArticle) => {
 			return rawArticleToArticleLink(rawArticle);
 		});
@@ -49,7 +48,7 @@ export class ShowcaseArticleService implements IArticleService {
 		return of(links);
   }
 
-  createArticle(token: string) {
+  createArticle(token: string): Observable<string> {
 		const id = "" + (++this.nextId);
 
 		articles.push(createRawArticle(id));
@@ -57,16 +56,14 @@ export class ShowcaseArticleService implements IArticleService {
 		return of(id);
   }
 
-  updateArticle(article: Article, token: string) {
+  updateArticle(article: Article, token: string): Observable<Article> {
 		const index = articles.findIndex(item => {
 			return article.id === item.id;
 		});
 
 		articles[index] = articleToRawArticle(article);
 
-		return of({
-			message: 'article saved',
-		}).pipe(delay(4000));
+		return of(article).pipe(delay(3000))
   }
 
   deleteArticle(articleId: string, token: string) {
@@ -77,15 +74,5 @@ export class ShowcaseArticleService implements IArticleService {
 		articles.splice(indexOfArticle, 1);
 
 		return of({});
-  }
-
-  publishArticle(articleId: string, publish: boolean, token:string) {
-		const indexOfArticle = articles.findIndex(article => {
-			return article.id === articleId;
-		});
-
-		articles[indexOfArticle].published = publish;
-
-		return of({ id: articleId, published: publish });
   }
 }

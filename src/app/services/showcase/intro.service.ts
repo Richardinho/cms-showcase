@@ -4,7 +4,7 @@ import { delay } from 'rxjs/operators';
 
 import { Intro } from '../../model';
 import { intro } from '../data/intro';
-import { rawIntroToIntro } from './utils/raw-intro-to-intro';
+import { rawIntroToIntro } from '../utils/raw-intro-to-intro';
 import { IIntroService } from '../interfaces/intro.service';
 
 
@@ -17,6 +17,6 @@ export class ShowcaseIntroService implements IIntroService {
 	}
 
   getIntro(token: string): Observable<Intro> {
-		return of(rawIntroToIntro(intro));
+		return of(rawIntroToIntro(intro)).pipe(delay(2000));
   }
 }

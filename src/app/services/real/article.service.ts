@@ -77,7 +77,7 @@ export class RealArticleService implements IArticleService {
     );
   }
 
-  createArticle(token: string) {
+  createArticle(token: string): Observable<string> {
     const formData = new FormData();
 
     const url = environment.blogDomain + '/index.php/api/article/';
@@ -94,11 +94,12 @@ export class RealArticleService implements IArticleService {
       .pipe(map(data => data.id));
   }
 
-  updateArticle(article: Article, token: string) {
+  updateArticle(article: Article, token: string): Observable<Article> {
     const url = environment.blogDomain + '/index.php/api/article/' + article.id;
     const formData: FormData = articleToFormData(article);
 
-    return this._post(url, formData, token);
+    return this._post(url, formData, token).pipe(
+			map((rawArticle: RawArticle) => rawArticleToArticle(rawArticle)));
   }
 
   deleteArticle(articleId: string, token: string) {
@@ -112,15 +113,6 @@ export class RealArticleService implements IArticleService {
     const url = environment.blogDomain + `/index.php/api/article/${articleId}`;
 
     return this.http.delete(url, httpOptions);
-  }
-
-  publishArticle(articleId: string, publish: boolean, token:string) {
-    const formData = new FormData();
-    const url = environment.blogDomain + '/index.php/api/publish/' + articleId;
-
-    formData.append('published', publish.toString());
-
-    return this._post(url, formData, token);
   }
 
   _get(url: string, token: string) {

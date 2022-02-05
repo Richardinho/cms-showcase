@@ -1,4 +1,4 @@
-import { RawIntro, Intro } from '../../../model';
+import { RawIntro, Intro } from '../../model';
 
 export const rawIntroToIntro = (rawIntro: RawIntro): Intro => {
 	const result: any = {};
