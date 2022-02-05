@@ -56,7 +56,6 @@ export class ProjectViewComponent {
 					this.deletingProject = true;
 				}),
 				mergeMap(([_, token]) => {
-
 					return this.projectService.deleteProject(this.project.id, token);
 				}),
 			)

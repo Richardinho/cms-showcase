@@ -1,4 +1,5 @@
 import { Inject, Component, OnInit, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
@@ -19,6 +20,7 @@ export class ArticlePageComponent implements OnInit {
 
   constructor(
     private store: Store<AppState>,
+		private router: Router,
 		@Inject(ARTICLE_SERVICE) private articleService: IArticleService,
   ) {}
 
@@ -32,7 +34,11 @@ export class ArticlePageComponent implements OnInit {
   }
 
 	createArticle() {
-		// TODO
-		console.log('create article');
+		this.store.pipe(
+			select(JWTToken),
+			mergeMap((token) => this.articleService.createArticle(token)),
+		).subscribe(id => {
+				this.router.navigate(['edit-article', id]);
+			});
 	}
 }
