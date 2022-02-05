@@ -5,7 +5,7 @@ import { mergeMap } from 'rxjs/operators';
 import { AppState, ArticleLink } from '../../model';
 
 import { Store, select } from '@ngrx/store';
-import { selectJWTToken } from '../../selectors/article.selector';
+import { JWTToken } from '../../selectors/jwt-token.selector';
 
 import { ARTICLE_SERVICE, IArticleService } from '../../services/interfaces/article.service';
 
@@ -24,7 +24,7 @@ export class ArticlePageComponent implements OnInit {
 
   ngOnInit() {
 		this.store.pipe(
-			select(selectJWTToken),
+			select(JWTToken),
 			mergeMap((token) => this.articleService.getArticleLinks(token)),
 		).subscribe(articles => {
 				this.articles = articles;

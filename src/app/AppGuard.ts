@@ -9,7 +9,7 @@ import {
 	Router,
 } from '@angular/router';
 import { map, Observable } from 'rxjs';
-import { selectJWTToken } from './selectors/article.selector';
+import { JWTToken } from './selectors/jwt-token.selector';
 
 @Injectable({
 	providedIn: 'root',
@@ -21,7 +21,7 @@ export class AppGuard implements CanActivate {
 	canActivate(
 		next: ActivatedRouteSnapshot,
 		state: RouterStateSnapshot): UrlTree | Observable<boolean | UrlTree> {
-			return this.store.pipe(select(selectJWTToken), map(jwt => {
+			return this.store.pipe(select(JWTToken), map(jwt => {
 				if (jwt) {
 					return true;
 				} 

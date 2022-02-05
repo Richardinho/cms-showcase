@@ -13,7 +13,7 @@ import { ARTICLE_SERVICE, IArticleService } from '../../services/interfaces/arti
 
 import { AppState, Article } from '../../model';
 
-import { selectJWTToken } from '../../selectors/article.selector';
+import { JWTToken } from '../../selectors/jwt-token.selector';
 
 import { createArticlePatchData, articleToFormGroup } from './utils/article-form.utils';
 import { tagsValidator } from './utils/tags.validator';
@@ -58,7 +58,7 @@ export class EditArticlePageComponent implements OnInit {
 
 		this.route.paramMap.pipe(
 			map((params: ParamMap) => params.get('id')),
-			withLatestFrom(this.store.pipe(select(selectJWTToken))),
+			withLatestFrom(this.store.pipe(select(JWTToken))),
 			mergeMap(([id, token]) => this.articleService.getArticle(id, token)),
 		).subscribe(article => {
 			this.form.patchValue(articleToFormGroup(article));
@@ -68,7 +68,7 @@ export class EditArticlePageComponent implements OnInit {
   update() {
 		this.loadingInProgress = true;
 
-		this.store.pipe(select(selectJWTToken)).pipe(
+		this.store.pipe(select(JWTToken)).pipe(
 			mergeMap((token) => this.articleService.updateArticle(this.form.value, token)),
 		).subscribe(() => {
 			this.loadingInProgress = false;

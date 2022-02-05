@@ -6,7 +6,7 @@ import { Store, select } from '@ngrx/store';
 
 import { PROJECT_SERVICE, IProjectService } from '../../services/interfaces/project.service';
 import { LOGIN_SERVICE, ILoginService } from '../../services/interfaces/login.service';
-import { selectJWTToken } from '../../selectors/article.selector';
+import { JWTToken } from '../../selectors/jwt-token.selector';
 
 @Component({
   templateUrl: './projects-page.component.html',
@@ -26,7 +26,7 @@ export class ProjectsPageComponent {
 	ngOnInit() {
 
 		this.route.paramMap.pipe(
-			withLatestFrom(this.store.pipe(select(selectJWTToken))),
+			withLatestFrom(this.store.pipe(select(JWTToken))),
 			mergeMap(([_, token]) => this.projectService.getProjects(token)),
 		).subscribe((projectLinks) => {
 			this.projectLinks = projectLinks;
@@ -43,7 +43,7 @@ export class ProjectsPageComponent {
 
 	createProject() {
 		this.store.pipe(
-			select(selectJWTToken),
+			select(JWTToken),
 			mergeMap((token) => this.projectService.createProject(token)),
 		).subscribe((newProject) => {
 			this.projectLinks = [ newProject, ...this.projectLinks];

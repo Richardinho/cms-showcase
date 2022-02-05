@@ -11,7 +11,7 @@ import {
 	Article,
 } from '../../model';
 
-import { selectJWTToken } from '../../selectors/article.selector';
+import { JWTToken } from '../../selectors/jwt-token.selector';
 import { DialogService } from '../../services/dialog.service';
 
 import {
@@ -41,7 +41,7 @@ export class ViewArticlePageComponent implements OnInit {
 
 		this.route.paramMap.pipe(
 			map((params: ParamMap) => params.get('id')),
-			withLatestFrom(this.store.pipe(select(selectJWTToken))),
+			withLatestFrom(this.store.pipe(select(JWTToken))),
 			mergeMap(([id, token]) => this.articleService.getArticle(id, token)),
 		).subscribe(article => {
 			this.article = article;
@@ -58,7 +58,7 @@ export class ViewArticlePageComponent implements OnInit {
 				filter((canDelete) => {
 					return canDelete;
 				}),
-				withLatestFrom(this.store.pipe(select(selectJWTToken))),
+				withLatestFrom(this.store.pipe(select(JWTToken))),
 				mergeMap(([_, token]) => {
 					return this.articleService.deleteArticle(this.article.id, token)
 				}),

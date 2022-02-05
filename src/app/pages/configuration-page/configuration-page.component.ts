@@ -7,7 +7,8 @@ import {
 import { AppState } from '../../model';
 
 import { mergeMap } from 'rxjs/operators';
-import { selectJWTToken } from '../../selectors/article.selector';
+import { JWTToken } from '../../selectors/jwt-token.selector';
+
 import { Store, select } from '@ngrx/store';
 
 import { METADATA_SERVICE, IMetadataService } from '../../services/interfaces/metadata.service';
@@ -37,7 +38,7 @@ export class ConfigurationPageComponent implements OnInit {
 		});
 
 		this.store.pipe(
-			select(selectJWTToken),
+			select(JWTToken),
 			mergeMap(token => this.metadataService.getMetadata(token)),
 		).subscribe(metadata => {
 				this.form.patchValue(metadata);
@@ -50,7 +51,7 @@ export class ConfigurationPageComponent implements OnInit {
 			this.loadingInProgress = true;
 
 			this.store.pipe(
-				select(selectJWTToken),
+				select(JWTToken),
 				mergeMap(token => this.metadataService.putMetadata(token, this.form.value)),
 			).subscribe(() => {
 				this.loadingInProgress = false;

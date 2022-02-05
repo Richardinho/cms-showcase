@@ -19,7 +19,7 @@ import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store'
 import { startWith, tap, mergeMap, map } from 'rxjs/operators';
 
-import { selectJWTToken } from '../../../selectors/article.selector';
+import { JWTToken } from '../../../selectors/jwt-token.selector';
 import { tagsValidator, isNewProject } from './utils/tags.validator';
 import { Project } from '../../../model';
 
@@ -73,7 +73,7 @@ export class ProjectEditFormComponent {
 		return () => {
 			this.loadingProgress = true;
 			this.store.pipe(
-				select(selectJWTToken),
+				select(JWTToken),
 				mergeMap((token) => this.projectService.updateProject(this.form.value, token)),
 			).subscribe(() => {
 				this.loadingProgress = false;

@@ -14,7 +14,7 @@ import {
 } from 'rxjs/operators';
 
 import { Store, select } from '@ngrx/store';
-import { selectJWTToken } from '../../../selectors/article.selector';
+import { JWTToken } from '../../../selectors/jwt-token.selector';
 import { DialogService } from '../../../services/dialog.service';
 import { IProjectService, PROJECT_SERVICE } from '../../../services/interfaces/project.service';
 import { ILoginService, LOGIN_SERVICE } from '../../../services/interfaces/login.service';
@@ -51,7 +51,7 @@ export class ProjectViewComponent {
 			this.dialogService.confirm('Are you sure that you want to delete this project?')
 			.pipe(
 				filter(canDelete => canDelete),
-				withLatestFrom(this.store.pipe(select(selectJWTToken))),
+				withLatestFrom(this.store.pipe(select(JWTToken))),
 				tap(() => {
 					this.deletingProject = true;
 				}),

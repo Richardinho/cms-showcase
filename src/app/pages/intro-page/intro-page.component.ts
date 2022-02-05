@@ -8,7 +8,7 @@ import { mergeMap } from 'rxjs/operators';
 import { Intro } from '../../model';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../model';
-import { selectJWTToken } from '../../selectors/article.selector';
+import { JWTToken } from '../../selectors/jwt-token.selector';
 import { INTRO_SERVICE, IIntroService } from '../../services/interfaces/intro.service';
 
 @Component({
@@ -31,7 +31,7 @@ export class IntroPageComponent {
 		});
 
 		this.store.pipe(
-			select(selectJWTToken),
+			select(JWTToken),
 			mergeMap(token => this.introService.getIntro(token)),
 		).subscribe(intro => {
 				this.form.patchValue(intro);
@@ -46,7 +46,7 @@ export class IntroPageComponent {
 			this.loadingInProgress = true;
 
 			this.store.pipe(
-				select(selectJWTToken),
+				select(JWTToken),
 				mergeMap(token => this.introService.saveIntro(this.form.value, token)),
 			).subscribe(() => {
 					this.loadingInProgress = false;
