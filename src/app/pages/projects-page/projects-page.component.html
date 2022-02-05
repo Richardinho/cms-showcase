@@ -10,13 +10,21 @@
 			<button (click)="createProject()" class="button">create project</button>
 		</div>
 		<ul>
-			<li *ngFor="let project of projectLinks$ | async; trackBy: trackByFn" class="project-item">
-				<ng-container *ngIf="project.underEdit">
-					<project-edit-form [project]="project"></project-edit-form>
+			<li *ngFor="let project of projectLinks; trackBy: trackByFn" class="project-item">
+				<ng-container *ngIf="showEditView(project.id)">
+					<project-edit-form
+						(onSavedProject)="saveProject($event)"
+						(onShowEdit)="setEditView($event)"
+						[project]="project"></project-edit-form>
 				</ng-container>
 
-				<ng-container *ngIf="!project.underEdit">
-					<cms-project-view [project]="project"></cms-project-view>
+				<ng-container *ngIf="!showEditView(project.id)">
+
+					<cms-project-view
+						(onDelete)="deleteProject($event)"
+						(onShowEdit)="setEditView($event)"
+						[project]="project"></cms-project-view>
+
 				</ng-container>
 			</li>
 		</ul>

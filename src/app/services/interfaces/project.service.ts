@@ -9,6 +9,9 @@ export interface IProjectService {
 	updateProject(project: Project, token: string): Observable<any>;
 
 	getProjects(token:string): Observable<any>;
+
+	createProject(token: string): Observable<any>;
 }
+
 
 export const PROJECT_SERVICE = new InjectionToken<IProjectService>('project.service');

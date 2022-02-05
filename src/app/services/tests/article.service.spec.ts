@@ -1,5 +1,5 @@
 import { of, throwError } from 'rxjs';
-import { ShowcaseArticleService } from './showcase-article.service';
+import { ShowcaseArticleService } from '../showcase/article.service';
 
 const mockArticles = [
   { title: 'apple' },

@@ -1,84 +1,66 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Store, select } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import {
+	Component,
+	Input,
+	EventEmitter,
+	Output,
+	Inject,
+} from '@angular/core';
+
+import {
+	mergeMap,
+	filter,
+	tap,
+} from 'rxjs/operators';
 
 import { DialogService } from '../../../services/dialog.service';
-import { Project, AppState } from '../../../model';
-
-// selectors
-import { selectProjects } from '../../../selectors/project.selector';
-import { selectLoadingTokens } from '../../../selectors/ui.selector';
-
-// actions
-import {
-	openEditForm,
-	deleteProjectRequest,
-	saveProjectRequest,
-} from '../../../actions/projects.action';
+import { IProjectService, PROJECT_SERVICE } from '../../../services/interfaces/project.service';
+import { ILoginService, LOGIN_SERVICE } from '../../../services/interfaces/login.service';
+import { Project } from '../../../model';
 
 @Component({
   selector: 'cms-project-view',
   templateUrl: './project-view.component.html',
   styleUrls: ['./project-view.component.scss']
 })
-export class ProjectViewComponent implements OnInit {
+export class ProjectViewComponent {
 
 	@Input() project: Project;
 
-	deletingProject$: Observable<boolean>;
+	@Output() onShowEdit: EventEmitter<{ id: string, show: boolean }> = new EventEmitter();
 
-	deleteProjectToken: string;
+	@Output() onDelete: EventEmitter<string> = new EventEmitter();
+
+	deletingProject: boolean = false;
 
   constructor(
-    private store: Store<AppState>,
     private dialogService: DialogService,
+		@Inject(LOGIN_SERVICE) private loginService: ILoginService,
+		@Inject(PROJECT_SERVICE) private projectService: IProjectService,
   ) {}
 
-  ngOnInit(): void {
-
-		this.deleteProjectToken = this.project.id + 'dp';
-
-    this.deletingProject$ = this.store.pipe(
-			select(selectLoadingTokens),
-			map((loadingTokens: Array<string>) => {
-				return loadingTokens.includes(this.deleteProjectToken);
-			}),
-		);
-  }
-
 	editProject() {
-		const metadata = {
-			id: this.project.id,
-			edit: true
-		};
-
-		this.store.dispatch(openEditForm(metadata));
-	}
-
-	publishProject(published: boolean) {
-		// todo: rewrite according to conventions
-		const updatedProject: Project = {
-			...this.project,
-			published,
-		};
-
-		this.store.dispatch(saveProjectRequest({
-			loadingToken: '',
-			project: updatedProject
-		}));
+		this.onShowEdit.emit({ id: this.project.id, show: true });
 	}
 
 	deleteProject() {
-		this.dialogService.confirm('Are you sure that you want to delete this project?')
-			.subscribe((canDelete: any) => {
-				if (canDelete) {
-					this.store.dispatch(deleteProjectRequest({
-						loadingToken: this.deleteProjectToken,
-						id: this.project.id,
-					}));
-				}
+		return () => {
+			this.dialogService.confirm('Are you sure that you want to delete this project?')
+			.pipe(
+				filter(canDelete => canDelete),
+				tap(() => {
+					this.deletingProject = true;
+				}),
+				mergeMap(() => {
+					const token = this.loginService.getToken();
+
+					return this.projectService.deleteProject(this.project.id, token);
+				}),
+			)
+			.subscribe(() => {
+				this.deletingProject = false;
+				this.onDelete.emit(this.project.id);
 			});
+		}
 	}
 
 	get tags() {

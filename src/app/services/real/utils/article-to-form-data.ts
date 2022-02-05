@@ -1,8 +1,5 @@
 import { Article } from '../../../model';
 
-/*
- *  Takes an article that is stored in our store and converts it to form data that we can send to the server
- */
 
 export const articleToFormData = (article: Article): FormData => {
   const formData = new FormData();

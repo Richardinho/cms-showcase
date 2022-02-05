@@ -39,4 +39,8 @@ export class ShowcaseProjectService implements IProjectService {
 
 		return of(projects);
 	}
+
+	createProject(token: string) {
+		return of({});
+	}
 }

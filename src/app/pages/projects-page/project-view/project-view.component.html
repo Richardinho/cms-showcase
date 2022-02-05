@@ -1,5 +1,8 @@
 <div class="title">{{project.title}}</div>
-<div class="href"><span class="project-label">href</span>{{project.href}}</div>
+
+<div class="href">
+	<span class="project-label">href</span>{{project.href}}</div>
+
 <div class="tags">
 	<div class="project-label">tags</div>
 
@@ -18,7 +21,7 @@
 		(click)="editProject()">edit</button>
 
 	<cms-cta
-		[loading]="deletingProject$ | async"
-		(click)="deleteProject()">delete</cms-cta>
+		[loading]="deletingProject"
+		[onClick]="deleteProject()">delete</cms-cta>
 
 </div>

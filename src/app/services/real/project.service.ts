@@ -7,13 +7,21 @@ import { environment } from '../../../environments/environment';
 import { Project } from '../../model';
 import { rawProjectToProject } from '../utils/raw-project-to-project';
 import { IProjectService } from '../interfaces/project.service';
+import { ProjectBuilder } from '../../builders/project.builder';
+
+import { projectToFormData } from './utils/project-to-form-data';
 
 @Injectable()
 export class RealProjectService implements IProjectService {
+	private _id = 100;
 
   constructor(
     private http: HttpClient,
   ) {}
+
+	get tempId() {
+		return `_${this._id++}`;
+	}
 
 	deleteProject(id: string, token: string) {
 		const url = environment.blogDomain + `/index.php/api/projects/${id}`;
@@ -27,7 +35,13 @@ export class RealProjectService implements IProjectService {
     return this.http.delete(url, httpOptions);
 	}
 
-	updateProject(project: any, token: string) {
+	createProject(token: string) {
+		const project = new ProjectBuilder().id(this.tempId).build();
+
+		return this.updateProject(project, token);
+	}
+
+	updateProject(project: Project, token: string) {
 		const url = environment.blogDomain + '/index.php/api/projects';
 
     const httpOptions = {
@@ -36,22 +50,12 @@ export class RealProjectService implements IProjectService {
       })
     };
 
-		const formData = new FormData();
-
-		const { id, title, href, tag1, tag2, tag3, published } = project;
-
-		formData.append('title', title);
-		formData.append('href', href);
-		formData.append('tag1', tag1 || '');
-		formData.append('tag2', tag2 || '');
-		formData.append('tag3', tag3 || '');
-		formData.append('id', id);
-		formData.append('published', published);
+		const formData = projectToFormData(project);
 
     return this.http.post<any>(url, formData, httpOptions)
       .pipe(
         map((data) => {
-					return data.project;
+					return rawProjectToProject(data.project);
         }),
         catchError((error: HttpErrorResponse) => {
           if (error.status) {

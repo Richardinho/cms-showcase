@@ -1,5 +1,24 @@
 @import '../../../../variables';
 
+
+.header {
+	display: flex;
+	align-items: center;
+}
+
+.close-button {
+	border: none;
+	font-size: 20px;
+	font-family: helvetica;
+	margin-left: auto;
+	background: transparent;
+	cursor: pointer;
+
+	&:hover {
+		color: blue;
+	}
+}
+
 .input-container {
 	display: grid;
 	grid-template-columns: auto 1fr;
@@ -9,6 +28,7 @@
 	"label input"
 	". error"
 }
+
 
 .input.ng-dirty.ng-invalid,
 .input.ng-touched.ng-invalid {

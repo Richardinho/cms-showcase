@@ -1,4 +1,11 @@
-import { Component, Input } from '@angular/core';
+import {
+	Component,
+	EventEmitter,
+	Inject,
+	Input,
+	Output,
+} from '@angular/core';
+
 import {
 	FormArray,
 	FormGroup,
@@ -6,30 +13,17 @@ import {
 	Validators,
 } from '@angular/forms';
 
+import { LOGIN_SERVICE, ILoginService } from '../../../services/interfaces/login.service';
 import { Observable } from 'rxjs';
-import { startWith, tap, map } from 'rxjs/operators';
-import { Store, select } from '@ngrx/store';
+import { startWith, tap, mergeMap, map } from 'rxjs/operators';
 
 import { tagsValidator, isNewProject } from './utils/tags.validator';
-import { Project, AppState } from '../../../model';
+import { Project } from '../../../model';
 
-//  selectors
-import { selectLoadingTokens } from '../../../selectors/ui.selector';
-import { selectProjects } from '../../../selectors/project.selector';
-
-// actions
-import {
-	openEditForm,
-	saveProjectRequest,
-	deleteLocalProject,
-	saveNewProjectRequest,
-	putProjectIntoStore,
-} from '../../../actions/projects.action';
+import { IProjectService, PROJECT_SERVICE } from '../../../services/interfaces/project.service';
 
 import { tagData } from '../../../tag-data';
 import { formDataToProject } from './utils/form-data-to-project';
-import { buildTagsFormGroup } from './utils/build-tags-form-group';
-
 
 @Component({
 	selector: 'project-edit-form',
@@ -39,26 +33,26 @@ import { buildTagsFormGroup } from './utils/build-tags-form-group';
 export class ProjectEditFormComponent {
 
   constructor(
-    private store: Store<AppState>
+		@Inject(PROJECT_SERVICE) private projectService: IProjectService,
+		@Inject(LOGIN_SERVICE) private loginService: ILoginService,
   ) {}
 
 	@Input()
 	project: Project;
 
-	newProject: boolean;
+	@Output()
+	onShowEdit: EventEmitter<{ id: string, show: boolean }> = new EventEmitter();
+
+	@Output()
+	onSavedProject: EventEmitter<Project> = new EventEmitter();
 
 	form: FormGroup;
-
-	showLoader$: Observable<boolean>;
-	showNewProjectLoader$: Observable<boolean>;
-
-	project$: Observable<Project>;
-	saveProjectToken: string;
-	saveNewProjectToken: string;
+	loadingInProgress: boolean = false;
 
 	ngOnInit() {
 
 		this.form = new FormGroup({
+			id: new FormControl(this.project.id),
 			title: new FormControl(this.project.title, Validators.required),
 			href: new FormControl(this.project.href, Validators.required),
 			published: new FormControl(this.project.published),
@@ -70,110 +64,29 @@ export class ProjectEditFormComponent {
 				'css': new FormControl(this.project.tags['css']),
 			}, tagsValidator),
 		});
-
-		this.newProject = isNewProject(this.project.id);
-
-		/*
-		 *  when form data changes, put this into store
-		 */ 
-
-
-		this.form.valueChanges.subscribe((value) => {
-
-			const metadata = {
-				data: {
-					...value,
-					id: this.project.id,
-				},
-			};
-
-			const action = putProjectIntoStore(metadata);
-
-			this.store.dispatch(action);
-		});
-
-		/*
-		 *  show loader animation when request is in transit
-		 */
-
-		this.saveProjectToken = this.project.id + 'sp';
-
-		this.showLoader$ = this.store.pipe(
-			select(selectLoadingTokens),
-			map((loadingTokens: Array<string>) => {
-				return loadingTokens.includes(this.saveProjectToken);
-			}),
-		);
-
-		this.saveNewProjectToken = this.project.id + 'snp';
-
-		this.showNewProjectLoader$ = this.store.pipe(
-			select(selectLoadingTokens),
-			map((loadingTokens: Array<string>) => {
-				return loadingTokens.includes(this.saveNewProjectToken);
-			}),
-		);
-
-		/*
-		 *  the update CTA should be disabled when:
-		 *  1. changes are in transit to server
-		 *  2. form input is invalid
-		 *  3. there are no local changes requiring to be saved 
-		 */
-
-		 const formInvalid$ = this.form.statusChanges.pipe(
-			 map(status => (status !== 'VALID')),
-			 startWith(false),
-		 );
-
-
 	}
 
 	save() {
 		return () => {
-			const metadata = { 
-				loadingToken: this.saveProjectToken,
-				project: this.project,
-			};
+			const token = this.loginService.getToken();
+			this.loadingInProgress = true;
 
-			const action = saveProjectRequest(metadata);
-
-			this.store.dispatch(action);
-		};
+			this.projectService.updateProject(this.form.value, token).subscribe(() => {
+				this.loadingInProgress = false;
+				this.onSavedProject.emit(this.form.value);
+			});
+		}
 	}
 
-	saveNewProject() {
-		return () => {
-			const metadata = {
-				project: formDataToProject(this.form.value, this.project.id),
-				loadingToken: this.saveNewProjectToken,
-			};
-
-			const action = saveNewProjectRequest(metadata);
-
-			this.store.dispatch(action);
-		};
+	close() {
+		this.onShowEdit.emit({
+			id: this.project.id,
+			show: false,
+		});
 	}
 
 	cancel() {
-		const metadata = { 
-			id: this.project.id,
-			edit: false,
-		};
-
-		const action = openEditForm(metadata);
-
-		this.store.dispatch(action);
-	}
-
-	cancelNewProject() {
-		const metadata = {
-			id: this.project.id,
-		}
-
-		const action = deleteLocalProject(metadata);
-
-		this.store.dispatch(action);
+		this.close();
 	}
 
 	get title() {

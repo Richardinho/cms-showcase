@@ -1,5 +1,9 @@
 
 <ng-container [formGroup]="form">
+	<div class="header">
+		<button (click)="close()" class="close-button">X</button>
+	</div>
+
 	<div class="input-container">
 		<label class="label" for="title">title</label>
 		<input class="input" id="title" required formControlName="title"/>
@@ -36,26 +40,14 @@
 		</div>
 
 		<div class="button-group">
-			<ng-container *ngIf="!newProject">
 
-				<cms-cta
-					[disabled]="formDisabled"
-					[loading]="showLoader$ | async"
-					[onClick]="save()">save edits</cms-cta>
+			<cms-cta
+				[disabled]="formDisabled"
+				[loading]="loadingInProgress"
+				[onClick]="save()">save edits</cms-cta>
 
-				<button (click)="cancel()" class="button">cancel</button>
-			</ng-container>
+			<button (click)="cancel()" class="button">cancel</button>
 
-			<ng-container *ngIf="newProject">
-
-				<cms-cta
-					[disabled]="formDisabled"
-					[loading]="showNewProjectLoader$ | async"
-					[onClick]="saveNewProject()"
-					>save new project</cms-cta>
-
-				<button (click)="cancelNewProject()" class="button">cancel</button>
-			</ng-container>
 		</div>
 	</div>
 </ng-container>

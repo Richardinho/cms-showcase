@@ -23,7 +23,7 @@ export class LoginPageComponent implements OnInit {
   public username = '';
   public password = '';
 
-  errorMessage: string = 'ss';
+  errorMessage: string = 'ssssss';
 
   constructor(
     private http: HttpClient,

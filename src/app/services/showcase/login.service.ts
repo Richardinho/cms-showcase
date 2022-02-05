@@ -8,8 +8,11 @@ import { ILoginService, LoginResponseData } from '../interfaces/login.service';
 @Injectable()
 export class ShowcaseLoginService implements ILoginService {
 
-  constructor(
-    private http: HttpClient) {}
+  constructor( private http: HttpClient) {}
+
+	getToken() {
+		return 'fake_token';
+	}
 
 	logIn(username: string, password: string) {
 		if (password === 'password') {

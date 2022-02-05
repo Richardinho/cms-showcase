@@ -6,7 +6,9 @@ export interface LoginResponseData {
 }
 
 export interface ILoginService {
-	logIn(username: string, password: string): Observable<LoginResponseData>;
+	logIn(username: string, password: string): Observable<any>;
+
+	getToken(): string;
 }
 
 export const LOGIN_SERVICE =  new InjectionToken<ILoginService>('login.service');

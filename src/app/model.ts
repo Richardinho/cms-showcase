@@ -66,13 +66,14 @@ export interface Project {
 	id: string;
 	title: string;
 	href: string;
-	underEdit: boolean;
+	underEdit?: boolean;
 	published: boolean;
 	tags: {
 		[tag: string]: boolean;
 	},
-	saved: boolean;
+	saved?: boolean;
 }
+
 
 export interface RawIntro {
 	intro_text: string

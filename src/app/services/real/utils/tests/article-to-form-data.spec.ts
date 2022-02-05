@@ -19,16 +19,6 @@ describe('articleToFormData()', () => {
 		saved: false,
 	};
 
-	const formData: FormData = new FormData();
-
-	formData.append('id', '23');
-	formData.append('title', 'alpha');
-	formData.append('body', 'blah blah');
-	formData.append('summary', 'alpha summary');
-	formData.append('published', 'true');
-	formData.append('tag1', 'css');
-	formData.append('tag2', 'javascript');
-
 	it('should construct form data object from article', () => {
 		const result = articleToFormData(article);
 
