@@ -8,7 +8,7 @@ export const rawProjectToProject = (rawProject: RawProject): Project => {
 	project.title = rawProject.title;
 	project.href = rawProject.href;
 	project.underEdit = false;
-	project.published = Boolean(parseInt(rawProject.published, 10));
+	project.published = rawProject.published === "1" ? true : false;
 	project.saved = true;
 
 	const selectedTags = [

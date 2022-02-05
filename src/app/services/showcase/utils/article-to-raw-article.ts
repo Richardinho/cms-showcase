@@ -1,7 +1,7 @@
 import {
 	Article,
 	RawArticle,
-} from '../../model';
+} from '../../../model';
 
 export const articleToRawArticle = (article: Article): RawArticle => {
 

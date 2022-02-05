@@ -56,10 +56,10 @@ export interface RawProject {
 	id: string;
 	title: string;
 	href: string;
-	published: string;
-	tag1: string;
-	tag2: string;
-	tag3: string;
+	published: "1" | "0";
+	tag1: string | null;
+	tag2: string | null;
+	tag3: string | null;
 }
 
 export interface Project {

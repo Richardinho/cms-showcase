@@ -11,9 +11,9 @@ import {
 } from '../../model';
 
 import { rawArticleToArticleLink } from '../utils/raw-article-to-article-link';
-import { articleToRawArticle } from '../utils/article-to-raw-article';
+import { articleToRawArticle } from './utils/article-to-raw-article';
 import { rawArticleToArticle } from '../utils/raw-article-to-article';
-import { createRawArticle } from '../utils/create-raw-article';
+import { createRawArticle } from './utils/create-raw-article';
 
 import { articles } from '../data/articles';
 
@@ -33,7 +33,10 @@ export class ShowcaseArticleService implements IArticleService {
 
 		const article: Article = rawArticleToArticle(rawArticle);
 
-		return of(article);
+		// delay is added to make this asynchronous.
+		// Otherwise, edit article page doesn't render after form is patched
+		// with data TODO: investigate this
+		return of(article).pipe(delay(2));
   }
 
   getArticleLinks(token: string): Observable<Array<ArticleLink>> {

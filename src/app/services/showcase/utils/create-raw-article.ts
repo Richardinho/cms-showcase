@@ -1,4 +1,4 @@
-import { RawArticle } from '../../model';
+import { RawArticle } from '../../../model';
 
 export const createRawArticle = (id: string) => {
 	return {

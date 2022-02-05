@@ -4,7 +4,7 @@ import { delay } from 'rxjs/operators';
 
 import { Intro } from '../../model';
 import { intro } from '../data/intro';
-import { rawIntroToIntro } from '../utils/raw-intro-to-intro';
+import { rawIntroToIntro } from './utils/raw-intro-to-intro';
 import { IIntroService } from '../interfaces/intro.service';
 
 

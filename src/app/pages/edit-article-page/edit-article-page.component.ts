@@ -61,7 +61,8 @@ export class EditArticlePageComponent implements OnInit {
 			withLatestFrom(this.store.pipe(select(JWTToken))),
 			mergeMap(([id, token]) => this.articleService.getArticle(id, token)),
 		).subscribe(article => {
-			this.form.patchValue(articleToFormGroup(article));
+				const formGroup = articleToFormGroup(article);
+				this.form.patchValue(formGroup);
     });
   }
 
