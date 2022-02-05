@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { AppState } from './model';
-import { loggedInSelector } from './selectors/logged-in.selector';
+import { loggedIn } from './selectors/logged-in.selector';
 import { Store, select } from '@ngrx/store';
 import { logOut } from './actions/log-in.action';
 
@@ -18,7 +18,7 @@ export class AppComponent implements OnInit {
   constructor(private store: Store<AppState>) {}
 	
   ngOnInit() {
-    this.loggedIn$ = this.store.select(loggedInSelector);
+    this.loggedIn$ = this.store.select(loggedIn);
   }
 
 	logOut() {

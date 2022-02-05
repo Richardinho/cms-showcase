@@ -19,10 +19,6 @@ import {
 	ARTICLE_SERVICE,
 } from '../../services/interfaces/article.service';
 
-import { deleteArticleRequest } from '../../actions/article.action';
-
-import { navigateToEditPageRequest } from '../../actions/navigate-to-edit-page-request';
-
 const CONFIRMATION_MESSAGE = 'Are you sure that you want to delete this article?';
 
 @Component({

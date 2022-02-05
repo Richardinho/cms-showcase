@@ -3,7 +3,7 @@ import { AppState } from '../model';
 
 export const selectJWTToken = (state: AppState) => state.jwt_token;
 
-export const loggedInSelector = createSelector(
+export const loggedIn = createSelector(
   selectJWTToken,
   token => !!token
 );

@@ -32,27 +32,14 @@ import { MessageService } from './services/message.service';
 import { MessageWidgetComponent } from './components/message-widget/message-widget.component';
 import { ProjectEditFormComponent } from './pages/projects-page/project-edit-form/project-edit-form.component';
 import { CTAComponent } from './components/cta/cta.component';
-import { articlesReducer } from './reducers/articles.reducer';
-import { introReducer } from './reducers/intro.reducer';
-import { uiReducer } from './reducers/ui.reducer';
+
+// reducers
 import { logInReducer } from './reducers/logged-in.reducer';
-import { metadataReducer } from './reducers/metadata.reducer';
-import { projectsReducer } from './reducers/projects.reducer';
 
 // add this to styles page
 import { SpinnerComponent } from './pages/configuration-page/spinner';
 
-import { NavigationEffects } from './effects/navigation.effect';
-import { DeleteArticleEffects } from './effects/delete-article.effect';
-import { CreateArticleEffects } from './effects/create-article.effect';
-import { GetMetadataEffect } from './effects/get-metadata.effect';
-import { PutMetadataEffect } from './effects/put-metadata.effect';
-import { SaveArticleEffects } from './effects/save-article.effect';
-import { GetArticleEffects } from './effects/get-article.effect';
 import { LogInEffects } from './effects/login.effect';
-import { PublishEffects } from './effects/publish';
-import { LoadArticleLinksEffects } from './effects/load-links';
-import { ProjectsEffects } from './effects/projects.effect';
 
 import { CheckboxComponent } from './components/checkbox/checkbox.component';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
@@ -86,13 +73,7 @@ import { ProjectViewComponent } from './pages/projects-page/project-view/project
     AppRoutingModule,
     HttpClientModule,
     StoreModule.forRoot({
-      articles: articlesReducer,
-			intro: introReducer,
-      ui: uiReducer,
-      // change name of this reducer
       jwt_token: logInReducer,
-      metadata: metadataReducer,
-			projects: projectsReducer,
     }),
 		StoreDevtoolsModule.instrument({
       maxAge: 25, // Retains last 25 states
@@ -100,17 +81,7 @@ import { ProjectViewComponent } from './pages/projects-page/project-view/project
       autoPause: true, // Pauses recording actions and state changes when the extension window is not open
     }),
     EffectsModule.forRoot([
-      DeleteArticleEffects,
-      SaveArticleEffects,
       LogInEffects,
-      GetArticleEffects,
-      NavigationEffects,
-      LoadArticleLinksEffects,
-      PublishEffects,
-      CreateArticleEffects,
-      GetMetadataEffect,
-      PutMetadataEffect,
-			ProjectsEffects,
     ])
   ],
   providers: [

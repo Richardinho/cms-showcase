@@ -1,27 +1,33 @@
 import { Injectable, Inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { EMPTY, of } from 'rxjs';
+import { of } from 'rxjs';
 import { Router } from '@angular/router';
-import { Store, select } from '@ngrx/store';
-import { tap, map, switchMap, catchError } from 'rxjs/operators';
+import {
+	tap,
+	map,
+	switchMap,
+	catchError,
+} from 'rxjs/operators';
 
-import { AppState } from '../model';
 import { ILoginService, LOGIN_SERVICE } from '../services/interfaces/login.service';
 
+/*
+ * ACTIONS
+ *
+ */
+
 import { genericError } from '../actions/generic-error.action';
-import { logInRequest, logInResponse } from '../actions/log-in.action';
-import { logOut } from '../actions/log-in.action';
-import { sessionExpired } from '../actions/session-expired.action';
+import {
+	logInRequest,
+	logInResponse,
+	logOut,
+} from '../actions/log-in.action';
 import { unauthorisedResponse } from '../actions/unauthorised-response.action';
 
 import { UNAUTHORIZED } from '../status-code.constants';
 
 @Injectable()
 export class LogInEffects {
-
-  /*
-   *  when the user clicks to log out we navigate back to home page
-   */
 
   logOut$ = createEffect(() => {
     return this.actions$.pipe(
@@ -31,10 +37,6 @@ export class LogInEffects {
       }),
     );
   }, { dispatch: false});
-
-  /*
-   *  if a user tries to access an api and aren't authorised, we direct them to the login page.
-   */
 
   unauthorised$ = createEffect(() =>
     this.actions$.pipe(
@@ -47,13 +49,6 @@ export class LogInEffects {
         this.router.navigate(['/login'], navigationExtras);
       })
     ), { dispatch: false });
-
-
-  /*
-   *  User has requested to login (from the login page).
-   *  We contact the server. If they are authorised, we dispatch the loginresponse action. 
-   *  otherwise, we dispatch an error action
-   */
 
   logInRequest$ = createEffect(() => 
     this.actions$.pipe(
@@ -78,17 +73,10 @@ export class LogInEffects {
       })
     ));
 
-
-  /*
-   *  when a jwt token has came back from the server signalling that the use is logged in.
-   *  We navigate back to where the user came from (or wherever else they want to go!)
-   */
-
   logInResponse$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(logInResponse),
       tap((action) => {
-
         this.router.navigate([action.redirectUrl]);
       }),
     )
@@ -97,7 +85,6 @@ export class LogInEffects {
   constructor(
     private actions$: Actions,
     private router: Router,
-    private store: Store<AppState>,
     @Inject(LOGIN_SERVICE) private loginService: ILoginService,
   ) {}
 }
