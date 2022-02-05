@@ -17,9 +17,9 @@ import { Intro } from '../../model';
 import { environment } from '../../../environments/environment';
 import { IIntroService } from '../interfaces/intro.service';
 
-const introToFormData = (intro) => {
+const introToFormData = (intro: Intro) => {
 	const formData = new FormData();
-	formData.append('intro_text', intro);
+	formData.append('intro_text', intro.body);
 	return formData;
 };
 
@@ -61,9 +61,7 @@ export class RealIntroService implements IIntroService {
 
   }
 
-	saveIntro(introWithToken: any) {
-		const intro = introWithToken.intro.body;
-		const token = introWithToken.jwt;
+	saveIntro(intro: Intro, token: string) {
     const url = environment.blogDomain + '/index.php/api/intro';
     const formData: FormData = introToFormData(intro);
 

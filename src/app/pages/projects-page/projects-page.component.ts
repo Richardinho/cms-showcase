@@ -1,8 +1,12 @@
 import { Component, Inject } from '@angular/core';
-import { Project } from '../../model';
+import { Project, AppState } from '../../model';
+import  { mergeMap, withLatestFrom } from 'rxjs/operators';
+import { ActivatedRoute, Router, ParamMap } from '@angular/router';
+import { Store, select } from '@ngrx/store';
 
 import { PROJECT_SERVICE, IProjectService } from '../../services/interfaces/project.service';
 import { LOGIN_SERVICE, ILoginService } from '../../services/interfaces/login.service';
+import { selectJWTToken } from '../../selectors/article.selector';
 
 @Component({
   templateUrl: './projects-page.component.html',
@@ -15,14 +19,16 @@ export class ProjectsPageComponent {
 
   constructor(
 		@Inject(PROJECT_SERVICE) private projectService: IProjectService,
-		@Inject(LOGIN_SERVICE) private loginService: ILoginService,
+		private store: Store<AppState>,
+		private route: ActivatedRoute,
   ) {}
 
 	ngOnInit() {
-		const token = this.loginService.getToken();
 
-		this.projectService.getProjects(token)
-		.subscribe((projectLinks) => {
+		this.route.paramMap.pipe(
+			withLatestFrom(this.store.pipe(select(selectJWTToken))),
+			mergeMap(([_, token]) => this.projectService.getProjects(token)),
+		).subscribe((projectLinks) => {
 			this.projectLinks = projectLinks;
 		});
 	}
@@ -36,12 +42,13 @@ export class ProjectsPageComponent {
 	}
 
 	createProject() {
-		const token = this.loginService.getToken();
-
-		this.projectService.createProject(token).subscribe((newProject) => {
+		this.store.pipe(
+			select(selectJWTToken),
+			mergeMap((token) => this.projectService.createProject(token)),
+		).subscribe((newProject) => {
 			this.projectLinks = [ newProject, ...this.projectLinks];
 			this.projectsUnderEdit = [ ...this.projectsUnderEdit, newProject.id ];
-		});
+			});
 	}
 
 	saveProject(project: Project) {

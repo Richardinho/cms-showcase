@@ -1,14 +1,17 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Store, select } from '@ngrx/store';
+import { Inject, Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs';
+import { mergeMap } from 'rxjs/operators';
 
 import { AppState, ArticleLink } from '../../model';
 
 import { selectArticleLinks } from '../../selectors/select-article-links';
+import { Store, select } from '@ngrx/store';
+import { selectJWTToken } from '../../selectors/article.selector';
 
 import { requestArticleLinks } from '../../actions/request-article-links';
 import { requestPublishArticle } from '../../actions/request-publish-article';
 import { createArticleRequest } from '../../actions/article.action';
+import { ARTICLE_SERVICE, IArticleService } from '../../services/interfaces/article.service';
 
 // change name to ArticleLinksPageComponent
 @Component({
@@ -16,44 +19,21 @@ import { createArticleRequest } from '../../actions/article.action';
   styleUrls: ['./article-page.component.scss']
 })
 export class ArticlePageComponent implements OnInit {
-  articles$: Observable<Array<ArticleLink>>;
+	articles: Array<ArticleLink> = [];
 
   constructor(
-    private store: Store<AppState>
+    private store: Store<AppState>,
+		@Inject(ARTICLE_SERVICE) private articleService: IArticleService,
   ) {}
 
   ngOnInit() {
-
-    this.store.dispatch(requestArticleLinks());
-
-    this.articles$ = this.store.pipe(select(selectArticleLinks));
-
+		this.store.pipe(
+			select(selectJWTToken),
+			mergeMap((token) => this.articleService.getArticleLinks(token)),
+		).subscribe(articles => {
+				this.articles = articles;
+			});
   }
-
-	/*
-	 * deprecate: remove from this page and put in edit article page
-  publish(articleId: string) {
-		const metadata = {
-			id: articleId,
-			publish: true,
-		};
-
-		const action = requestPublishArticle(metadata);
-
-    this.store.dispatch(action);
-  }
-
-  unpublish(articleId: string) {
-		const metadata = {
-			id: articleId,
-			publish: false
-		};
-
-		const action = requestPublishArticle(metadata);
-
-    this.store.dispatch(action);
-  }
-	*/
 
 	createArticle() {
 		const action = createArticleRequest();

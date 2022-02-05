@@ -1,9 +1,10 @@
 import { Observable } from 'rxjs';
+import { Intro } from '../../model';
 import { InjectionToken } from '@angular/core';
 
 export interface IIntroService {
 
-	saveIntro(introWithToken: any): Observable<any>;
+	saveIntro(intro: Intro, token: string): Observable<any>;
 
 	getIntro(token: string): Observable<any>;
 }

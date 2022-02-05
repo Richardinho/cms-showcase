@@ -10,12 +10,15 @@ import {
 	mergeMap,
 	filter,
 	tap,
+	withLatestFrom,
 } from 'rxjs/operators';
 
+import { Store, select } from '@ngrx/store';
+import { selectJWTToken } from '../../../selectors/article.selector';
 import { DialogService } from '../../../services/dialog.service';
 import { IProjectService, PROJECT_SERVICE } from '../../../services/interfaces/project.service';
 import { ILoginService, LOGIN_SERVICE } from '../../../services/interfaces/login.service';
-import { Project } from '../../../model';
+import { AppState, Project } from '../../../model';
 
 @Component({
   selector: 'cms-project-view',
@@ -36,6 +39,7 @@ export class ProjectViewComponent {
     private dialogService: DialogService,
 		@Inject(LOGIN_SERVICE) private loginService: ILoginService,
 		@Inject(PROJECT_SERVICE) private projectService: IProjectService,
+		private store: Store<AppState>,
   ) {}
 
 	editProject() {
@@ -47,11 +51,11 @@ export class ProjectViewComponent {
 			this.dialogService.confirm('Are you sure that you want to delete this project?')
 			.pipe(
 				filter(canDelete => canDelete),
+				withLatestFrom(this.store.pipe(select(selectJWTToken))),
 				tap(() => {
 					this.deletingProject = true;
 				}),
-				mergeMap(() => {
-					const token = this.loginService.getToken();
+				mergeMap(([_, token]) => {
 
 					return this.projectService.deleteProject(this.project.id, token);
 				}),

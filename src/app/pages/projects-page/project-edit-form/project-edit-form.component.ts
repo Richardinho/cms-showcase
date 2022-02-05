@@ -13,10 +13,13 @@ import {
 	Validators,
 } from '@angular/forms';
 
+import { AppState } from '../../../model';
 import { LOGIN_SERVICE, ILoginService } from '../../../services/interfaces/login.service';
 import { Observable } from 'rxjs';
+import { Store, select } from '@ngrx/store'
 import { startWith, tap, mergeMap, map } from 'rxjs/operators';
 
+import { selectJWTToken } from '../../../selectors/article.selector';
 import { tagsValidator, isNewProject } from './utils/tags.validator';
 import { Project } from '../../../model';
 
@@ -34,7 +37,7 @@ export class ProjectEditFormComponent {
 
   constructor(
 		@Inject(PROJECT_SERVICE) private projectService: IProjectService,
-		@Inject(LOGIN_SERVICE) private loginService: ILoginService,
+		private store: Store<AppState>,
   ) {}
 
 	@Input()
@@ -47,7 +50,7 @@ export class ProjectEditFormComponent {
 	onSavedProject: EventEmitter<Project> = new EventEmitter();
 
 	form: FormGroup;
-	loadingInProgress: boolean = false;
+	loadingProgress: boolean = false;
 
 	ngOnInit() {
 
@@ -68,13 +71,14 @@ export class ProjectEditFormComponent {
 
 	save() {
 		return () => {
-			const token = this.loginService.getToken();
-			this.loadingInProgress = true;
-
-			this.projectService.updateProject(this.form.value, token).subscribe(() => {
-				this.loadingInProgress = false;
+			this.loadingProgress = true;
+			this.store.pipe(
+				select(selectJWTToken),
+				mergeMap((token) => this.projectService.updateProject(this.form.value, token)),
+			).subscribe(() => {
+				this.loadingProgress = false;
 				this.onSavedProject.emit(this.form.value);
-			});
+				});
 		}
 	}
 

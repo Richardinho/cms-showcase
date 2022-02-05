@@ -1,12 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Store, select } from '@ngrx/store';
-import { AppState, Article } from '../../model';
-import { HttpHeaders, HttpClient } from '@angular/common/http';
-import { FormControl } from '@angular/forms';
-
-import { environment } from '../../../environments/environment';
-
+import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../model';
+import { HttpClient } from '@angular/common/http';
 
 import { logInRequest } from '../../actions/log-in.action';
 
@@ -18,16 +14,15 @@ interface LoginResponseData {
   templateUrl: './login-page.component.html',
   styleUrls: ['./login-page.component.scss']
 })
-export class LoginPageComponent implements OnInit {
+export class LoginPageComponent {
 
   public username = '';
   public password = '';
 
-  errorMessage: string = 'ssssss';
+  errorMessage: string = '';
 
   constructor(
     private http: HttpClient,
-    private router: Router,
     private route: ActivatedRoute,
     private store: Store<AppState>,
     ) {}

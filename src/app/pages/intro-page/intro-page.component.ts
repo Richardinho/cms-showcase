@@ -1,130 +1,61 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import {
   FormControl,
   FormGroup,
   Validators } from '@angular/forms';
-import { Observable, combineLatest } from 'rxjs';
-import { merge, of } from 'rxjs';
-import { map, startWith, tap } from 'rxjs/operators';
-import { Article, Intro } from '../../model';
+import { Observable } from 'rxjs';
+import { mergeMap } from 'rxjs/operators';
+import { Intro } from '../../model';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../model';
-import { selectIntro } from '../../selectors/intro.selector';
-import { selectLoadingTokens } from '../../selectors/ui.selector';
-
-import {
-	putIntroIntoStore,
-	introRequest,
-	saveIntroRequest,
-	introStatusChanged,
-} from '../../actions/intro-request.action';
+import { selectJWTToken } from '../../selectors/article.selector';
+import { INTRO_SERVICE, IIntroService } from '../../services/interfaces/intro.service';
 
 @Component({
   templateUrl: './intro-page.component.html',
 	styleUrls: ['./intro-page.component.scss'],
 })
 export class IntroPageComponent {
-  intro$: Observable<Intro>;
-	showLoader$: Observable<boolean>;
-	disabled$: Observable<boolean>;
+	intro$: Observable<Intro>;
+	loadingInProgress: boolean;
 	form: FormGroup;
 
   constructor(
-    private store: Store<AppState>
+    private store: Store<AppState>,
+		@Inject(INTRO_SERVICE) private introService: IIntroService,
   ) {}
 
 	ngOnInit() {
-
 		this.form = new FormGroup({
 			body: new FormControl('', Validators.required),
 		});
 
-		/*
-		 *  when form data changes, put this into store
-		 */ 
+		this.store.pipe(
+			select(selectJWTToken),
+			mergeMap(token => this.introService.getIntro(token)),
+		).subscribe(intro => {
+				this.form.patchValue(intro);
+			});
 
-		this.form.valueChanges.subscribe(intro => {
-			const metadata = {
-				body: intro.body,
-			};
-
-			const action = putIntroIntoStore(metadata);
-
-			this.store.dispatch(action);
-		});
-
-		/*
-		 *  get intro from store
-		 */
-
-		this.intro$ = this.store.pipe(select(selectIntro));
-
-		/*
-		 *  when data in store changes, put this data into form
-		 */
-
-		this.intro$.subscribe(intro => {
-			if (intro) {
-				this.form.patchValue(intro, { emitEvent: false });
-			}
-		});
-
-		/*
-		 *  show loader animation when request is in transit
-		 */
-
-		this.showLoader$ = this.store.pipe(
-			select(selectLoadingTokens),
-			map((loadingTokens: Array<string>) => loadingTokens.includes('__intro_body__')),
-			startWith(false),
-		);
-
-		/*
-		 *  the update CTA should be disabled when:
-		 *  1. changes are in transit to server
-		 *  2. form input is invalid
-		 *  3. there are no local changes requiring to be saved 
-		 */
-
-		const formInvalid$ = this.form.statusChanges.pipe(
-			map(status => (status !== 'VALID')),
-			startWith(false),
-		);
-
-		const noLocalChanges$ = this.intro$.pipe(
-			map(data => data.saved),
-		);
-
-		this.disabled$ = combineLatest(
-			this.showLoader$,
-			formInvalid$,
-			noLocalChanges$,
-		).pipe(
-			map(([
-				loading,
-				formInvalid,
-				noLocalChanges
-			]) => {
-				return loading || formInvalid || noLocalChanges; 
-			}),
-		);
-
-		/*
-		 *  dispatch request to fetch data from store
-		 */
-
-		this.store.dispatch(introRequest());
+		this.intro$ = this.form.valueChanges;
 	}
+
 
 	update() {
 		return () => {
-			const metadata = {
-				loadingToken: '__intro_body__',
-			};
+			this.loadingInProgress = true;
 
-			const action = saveIntroRequest(metadata);
-
-			this.store.dispatch(action);
+			this.store.pipe(
+				select(selectJWTToken),
+				mergeMap(token => this.introService.saveIntro(this.form.value, token)),
+			).subscribe(() => {
+					this.loadingInProgress = false;
+					this.form.markAsPristine();
+				});
 		}
+	}
+
+	get disabled() {
+		return this.form.pristine || this.form.invalid || this.loadingInProgress;
 	}
 }

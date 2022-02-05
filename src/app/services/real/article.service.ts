@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 
 import {
 	HttpErrorResponse,
@@ -27,6 +27,7 @@ import { environment } from '../../../environments/environment';
 import { articles } from '../data/articles';
 
 import { IArticleService } from '../interfaces/article.service';
+import { LOGIN_SERVICE, ILoginService } from '../interfaces/login.service';
 
 import { articleToFormData } from './utils/article-to-form-data';
 
@@ -35,6 +36,7 @@ export class RealArticleService implements IArticleService {
 
   constructor(
     private http: HttpClient,
+		@Inject(LOGIN_SERVICE) private loginService: ILoginService,
   ) {}
 
   getArticle(id: string, token: string): Observable<Article> {

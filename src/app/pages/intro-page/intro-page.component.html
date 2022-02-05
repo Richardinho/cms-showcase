@@ -1,7 +1,7 @@
 <div class="cta-bar">
 	<cms-cta
-		[disabled]="disabled$ | async"
-		[loading]="showLoader$ | async"
+		[disabled]="disabled"
+		[loading]="loadingInProgress"
 		[onClick]="update()"
 		>save to server</cms-cta>
 </div>
@@ -24,7 +24,7 @@
 		<div class="article-pane">
 			<div
 				class="article-content"
-				[innerHTML]="(intro$|async)?.body | markdownToHTML"
+				[innerHTML]="(intro$ | async)?.body | markdownToHTML"
 				></div>
 		</div>
 	</div>

@@ -50,7 +50,6 @@ import { PutMetadataEffect } from './effects/put-metadata.effect';
 import { SaveArticleEffects } from './effects/save-article.effect';
 import { GetArticleEffects } from './effects/get-article.effect';
 import { LogInEffects } from './effects/login.effect';
-import { GetIntroEffects } from './effects/intro.effect';
 import { PublishEffects } from './effects/publish';
 import { LoadArticleLinksEffects } from './effects/load-links';
 import { ProjectsEffects } from './effects/projects.effect';
@@ -104,7 +103,6 @@ import { ProjectViewComponent } from './pages/projects-page/project-view/project
       DeleteArticleEffects,
       SaveArticleEffects,
       LogInEffects,
-			GetIntroEffects,
       GetArticleEffects,
       NavigationEffects,
       LoadArticleLinksEffects,

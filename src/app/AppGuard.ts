@@ -11,10 +11,6 @@ import {
 import { map, Observable } from 'rxjs';
 import { selectJWTToken } from './selectors/article.selector';
 
-const selectFoo = (state: AppState) => {
-	return 'hellofoo';
-};
-
 @Injectable({
 	providedIn: 'root',
 })
