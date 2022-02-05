@@ -1,14 +1,23 @@
 import { Injectable } from '@angular/core';
-import { HttpErrorResponse, HttpHeaders, HttpClient } from '@angular/common/http';
 
-import { of, Observable, throwError } from 'rxjs';
-import { map, delay, catchError } from 'rxjs/operators';
+import {
+	HttpErrorResponse,
+	HttpHeaders,
+	HttpClient,
+} from '@angular/common/http';
+
+import {
+	of,
+	Observable,
+	throwError,
+} from 'rxjs';
+
+import { map, catchError } from 'rxjs/operators';
 
 import {
 	Article,
 	ArticleLink,
 	RawArticle,
-	EditArticleView,
 } from '../../model';
 
 import { rawArticleToArticleLink } from '../utils/raw-article-to-article-link';
