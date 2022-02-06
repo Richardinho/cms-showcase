@@ -53,17 +53,6 @@ export class RealArticleService implements IArticleService {
         map((data) => {
           return rawArticleToArticle(data);
         }),
-        catchError((error: HttpErrorResponse) => {
-          if (error.status) {
-            return throwError({
-              status: error.status
-            });
-          } else {
-            return throwError({
-              message: 'an error occurred'
-            });
-          }
-        })
       );
   }
 

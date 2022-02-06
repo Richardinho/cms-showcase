@@ -98,7 +98,7 @@ export interface Intro {
 
 export interface Metadata {
   github_url: string;
-	saved: boolean;
+	saved?: boolean;
 }
 
 export interface Articles {

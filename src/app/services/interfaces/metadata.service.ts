@@ -1,11 +1,12 @@
 import { Observable } from 'rxjs';
 import { InjectionToken } from '@angular/core';
+import { Metadata } from '../../model';
 
 export interface IMetadataService {
 
-	putMetadata(token: string, metadata: any): Observable<any>;
+	putMetadata(token: string, metadata: Metadata): Observable<any>;
 
-	getMetadata(token: string): Observable<any>;
+	getMetadata(token: string): Observable<Metadata>;
 
 }
 

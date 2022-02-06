@@ -13,6 +13,7 @@ import {
 
 import { JWTToken } from '../../selectors/jwt-token.selector';
 import { DialogService } from '../../services/dialog.service';
+import { ERROR, INFO, MessageService } from '../../services/message.service';
 
 import {
 	IArticleService,
@@ -34,6 +35,7 @@ export class ViewArticlePageComponent implements OnInit {
 		private router: Router,
     private dialogService: DialogService,
     private store: Store<AppState>,
+		private messageService: MessageService,
 		@Inject(ARTICLE_SERVICE) private articleService: IArticleService,
   ) {}
 
@@ -43,9 +45,15 @@ export class ViewArticlePageComponent implements OnInit {
 			map((params: ParamMap) => params.get('id')),
 			withLatestFrom(this.store.pipe(select(JWTToken))),
 			mergeMap(([id, token]) => this.articleService.getArticle(id, token)),
-		).subscribe(article => {
-			this.article = article;
-		});
+		).subscribe({
+				next: (article: Article) => {
+					this.article = article;
+				},
+
+				error: () => {
+					this.messageService.show('An error occurred. Please check your network', ERROR);
+				},
+			});
 	}
 
   editArticle(id: string) {
@@ -63,8 +71,14 @@ export class ViewArticlePageComponent implements OnInit {
 					return this.articleService.deleteArticle(this.article.id, token)
 				}),
 			)
-			.subscribe(() => {
-				this.router.navigate(['/article-list']);
+			.subscribe({
+				next: () => {
+					this.router.navigate(['/article-list']);
+				},
+
+				error: () => {
+					this.messageService.show('An error occurred. Please check your network', ERROR);
+				},
 			});
   }
 }

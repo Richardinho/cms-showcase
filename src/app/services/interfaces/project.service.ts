@@ -8,7 +8,7 @@ export interface IProjectService {
 
 	updateProject(project: Project, token: string): Observable<any>;
 
-	getProjects(token:string): Observable<any>;
+	getProjects(token:string): Observable<Array<Project>>;
 
 	createProject(token: string): Observable<any>;
 }

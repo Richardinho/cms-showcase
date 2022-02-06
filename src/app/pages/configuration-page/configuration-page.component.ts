@@ -4,10 +4,11 @@ import {
 	OnInit,
 } from '@angular/core';
 
-import { AppState } from '../../model';
+import { Metadata, AppState } from '../../model';
 
 import { mergeMap } from 'rxjs/operators';
 import { JWTToken } from '../../selectors/jwt-token.selector';
+import { ERROR, INFO, MessageService } from '../../services/message.service';
 
 import { Store, select } from '@ngrx/store';
 
@@ -30,6 +31,7 @@ export class ConfigurationPageComponent implements OnInit {
   constructor(
     private store: Store<AppState>,
 		@Inject(METADATA_SERVICE) private metadataService: IMetadataService,
+		private messageService: MessageService,
   ) {}
 
   ngOnInit() {
@@ -40,8 +42,14 @@ export class ConfigurationPageComponent implements OnInit {
 		this.store.pipe(
 			select(JWTToken),
 			mergeMap(token => this.metadataService.getMetadata(token)),
-		).subscribe(metadata => {
-				this.form.patchValue(metadata);
+		).subscribe({
+				next: (metadata: Metadata) => {
+					this.form.patchValue(metadata);
+				},
+
+				error: (err) => {
+					this.messageService.show('An error occurred. Please check your network', ERROR);
+				},
 			});
   }
 
@@ -53,10 +61,18 @@ export class ConfigurationPageComponent implements OnInit {
 			this.store.pipe(
 				select(JWTToken),
 				mergeMap(token => this.metadataService.putMetadata(token, this.form.value)),
-			).subscribe(() => {
-				this.loadingInProgress = false;
-				this.form.markAsPristine();
-			});
+			).subscribe({
+					next: () => {
+						this.loadingInProgress = false;
+						this.form.markAsPristine();
+						this.messageService.show('Changes saved to server', INFO);
+					},
+
+					error: () => {
+						this.loadingInProgress = false;
+						this.messageService.show('An error occurred', ERROR);
+					},
+				});
 		};
   }
 

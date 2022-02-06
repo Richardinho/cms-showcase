@@ -7,6 +7,7 @@ import { AppState, ArticleLink } from '../../model';
 
 import { Store, select } from '@ngrx/store';
 import { JWTToken } from '../../selectors/jwt-token.selector';
+import { ERROR, INFO, MessageService } from '../../services/message.service';
 
 import { ARTICLE_SERVICE, IArticleService } from '../../services/interfaces/article.service';
 
@@ -17,10 +18,12 @@ import { ARTICLE_SERVICE, IArticleService } from '../../services/interfaces/arti
 })
 export class ArticlePageComponent implements OnInit {
 	articles: Array<ArticleLink> = [];
+	loadingInProgress: boolean = false;
 
   constructor(
     private store: Store<AppState>,
 		private router: Router,
+		private messageService: MessageService,
 		@Inject(ARTICLE_SERVICE) private articleService: IArticleService,
   ) {}
 
@@ -28,17 +31,35 @@ export class ArticlePageComponent implements OnInit {
 		this.store.pipe(
 			select(JWTToken),
 			mergeMap((token) => this.articleService.getArticleLinks(token)),
-		).subscribe(articles => {
-				this.articles = articles;
+		).subscribe({
+				next: (articles: Array<ArticleLink>) => {
+					this.articles = articles;
+				},
+
+				error: (err) => {
+					this.messageService.show('An error occurred. Please check your network', ERROR);
+				},
 			});
   }
 
 	createArticle() {
-		this.store.pipe(
-			select(JWTToken),
-			mergeMap((token) => this.articleService.createArticle(token)),
-		).subscribe(id => {
-				this.router.navigate(['edit-article', id]);
-			});
+		return () => {
+			this.loadingInProgress = true;
+
+			this.store.pipe(
+				select(JWTToken),
+				mergeMap((token) => this.articleService.createArticle(token)),
+			).subscribe({
+					next: (id) => {
+						this.loadingInProgress = false;
+						this.router.navigate(['edit-article', id]);
+					},
+
+					error: (err) => {
+						this.loadingInProgress = false;
+						this.messageService.show('An error occurred. Please check your network', ERROR);
+					},
+				});
+		}
 	}
 }

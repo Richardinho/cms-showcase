@@ -5,6 +5,7 @@ import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 
 import { PROJECT_SERVICE, IProjectService } from '../../services/interfaces/project.service';
+import { ERROR, INFO, MessageService } from '../../services/message.service';
 import { LOGIN_SERVICE, ILoginService } from '../../services/interfaces/login.service';
 import { JWTToken } from '../../selectors/jwt-token.selector';
 
@@ -16,11 +17,13 @@ export class ProjectsPageComponent {
 
 	projectLinks: Array<Project>;
 	projectsUnderEdit = [];
+	loadingCreateProjectInProgress: boolean = false;
 
   constructor(
 		@Inject(PROJECT_SERVICE) private projectService: IProjectService,
 		private store: Store<AppState>,
 		private route: ActivatedRoute,
+		private messageService: MessageService,
   ) {}
 
 	ngOnInit() {
@@ -28,9 +31,16 @@ export class ProjectsPageComponent {
 		this.route.paramMap.pipe(
 			withLatestFrom(this.store.pipe(select(JWTToken))),
 			mergeMap(([_, token]) => this.projectService.getProjects(token)),
-		).subscribe((projectLinks) => {
-			this.projectLinks = projectLinks;
-		});
+		).subscribe({
+				next: (projectLinks: Array<Project>) => {
+					this.projectLinks = projectLinks;
+				},
+				error: () => {
+					this.messageService.show('An error occurred. Please check your network', ERROR);
+
+				},
+			});
+
 	}
 
 	deleteProject(id: string) {
@@ -42,13 +52,24 @@ export class ProjectsPageComponent {
 	}
 
 	createProject() {
-		this.store.pipe(
-			select(JWTToken),
-			mergeMap((token) => this.projectService.createProject(token)),
-		).subscribe((newProject) => {
-			this.projectLinks = [ newProject, ...this.projectLinks];
-			this.projectsUnderEdit = [ ...this.projectsUnderEdit, newProject.id ];
-			});
+		return () => {
+			this.loadingCreateProjectInProgress = true;
+
+			this.store.pipe(
+				select(JWTToken),
+				mergeMap((token) => this.projectService.createProject(token)),
+			).subscribe({
+					next: (newProject: Project) => {
+						this.projectLinks = [ newProject, ...this.projectLinks];
+						this.projectsUnderEdit = [ ...this.projectsUnderEdit, newProject.id ];
+						this.loadingCreateProjectInProgress = false;
+					},
+					error: () => {
+						this.messageService.show('An error occurred. Please check your network', ERROR);
+						this.loadingCreateProjectInProgress = false;
+					},
+				});
+		};
 	}
 
 	saveProject(project: Project) {

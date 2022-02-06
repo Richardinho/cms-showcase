@@ -86,17 +86,6 @@ export class RealProjectService implements IProjectService {
 					const projects = data?.projects || [];
 					return projects.map(rawProjectToProject);
         }),
-        catchError((error: HttpErrorResponse) => {
-          if (error.status) {
-            return throwError({
-              status: error.status
-            });
-          } else {
-            return throwError({
-              message: 'an error occurred'
-            });
-          }
-        })
       );
 	}
 }

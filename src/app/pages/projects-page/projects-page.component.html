@@ -7,7 +7,10 @@
 	<div class="container">
 		<h2 class="page-title">Projects</h2>
 		<div class="cta-header">
-			<button (click)="createProject()" class="button">create project</button>
+			<cms-cta
+				[loading]="loadingCreateProjectInProgress"
+				[onClick]="createProject()"
+				>create project</cms-cta>
 		</div>
 		<ul>
 			<li *ngFor="let project of projectLinks; trackBy: trackByFn" class="project-item">

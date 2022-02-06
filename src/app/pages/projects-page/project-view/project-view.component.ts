@@ -18,6 +18,7 @@ import { JWTToken } from '../../../selectors/jwt-token.selector';
 import { DialogService } from '../../../services/dialog.service';
 import { IProjectService, PROJECT_SERVICE } from '../../../services/interfaces/project.service';
 import { ILoginService, LOGIN_SERVICE } from '../../../services/interfaces/login.service';
+import { MessageService, ERROR, INFO } from '../../../services/message.service';
 import { AppState, Project } from '../../../model';
 
 @Component({
@@ -40,6 +41,7 @@ export class ProjectViewComponent {
 		@Inject(LOGIN_SERVICE) private loginService: ILoginService,
 		@Inject(PROJECT_SERVICE) private projectService: IProjectService,
 		private store: Store<AppState>,
+		private messageService: MessageService,
   ) {}
 
 	editProject() {
@@ -58,10 +60,16 @@ export class ProjectViewComponent {
 				mergeMap(([_, token]) => {
 					return this.projectService.deleteProject(this.project.id, token);
 				}),
-			)
-			.subscribe(() => {
-				this.deletingProject = false;
-				this.onDelete.emit(this.project.id);
+			).subscribe({
+				next: () => {
+					this.deletingProject = false;
+					this.onDelete.emit(this.project.id);
+					this.messageService.show('project was successfully deleted.');
+				},
+				error: () => {
+					this.deletingProject = false;
+					this.messageService.show('An error occurred. Please check your network connection', ERROR);
+				},
 			});
 		}
 	}

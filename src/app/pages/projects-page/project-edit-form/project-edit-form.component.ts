@@ -24,6 +24,7 @@ import { tagsValidator, isNewProject } from './utils/tags.validator';
 import { Project } from '../../../model';
 
 import { IProjectService, PROJECT_SERVICE } from '../../../services/interfaces/project.service';
+import { MessageService, ERROR, INFO } from '../../../services/message.service';
 
 import { tagData } from '../../../tag-data';
 import { formDataToProject } from './utils/form-data-to-project';
@@ -38,6 +39,7 @@ export class ProjectEditFormComponent {
   constructor(
 		@Inject(PROJECT_SERVICE) private projectService: IProjectService,
 		private store: Store<AppState>,
+		private messageService: MessageService,
   ) {}
 
 	@Input()
@@ -75,12 +77,23 @@ export class ProjectEditFormComponent {
 			this.store.pipe(
 				select(JWTToken),
 				mergeMap((token) => this.projectService.updateProject(this.form.value, token)),
-			).subscribe(() => {
-				this.loadingProgress = false;
-				this.onSavedProject.emit(this.form.value);
+			).subscribe({
+
+					next: () => {
+						this.loadingProgress = false;
+						this.onSavedProject.emit(this.form.value);
+						this.form.markAsPristine();
+						this.messageService.show('project saved to server', INFO);
+					},
+
+					error: () => {
+						this.loadingProgress = false;
+						this.messageService.show('an error occurred', ERROR);
+					},
 				});
 		}
 	}
+
 
 	close() {
 		this.onShowEdit.emit({
@@ -91,6 +104,10 @@ export class ProjectEditFormComponent {
 
 	cancel() {
 		this.close();
+	}
+
+	get disabled() {
+		return this.form.pristine || this.form.invalid || this.loadingProgress;
 	}
 
 	get title() {
@@ -107,10 +124,5 @@ export class ProjectEditFormComponent {
 
 	get tagList() {
 		return tagData;
-	}
-
-	// todo: base this on form validity AND saved state
-	get formDisabled() {
-		return this.form.invalid;
 	}
 }

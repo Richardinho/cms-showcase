@@ -80,22 +80,24 @@ export class EditArticlePageComponent implements OnInit {
   }
 
   update() {
-		this.loadingInProgress = true;
+		return () => {
+			this.loadingInProgress = true;
 
-		this.store.pipe(select(JWTToken)).pipe(
-			mergeMap((token) => this.articleService.updateArticle(this.form.value, token)),
-		).subscribe({
-				next: (article) => {
-					this.loadingInProgress = false;
-					this.form.markAsPristine();
-					this.messageService.show('Changes saved to server', INFO);
-				},
-				error: (err) => {
-					this.loadingInProgress = false;
-					this.messageService.show('An error occurred', ERROR);
-				},
-			}
-		);
+			this.store.pipe(select(JWTToken)).pipe(
+				mergeMap((token) => this.articleService.updateArticle(this.form.value, token)),
+			).subscribe({
+					next: (article) => {
+						this.loadingInProgress = false;
+						this.form.markAsPristine();
+						this.messageService.show('Changes saved to server', INFO);
+					},
+					error: (err) => {
+						this.loadingInProgress = false;
+						this.messageService.show('An error occurred', ERROR);
+					},
+				}
+			);
+		}
   }
 
 	get updateButtonDisabled() {

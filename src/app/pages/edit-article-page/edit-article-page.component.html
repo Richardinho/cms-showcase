@@ -1,10 +1,10 @@
 <ng-container *ngIf="(article$ | async) as article">
 	<div class="cta-bar">
-		<button
+		<cms-cta
 			[disabled]="updateButtonDisabled"
-			[loading]="showLoader$ | async"
-			(click)="update()">
-			save to server</button>
+			[loading]="loadingInProgress"
+			[onClick]="update()">
+			save to server</cms-cta>
 	</div>
 
 	<div class="outer-container">

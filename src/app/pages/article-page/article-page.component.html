@@ -1,8 +1,9 @@
 
 <div class="cta-bar">
-	<button
-			(click)="createArticle()"
-			class="button">create article</button>
+	<cms-cta
+		[loading]="loadingInProgress"
+		[onClick]="createArticle()"
+			>create article</cms-cta>
 </div>
 
 <div class="links-container">
